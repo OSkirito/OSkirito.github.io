@@ -162,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head_image.png">
@@ -176,7 +176,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/" class="post-title-link" itemprop="url">Maya中实现简单的褶皱纹理变化</a>
+            <a href="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/" class="post-title-link" itemprop="url">Maya中实现简单的褶皱纹理变化</a>
         </h2>
 
         <div class="post-meta">
@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-05-21 14:20:20 / 修改时间：18:45:37" itemprop="dateCreated datePublished" datetime="2023-05-21T14:20:20+08:00">2023-05-21</time>
+              <time title="创建时间：2023-05-22 10:22:35 / 修改时间：10:23:53" itemprop="dateCreated datePublished" datetime="2023-05-22T10:22:35+08:00">2023-05-22</time>
             </span>
 
           
@@ -202,35 +202,35 @@
 
       
           <p>首先准备好需要的贴图（此处使用抬眉皱纹演示，中性表情和抬眉表情的颜色贴图及法线，左右眉蒙版）</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521181559601.png" class="" title="image-20230521181559601">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521181559601.png" class="" title="image-20230521181559601">
 
 <p>打开含有绑定完好角色的Maya文件，选择头部模型创建两个属性（设置属性名称、类型、最大最小值、默认值）</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183125175.png" class="" title="image-20230521183125175">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183125175.png" class="" title="image-20230521183125175">
 
 <p>打开关键帧驱动窗口，设置相应的驱动范围（最小值k一下，最大值k一下）</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183318678.png" class="" title="image-20230521183318678">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183318678.png" class="" title="image-20230521183318678">
 
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183512309.png" class="" title="image-20230521183512309">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183512309.png" class="" title="image-20230521183512309">
 
 <p>打开材质编辑器，选择头部材质，导入蒙版贴图，创建乘法节点（通过属性值驱动蒙版强度）</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183854030.png" class="" title="image-20230521183854030">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183854030.png" class="" title="image-20230521183854030">
 
 <p>打开连接编辑器，将属性值与蒙版相乘</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184024439.png" class="" title="image-20230521184024439">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184024439.png" class="" title="image-20230521184024439">
 
 <p>将左右蒙版的结果相加，重新生成为贴图再与一个三维向量相乘</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184223406.png" class="" title="image-20230521184223406">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184223406.png" class="" title="image-20230521184223406">
 
 <p>将颜色和法线贴图做如下操作</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184344616.png" class="" title="image-20230521184344616">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184344616.png" class="" title="image-20230521184344616">
 
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184404136.png" class="" title="image-20230521184404136">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184404136.png" class="" title="image-20230521184404136">
 
 <p>将最终的结果与材质对应节点相连并将材质赋予头部模型</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184446495.png" class="" title="image-20230521184446495">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184446495.png" class="" title="image-20230521184446495">
 
 <p>最终效果</p>
-<img src="/2023/05/21/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/%E8%A4%B6%E7%9A%B1%E6%BC%94%E7%A4%BA.gif" class="" title="褶皱演示">
+<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/%E8%A4%B6%E7%9A%B1%E6%BC%94%E7%A4%BA.gif" class="" title="褶皱演示">
 
       
     </div>

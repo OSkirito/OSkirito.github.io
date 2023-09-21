@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,128 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/" class="post-title-link" itemprop="url">code中配置OpenGL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-21 10:48:13 / 修改时间：22:39:49" itemprop="dateCreated datePublished" datetime="2023-09-21T10:48:13+08:00">2023-09-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先下载[MinGW](<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/mingw/">MinGW - Minimalist GNU for Windows download | SourceForge.net</a>)</p>
+<p>下载文件后解压，双击运行guimain.exe文件</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921105739503.png" class="" title="image-20230921105739503">
+
+<p>安装下列三个文件并更新配置</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921110136828.png" class="" title="image-20230921110136828">
+
+<p>安装完成后，将..\MinGW\bin添加到环境变量</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921110442456.png" class="" title="image-20230921110442456">
+
+<p>在cmd中进行验证</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921110556502.png" class="" title="image-20230921110556502">
+
+<p>将mingw32-make.exe创建副本重命名覆盖make.exe</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921112817561.png" class="" title="image-20230921112817561">
+
+<p>在cmd中进行验证</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921113024702.png" class="" title="image-20230921113024702">
+
+<p>打开VScode添加[C/C++](<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++ - Visual Studio Marketplace</a>)和[C/C++ Project Generator](<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=danielpinto8zz6.c-cpp-project-generator">C/C++ Project Generator - Visual Studio Marketplace</a>)插件</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921151743776.png" class="" title="image-20230921151743776">
+
+<p>创建一个文件夹，并在VScode中打开，按Ctrl+Shift+P创建C++项目</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152238812.png" class="" title="image-20230921152238812">
+
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152259595.png" class="" title="image-20230921152259595">
+
+<p>在控制台中验证能否正常运行</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152417704.png" class="" title="image-20230921152417704">
+
+<p>下载[GLFW](<a target="_blank" rel="noopener" href="https://www.glfw.org/download.html">Download | GLFW</a>)</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153030075.png" class="" title="image-20230921153030075">
+
+<p>下载完成后解压，将GLFW文件夹、.a文件、dll文件拷贝到创建工程的对应路径下</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153233934.png" class="" title="image-20230921153233934">
+
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153335999.png" class="" title="image-20230921153335999">
+
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153541080.png" class="" title="image-20230921153541080">
+
+<p>打开<a href="%5Bglad.dav1d.de%5D(https://glad.dav1d.de/)">glad</a>在线生成静态库，设置好相关参数点击生成，下载zip文件</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921154202377.png" class="" title="image-20230921154202377">
+
+<p>解压文件，在该文件夹下运行cmd命令，生成对应的文件</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc ./src/glad.c -c -I ./include/</span><br><span class="line">ar -rc libglad.a glad.o</span><br></pre></td></tr></table></figure>
+
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921154631866.png" class="" title="image-20230921154631866">
+
+<p>将将GLFW文件夹、.a文件拷贝到创建工程的对应路径下</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921160808741.png" class="" title="image-20230921160808741">
+
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921160950774.png" class="" title="image-20230921160950774">
+
+<p>打开项目中的Makefile添加代码</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223525495.png" class="" title="image-20230921223525495">
+
+<p>在控制台进行验证</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223602084.png" class="" title="image-20230921223602084">
+
+<p>将下面的代码复制到main.cpp文件保存运行</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include &lt;glad/glad.h&gt;</span></span><br><span class="line"><span class="meta">#include &lt;GLFW/glfw3.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#include &lt;iostream&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> framebuffer_size_callback(GLFWwindow *window, <span class="type">int</span> width, <span class="type">int</span> height);</span><br><span class="line"><span class="type">void</span> processInput(GLFWwindow *window);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> unsigned <span class="type">int</span> SCR_WIDTH = <span class="number">800</span>;</span><br><span class="line"><span class="keyword">const</span> unsigned <span class="type">int</span> SCR_HEIGHT = <span class="number">600</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> main()</span><br><span class="line">&#123;</span><br><span class="line">	glfwInit();</span><br><span class="line">	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span class="number">3</span>);</span><br><span class="line">	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span class="number">3</span>);</span><br><span class="line">	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);</span><br><span class="line"></span><br><span class="line">	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, &quot;LearnOpenGL&quot;, NULL, NULL);</span><br><span class="line">	<span class="keyword">if</span> (window == NULL)</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout &lt;&lt; &quot;Failed to create GLFW window&quot; &lt;&lt; std::endl;</span><br><span class="line">		glfwTerminate();</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	glfwMakeContextCurrent(window);</span><br><span class="line">	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout &lt;&lt; &quot;Failed to initialize GLAD&quot; &lt;&lt; std::endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (!glfwWindowShouldClose(window))</span><br><span class="line">	&#123;</span><br><span class="line">        glClearColor(<span class="number">0.2</span>f, <span class="number">0.3</span>f, <span class="number">0.3</span>f, <span class="number">1.0</span>f);</span><br><span class="line">        glClear(GL_COLOR_BUFFER_BIT);</span><br><span class="line">		processInput(window);</span><br><span class="line">		glfwSwapBuffers(window);</span><br><span class="line">		glfwPollEvents();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	glfwTerminate();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> processInput(GLFWwindow *window)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)</span><br><span class="line">		glfwSetWindowShouldClose(window, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> framebuffer_size_callback(GLFWwindow *window, <span class="type">int</span> width, <span class="type">int</span> height)</span><br><span class="line">&#123;</span><br><span class="line">	glViewport(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如图所示，完成OpenGL的配置</p>
+<img src="/2023/09/21/%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223923694.png" class="" title="image-20230921223923694">
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -13922,14 +14044,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

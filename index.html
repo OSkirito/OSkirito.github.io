@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,73 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/" class="post-title-link" itemprop="url">01-OpenGL简述</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-23 15:15:45 / 修改时间：17:24:10" itemprop="dateCreated datePublished" datetime="2023-09-23T15:15:45+08:00">2023-09-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>OpenGL一般被认为是一个API(Application Programming Interface, 应用程序编程接口)，包含了一系列可以操作图形、图像的函数，它允许我们访问GPU，调用它来更好得进行图形绘制。然而，OpenGL本身并不是一个API，它仅仅是一种图形编程规范（定义了某个函数应该传入什么参数，并返回什么，但它也不是一个类库，函数的具体实现由用户的硬件驱动去实现）。</p>
+<p>OpenGL也并不是开源的，它是由各个硬件厂商实现的，他们不会公开自己的驱动源码。</p>
+<p>OpenGL是跨平台的，但这并不意味着它比Direc3D更好，每个设备平台上原生的一定比通用的、跨平台的更具有针对性（例如Direc3D、Metal）。不过正是因为OpenGL是跨平台的，所以它的通用性和可移植性是最好的。</p>
+<p>OpenGL的规范有两种模式，一个是核心模式，一个是兼容模式。核心模式是现代OpenGL最常用的模式，它删除了大量传统OpenGL的功能，在一些平台上，只有核心模式才能使用较新的功能；兼容模式保留了OpenGL1.0开始的所有版本的向后兼容性（本笔记只使用核心模式）。</p>
+<h1 id="管线和基元"><a href="#管线和基元" class="headerlink" title="管线和基元"></a>管线和基元</h1><p>GPU由大量小型可编程处理器组成，这些处理器被称为shader core，其运行的程序称为shader，每个GPU包含几十到几千个核心，这些核心聚在一起可以同时完成巨量工作。</p>
+<p>图形系统被分解为多个阶段，我们称为图形管线，每个阶段用一个着色器或者固定的函数、可配置的处理块表示。下图展示了图形管线示意图，圆角框表示固定函数阶段，而方角框表示可编程阶段。</p>
+<img src="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/image-20230923171840253.png" class="" title="image-20230923171840253">
+
+<p>在OpenGL中，基本的渲染单元称为基元。OpenGL支持多种基元，但基本的三种可渲染基元为点、线和三角形，我们在屏幕上看见的东西都是由基元构成的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -14056,14 +14123,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

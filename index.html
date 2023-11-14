@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-11-13 10:31:49 / 修改时间：16:28:52" itemprop="dateCreated datePublished" datetime="2023-11-13T10:31:49+08:00">2023-11-13</time>
+              <time title="创建时间：2023-11-13 10:31:49 / 修改时间：17:47:54" itemprop="dateCreated datePublished" datetime="2023-11-13T10:31:49+08:00">2023-11-13</time>
             </span>
 
           
@@ -227,8 +227,9 @@
 <p>我们在主函数之前将我们的shader源代码硬编码储存在字符串中，如下我们编写了一个顶点着色器和片段着色器：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将顶点着色器的源代码硬编码储存在字符串中</span></span><br><span class="line"><span class="keyword">const</span> char *vertexShaderSource = &quot;<span class="meta">#version 330 core\n&quot;</span></span><br><span class="line">                                 &quot;<span class="keyword">layout</span> (<span class="keyword">location</span> = <span class="number">0</span>) <span class="keyword">in</span> <span class="type">vec3</span> aPos;\n&quot;</span><br><span class="line">                                 &quot;<span class="type">void</span> main()\n&quot;</span><br><span class="line">                                 &quot;&#123;\n&quot;</span><br><span class="line">                                 &quot;   <span class="built_in">gl_Position</span> = <span class="type">vec4</span>(aPos.x, aPos.y, aPos.z, <span class="number">1.0</span>f);\n&quot;</span><br><span class="line">                                <span class="comment">//  &quot;   gl_PointSize = 10.0f&quot;</span></span><br><span class="line">                                 &quot;&#125;\<span class="number">0</span>&quot;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将片段着色器的源代码硬编码储存在字符串中</span></span><br><span class="line"><span class="keyword">const</span> char *fragmentShaderSource = &quot;<span class="meta">#version 330 core\n&quot;</span></span><br><span class="line">                                   &quot;<span class="keyword">out</span> <span class="type">vec4</span> FragColor;\n&quot;</span><br><span class="line">                                   &quot;<span class="type">void</span> main()\n&quot;</span><br><span class="line">                                   &quot;&#123;\n&quot;</span><br><span class="line">                                   &quot;    FragColor = <span class="type">vec4</span>(<span class="number">1.0</span>f, <span class="number">0.5</span>f, <span class="number">0.2</span>f, <span class="number">1.0</span>f);\n&quot;</span><br><span class="line">                                   &quot;&#125;\<span class="number">0</span>&quot;;</span><br></pre></td></tr></table></figure>
 
+<p>顶点拥有很多顶点属性（位置、颜色、法线等），在上面的代码中我们为顶点位置设置了布局（index为0），方便在后续设置顶点数据指针。</p>
 <p>然后我们需要定义需要传入的顶点数据：</p>
-<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> <span class="keyword">vertices</span>[] = </span><br><span class="line">&#123;</span><br><span class="line">    <span class="number">-0.5</span>f, <span class="number">-0.5</span>f, <span class="number">0.0</span>f,</span><br><span class="line">        <span class="number">0.5</span>f, <span class="number">-0.5</span>f, <span class="number">0.0</span>f,</span><br><span class="line">        <span class="number">0.0</span>f,  <span class="number">0.5</span>f, <span class="number">0.0</span>f</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> <span class="keyword">vertices</span>[] = </span><br><span class="line">&#123;</span><br><span class="line">    <span class="number">-0.5</span>f, <span class="number">-0.5</span>f, <span class="number">0.0</span>f,</span><br><span class="line">	<span class="number">0.5</span>f, <span class="number">-0.5</span>f, <span class="number">0.0</span>f,</span><br><span class="line">	<span class="number">0.0</span>f,  <span class="number">0.5</span>f, <span class="number">0.0</span>f</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>接着我们创建VBO和VAO对象，并对他们进行绑定：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建顶点缓冲对象(VBO)、顶点数组对象(VAO)</span></span><br><span class="line">unsigned <span class="type">int</span> VBO, VAO;</span><br><span class="line">glGenBuffers(<span class="number">1</span>, &amp;VBO);</span><br><span class="line">glGenVertexArrays(<span class="number">1</span>, &amp;VAO);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 绑定VAO对象</span></span><br><span class="line">glBindVertexArray(VAO);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 绑定到缓冲区</span></span><br><span class="line">glBindBuffer(GL_ARRAY_BUFFER, VBO);</span><br></pre></td></tr></table></figure>
@@ -243,9 +244,19 @@
 <p>三角形的位置数据不会改变，每次渲染调用时都保持原样，所以它的使用类型最好是GL_STATIC_DRAW。如果一个缓冲中的数据将频繁被改变，那么使用的类型就是GL_DYNAMIC_DRAW或GL_STREAM_DRAW，这样能确保显卡把数据放在能够高速写入的内存位置。</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 填充数据</span></span><br><span class="line">glBufferData(GL_ARRAY_BUFFER, sizeof(<span class="keyword">vertices</span>), <span class="keyword">vertices</span>, GL_STATIC_DRAW);</span><br></pre></td></tr></table></figure>
 
-<p>当有了顶点信息我们就可以使用glVertexAttribPointer函数告诉OpenGL该如何解析顶点数据（应用到逐个顶点属性上）了：</p>
+<p>当有了顶点信息我们就可以告诉OpenGL该如何解析顶点数据了，并且我们需要启用顶点属性：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置顶点数据指针</span></span><br><span class="line">glVertexAttribPointer(<span class="number">0</span>, <span class="number">3</span>, GL_FLOAT, GL_FALSE, <span class="number">3</span> * sizeof(<span class="type">float</span>), (<span class="type">void</span>*)<span class="number">0</span>);</span><br><span class="line">glEnableVertexAttribArray(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
 
+<p>glVertexAttribPointer函数告诉OpenGL该如何解析顶点数据：</p>
+<ul>
+<li>第一个参数指定要配置的顶点属性布局（index）。在顶点着色器中使用<code>layout(location = 0)</code>定义了顶点位置属性的布局设置为0，所以这里我们传入0。</li>
+<li>第二个参数指定顶点属性的大小。位置属性是一个<code>vec3</code>，它由3个值组成，所以大小是3。</li>
+<li>第三个参数指定数据的类型。</li>
+<li>第四个参数定义是否希望数据被标准化(Normalize)。如果设置为GL_TRUE，所有数据都会被映射到0（对于有符号型signed数据是-1）到1之间。</li>
+<li>第五个参数叫做步长(Stride)，它告诉我们在连续的顶点属性组之间的间隔。即，从这个属性第二次出现的地方到整个数组0位置之间有多少字节。</li>
+<li>最后一个参数的类型是<code>void*</code>，所以需要我们进行这个奇怪的强制类型转换。它表示位置数据在缓冲中起始位置的偏移量(Offset)。由于位置数据在数组的开头，所以这里是0。</li>
+</ul>
+<p>glEnableVertexAttribArray函数告诉OpenGL启用对应布局的顶点属性。</p>
 <p>在完成顶点数据的传入后我们就可以解绑VAO了：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 解绑VAO</span></span><br><span class="line">glBindVertexArray(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
 
@@ -397,10 +408,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-09-23 15:15:45 / 修改时间：17:24:10" itemprop="dateCreated datePublished" datetime="2023-09-23T15:15:45+08:00">2023-09-23</time>
+              <time title="创建时间：2023-09-23 15:15:45" itemprop="dateCreated datePublished" datetime="2023-09-23T15:15:45+08:00">2023-09-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-11-14 10:40:45" itemprop="dateModified" datetime="2023-11-14T10:40:45+08:00">2023-11-14</time>
+              </span>
 
           
 
@@ -417,11 +434,18 @@
 <p>OpenGL也并不是开源的，它是由各个硬件厂商实现的，他们不会公开自己的驱动源码。</p>
 <p>OpenGL是跨平台的，但这并不意味着它比Direc3D更好，每个设备平台上原生的一定比通用的、跨平台的更具有针对性（例如Direc3D、Metal）。不过正是因为OpenGL是跨平台的，所以它的通用性和可移植性是最好的。</p>
 <p>OpenGL的规范有两种模式，一个是核心模式，一个是兼容模式。核心模式是现代OpenGL最常用的模式，它删除了大量传统OpenGL的功能，在一些平台上，只有核心模式才能使用较新的功能；兼容模式保留了OpenGL1.0开始的所有版本的向后兼容性（本笔记只使用核心模式）。</p>
+<p>Shader（着色器）是一段代码或一个程序，它不像其他程序在CPU上运行，而是在显卡（GPU）上运行的程序。</p>
 <h1 id="管线和基元"><a href="#管线和基元" class="headerlink" title="管线和基元"></a>管线和基元</h1><p>GPU由大量小型可编程处理器组成，这些处理器被称为shader core，其运行的程序称为shader，每个GPU包含几十到几千个核心，这些核心聚在一起可以同时完成巨量工作。</p>
-<p>图形系统被分解为多个阶段，我们称为图形管线，每个阶段用一个着色器或者固定的函数、可配置的处理块表示。下图展示了图形管线示意图，圆角框表示固定函数阶段，而方角框表示可编程阶段。</p>
-<img src="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/image-20230923171840253.png" class="" title="image-20230923171840253">
+<p>图形系统被分解为多个阶段，我们称为图形管线，每个阶段用一个着色器或者固定的函数、可配置的处理块表示。下图展示了图形管线示意图。</p>
+<img src="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/%E7%AE%A1%E7%BA%BF.png" class="" title="管线">
 
+<p>OpenGL中的片段是指渲染一个像素需要的所有数据，所以片段着色器是OpenGL高级效果产生的阶段，它将计算一个像素最终的颜色（通常包括光照、阴影、光的颜色等）。</p>
+<p>测试与混合是指Alpha测试（物体是否透明）并对物体的颜色进行混合。</p>
+<p>在一个OpenGL程序中，必须定义至少应该顶点或者片段着色器，因为GPU并没有提供默认的着色器。</p>
 <p>在OpenGL中，基本的渲染单元称为基元。OpenGL支持多种基元，但基本的三种可渲染基元为点、线和三角形，我们在屏幕上看见的东西都是由基元构成的。</p>
+<h1 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h1><p>OpenGL自身是一个巨大的状态机(State Machine)：一系列的变量描述OpenGL此刻应当如何运行。OpenGL的状态通常被称为OpenGL上下文(Context)。通常使用如下途径去更改OpenGL状态：设置选项，操作缓冲。最后，使用当前OpenGL上下文来渲染。</p>
+<p>当使用OpenGL去画线段而不是三角形的时候，通过改变一些上下文变量来改变OpenGL状态，从而告诉OpenGL如何去绘图。一旦改变了OpenGL的状态为绘制线段，下一个绘制命令就会画出线段而不是三角形。</p>
+<p>当使用OpenGL的时候，我们会遇到一些状态设置函数(State-changing Function)，这类函数将会改变上下文。以及状态使用函数(State-using Function)，这类函数会根据当前OpenGL的状态执行一些操作。只要记住OpenGL本质上是个大状态机，就能更容易理解它的大部分特性。</p>
 
       
     </div>

@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">18</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,78 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/05/%E4%BF%AE%E6%94%B9UE%E7%9A%84%E7%BC%93%E5%AD%98%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/05/%E4%BF%AE%E6%94%B9UE%E7%9A%84%E7%BC%93%E5%AD%98%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">修改UE的缓存路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-05 23:53:13" itemprop="dateCreated datePublished" datetime="2023-10-05T23:53:13+08:00">2023-10-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-06 00:11:04" itemprop="dateModified" datetime="2023-10-06T00:11:04+08:00">2023-10-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1.首先先删除C盘下已有的UE缓存，路径在C:\Users\<del>用户名</del>\AppData\Local\UnrealEngine\Common</p>
+<p>2.找到对应UE版本的安装目录下的config文件进行修改，打开UE缓存设置文件，默认路径在C:\Program Files\Epic Games\<del>UE版本</del>\Engine\Config\BaseEngine</p>
+<img src="/2023/10/05/%E4%BF%AE%E6%94%B9UE%E7%9A%84%E7%BC%93%E5%AD%98%E8%B7%AF%E5%BE%84/image-20231006000803033.png" class="" title="image-20231006000803033">
+
+<p>将该文件中的Path=”%ENGINEVERSIONAGNOSTICUSERDIR%DerivedDataCache”改为Path=”%GAMEDIR%DerivedDataCache”</p>
+<img src="/2023/10/05/%E4%BF%AE%E6%94%B9UE%E7%9A%84%E7%BC%93%E5%AD%98%E8%B7%AF%E5%BE%84/image-20231006000939728.png" class="" title="image-20231006000939728">
+
+<p>3.修改完猴保存，以后UE的缓存就不会保存在C盘了（每次重装引擎或新版本都需要重新修改）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -14145,7 +14217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

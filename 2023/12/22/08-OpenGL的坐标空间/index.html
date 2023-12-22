@@ -30,9 +30,11 @@
 <meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/coordinate_systems.png">
 <meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/orthographic_frustum.png">
 <meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/perspective.png">
+<meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/image-20231223003700982.png">
 <meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/perspective_frustum.png">
+<meta property="og:image" content="http://example.com/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/image-20231223003723708.png">
 <meta property="article:published_time" content="2023-12-22T09:28:03.000Z">
-<meta property="article:modified_time" content="2023-12-22T14:03:59.448Z">
+<meta property="article:modified_time" content="2023-12-22T16:37:25.678Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -196,10 +198,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-12-22 17:28:03 / 修改时间：22:03:59" itemprop="dateCreated datePublished" datetime="2023-12-22T17:28:03+08:00">2023-12-22</time>
+              <time title="创建时间：2023-12-22 17:28:03" itemprop="dateCreated datePublished" datetime="2023-12-22T17:28:03+08:00">2023-12-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-12-23 00:37:25" itemprop="dateModified" datetime="2023-12-23T00:37:25+08:00">2023-12-23</time>
+              </span>
 
           
 
@@ -242,14 +250,20 @@
 <p>前两个参数指定了平截头体的左右坐标，第三和第四参数指定了平截头体的底部和顶部。通过这四个参数我们定义了近平面和远平面的大小，然后第五和第六个参数则定义了近平面和远平面的距离。这个投影矩阵会将处于这些x，y，z值范围内的坐标变换为标准化设备坐标。正射投影矩阵直接将坐标映射到2D平面中，即屏幕，但实际上正射投影矩阵会产生不真实的结果，因为这个投影没有将透视考虑进去。</p>
 <img src="/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/perspective.png" class="" title="img">
 
-<p>由于透视，这两条线在很远的地方看起来会相交。这正是透视投影想要达到的效果，它是使用透视投影矩阵来完成的。这个投影矩阵将给定的平截头体范围映射到裁剪空间，除此之外还修改了每个顶点坐标的w值，从而使得离观察者越远的顶点坐标w分量越大。被变换到裁剪空间的坐标都会在-w到w的范围之间（任何大于这个范围的坐标都会被裁剪掉）。OpenGL要求所有可见的坐标都落在-1.0到1.0范围内，作为顶点着色器最后的输出，因此，一旦坐标在裁剪空间内之后，透视除法就会被应用到裁剪空间坐标上：<br>$$<br>out = \begin{pmatrix} x /w \ y / w \ z / w \end{pmatrix}<br>$$<br>在透视平截头体以外的东西最后都不会出现在裁剪空间体积内，并且将会受到裁剪。一个透视平截头体可以被看作一个不均匀形状的箱子，在这个箱子内部的每个坐标都会被映射到裁剪空间上的一个点。</p>
+<p>由于透视，这两条线在很远的地方看起来会相交。这正是透视投影想要达到的效果，它是使用透视投影矩阵来完成的。这个投影矩阵将给定的平截头体范围映射到裁剪空间，除此之外还修改了每个顶点坐标的w值，从而使得离观察者越远的顶点坐标w分量越大。被变换到裁剪空间的坐标都会在-w到w的范围之间（任何大于这个范围的坐标都会被裁剪掉）。OpenGL要求所有可见的坐标都落在-1.0到1.0范围内，作为顶点着色器最后的输出，因此，一旦坐标在裁剪空间内之后，透视除法就会被应用到裁剪空间坐标上：</p>
+<img src="/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/image-20231223003700982.png" class="" title="image-20231223003700982">
+
+<p>在透视平截头体以外的东西最后都不会出现在裁剪空间体积内，并且将会受到裁剪。一个透视平截头体可以被看作一个不均匀形状的箱子，在这个箱子内部的每个坐标都会被映射到裁剪空间上的一个点。</p>
 <img src="/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/perspective_frustum.png" class="" title="img">
 
 <p>在GLM中可以这样创建一个透视投影矩阵：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glm::mat4 proj = glm::<span class="built_in">perspective</span>(glm::<span class="built_in">radians</span>(<span class="number">45.0f</span>), (<span class="type">float</span>)width/(<span class="type">float</span>)height, <span class="number">0.1f</span>, <span class="number">100.0f</span>);</span><br></pre></td></tr></table></figure>
 
 <p>它的第一个参数定义了fov的值，它表示的是视野(Field of View)，并且设置了观察空间的大小。如果想要一个真实的观察效果，它的值通常设置为45.0f，但想要一个末日风格的结果你可以将其设置一个更大的值。第二个参数设置了宽高比，由视口的宽除以高所得。第三和第四个参数设置了平截头体的<strong>近</strong>和<strong>远</strong>平面。我们通常设置近距离为0.1f，而远距离设为100.0f。所有在近平面和远平面内且处于平截头体内的顶点都会被渲染。</p>
-<p>上述的每一个步骤都创建了一个变换矩阵：模型矩阵、观察矩阵和投影矩阵。一个顶点坐标将会根据以下过程被变换到裁剪坐标：<br>$$<br>V_{clip} = M_{projection} \cdot M_{view} \cdot M_{model} \cdot V_{local}<br>$$<br>最后OpenGL会使用glViewPort内部的参数来将标准化设备坐标映射到屏幕坐标，每个坐标都关联了一个屏幕上的点，这个过程称为视口变换。</p>
+<p>上述的每一个步骤都创建了一个变换矩阵：模型矩阵、观察矩阵和投影矩阵。一个顶点坐标将会根据以下过程被变换到裁剪坐标：</p>
+<img src="/2023/12/22/08-OpenGL%E7%9A%84%E5%9D%90%E6%A0%87%E7%A9%BA%E9%97%B4/image-20231223003723708.png" class="" title="image-20231223003723708">
+
+<p>最后OpenGL会使用glViewPort内部的参数来将标准化设备坐标映射到屏幕坐标，每个坐标都关联了一个屏幕上的点，这个过程称为视口变换。</p>
 <h2 id="3D空间"><a href="#3D空间" class="headerlink" title="3D空间"></a>3D空间</h2>
     </div>
 

@@ -257,7 +257,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-01-02 13:38:55 / 修改时间：18:14:09" itemprop="dateCreated datePublished" datetime="2024-01-02T13:38:55+08:00">2024-01-02</time>
+              <time title="创建时间：2024-01-02 13:38:55 / 修改时间：19:54:05" itemprop="dateCreated datePublished" datetime="2024-01-02T13:38:55+08:00">2024-01-02</time>
             </span>
 
           
@@ -322,15 +322,15 @@
 <h3 id="视角移动"><a href="#视角移动" class="headerlink" title="视角移动"></a>视角移动</h3><p>为了能够改变视角，需要根据鼠标的输入改变cameraFront向量。为了实现这种效果，需要用到欧拉角。欧拉角(Euler Angle)是可以表示3D空间中任何旋转的3个值：俯仰角(Pitch)、偏航角(Yaw)和滚转角(Roll)：</p>
 <img src="/2024/01/02/10-%E5%9C%A8OpenGL%E4%B8%AD%E5%88%9B%E5%BB%BA%E6%91%84%E5%83%8F%E6%9C%BA/camera_pitch_yaw_roll.png" class="" title="img">
 
-<p>俯仰角是描述我们如何往上或往下看的角，可以在第一张图中看到。第二张图展示了偏航角，偏航角表示我们往左和往右看的程度。滚转角代表我们如何<strong>翻滚</strong>摄像机，通常在太空飞船的摄像机中使用。每个欧拉角都有一个值来表示，把三个角结合起来就能够计算3D空间中任何的旋转向量了。</p>
-<p>在使用单位向量时，可以得到基于俯仰角和偏航角的方向向量：</p>
+<p>Pitch是描述我们如何往上或往下看的角，可以在第一张图中看到。第二张图展示了Yaw，Yaw表示我们往左和往右看的程度。Roll代表我们如何翻滚摄像机，通常在太空飞船的摄像机中使用。每个欧拉角都有一个值来表示，把三个角结合起来就能够计算3D空间中任何的旋转向量了。</p>
+<p>在使用单位向量时，可以得到基于Pitch和Yaw的方向向量：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">direction.x = <span class="built_in">cos</span>(glm::<span class="built_in">radians</span>(pitch)) * <span class="built_in">cos</span>(glm::<span class="built_in">radians</span>(yaw)); <span class="comment">// direction代表摄像机的前轴(Front)</span></span><br><span class="line">direction.y = <span class="built_in">sin</span>(glm::<span class="built_in">radians</span>(pitch));</span><br><span class="line">direction.z = <span class="built_in">cos</span>(glm::<span class="built_in">radians</span>(pitch)) * <span class="built_in">sin</span>(glm::<span class="built_in">radians</span>(yaw));</span><br></pre></td></tr></table></figure>
 
-<p>通过鼠标（或手柄）移动可以得到偏航角和俯仰角，水平的移动影响偏航角，竖直的移动影响俯仰角。它的原理就是，储存上一帧鼠标的位置，在当前帧中我们当前计算鼠标位置与上一帧的位置相差多少。如果水平/竖直差别越大那么俯仰角或偏航角就改变越大，也就是摄像机需要移动更多的距离。</p>
+<p>通过鼠标（或手柄）移动可以得到Yaw和Pitch，水平的移动影响Yaw，竖直的移动影响Pitch。它的原理就是，储存上一帧鼠标的位置，在当前帧中我们当前计算鼠标位置与上一帧的位置相差多少。如果水平/竖直差别越大那么Pitch或Yaw就改变越大，也就是摄像机需要移动更多的距离。</p>
 <p>首先要告诉GLFW，隐藏光标并捕捉它（因为使用了imgui，此处不使用）。捕捉光标表示的是，如果焦点在你的程序上，光标应该停留在窗口中（除非程序失去焦点或者退出）。用一个简单地配置调用来完成：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glfwSetInputMode</span>(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);</span><br></pre></td></tr></table></figure>
 
-<p>为了计算俯仰角和偏航角，需要让GLFW监听鼠标移动事件。（和键盘输入相似）用一个回调函数来完成，函数的原型如下：</p>
+<p>为了计算Pitch和Yaw，需要让GLFW监听鼠标移动事件。（和键盘输入相似）用一个回调函数来完成，函数的原型如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">mouse_callback</span><span class="params">(GLFWwindow* window, <span class="type">double</span> xpos, <span class="type">double</span> ypos)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <p>这里的xpos和ypos代表当前鼠标的位置。当用GLFW注册了回调函数之后，鼠标一移动mouse_callback函数就会被调用：</p>
@@ -339,7 +339,7 @@
 <p>首先计算鼠标距上一帧的偏移量，需要在程序中储存上一帧的鼠标位置，把它的初始值设置为屏幕的中心：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> lastX = SCREEN_WIDTH / <span class="number">2.0</span>;</span><br><span class="line"><span class="type">float</span> lastY = SCREEN_HEIGHT / <span class="number">2.0</span>;</span><br><span class="line"><span class="type">float</span> yaw   = <span class="number">-90.0f</span>;</span><br><span class="line"><span class="type">float</span> pitch =  <span class="number">0.0f</span>;</span><br><span class="line"><span class="type">float</span> xoffset = xpos - lastX;</span><br><span class="line"><span class="type">float</span> yoffset = lastY - ypos; <span class="comment">// 注意这里是相反的，因为y坐标是从底部往顶部依次增大的</span></span><br><span class="line">lastX = xpos;</span><br><span class="line">lastY = ypos;</span><br><span class="line"></span><br><span class="line"><span class="type">float</span> sensitivity = <span class="number">0.05f</span>;</span><br><span class="line">xoffset *= sensitivity; <span class="comment">// 乘以了sensitivity（灵敏度）值</span></span><br><span class="line">yoffset *= sensitivity;</span><br><span class="line"></span><br><span class="line">yaw   += xoffset;</span><br><span class="line">pitch += yoffset;</span><br></pre></td></tr></table></figure>
 
-<p>需要给摄像机添加一些限制，这样摄像机就不会发生奇怪的移动了（这样也会避免一些奇怪的问题）。对于俯仰角，要让用户不能看向高于89度的地方（在90度时视角会发生逆转，所以我们把89度作为极限），同样也不允许小于-89度。这样能够保证用户只能看到天空或脚下，但是不能超越这个限制。可以在值超过限制的时候将其改为极限值来实现：</p>
+<p>需要给摄像机添加一些限制，这样摄像机就不会发生奇怪的移动了（这样也会避免一些奇怪的问题）。对于Pitch，要让用户不能看向高于89度的地方（在90度时视角会发生逆转，所以我们把89度作为极限），同样也不允许小于-89度。这样能够保证用户只能看到天空或脚下，但是不能超越这个限制。可以在值超过限制的时候将其改为极限值来实现：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(pitch &gt; <span class="number">89.0f</span>)</span><br><span class="line">  pitch =  <span class="number">89.0f</span>;</span><br><span class="line"><span class="keyword">if</span>(pitch &lt; <span class="number">-89.0f</span>)</span><br><span class="line">  pitch = <span class="number">-89.0f</span>;</span><br></pre></td></tr></table></figure>
 
 <p>最后获得真正的方向向量：</p>

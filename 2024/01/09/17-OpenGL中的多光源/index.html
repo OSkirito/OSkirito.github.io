@@ -27,14 +27,16 @@
 <meta property="og:site_name" content="OS&#39;s Blog">
 <meta property="og:description" content="到此目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。 为了在场景">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/image-20240110205816249.png">
 <meta property="article:published_time" content="2024-01-09T06:05:28.000Z">
-<meta property="article:modified_time" content="2024-01-09T11:44:30.075Z">
+<meta property="article:modified_time" content="2024-01-10T15:57:46.879Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
 <meta property="article:tag" content="OpenGL">
 <meta property="article:tag" content="GLSL">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/image-20240110205816249.png">
 
 <link rel="canonical" href="http://example.com/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/">
 
@@ -191,10 +193,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-01-09 14:05:28 / 修改时间：19:44:30" itemprop="dateCreated datePublished" datetime="2024-01-09T14:05:28+08:00">2024-01-09</time>
+              <time title="创建时间：2024-01-09 14:05:28" itemprop="dateCreated datePublished" datetime="2024-01-09T14:05:28+08:00">2024-01-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-10 23:57:46" itemprop="dateModified" datetime="2024-01-10T23:57:46+08:00">2024-01-10</time>
+              </span>
 
           
 
@@ -231,8 +239,12 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vec3 <span class="title">CalcSpotLight</span><span class="params">(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 ambient = <span class="built_in">vec3</span>(light.ambientStrength) * light.lightColor * material.ambient * <span class="built_in">vec3</span>(<span class="built_in">texture</span>(material.diffusemap, TexCoords));</span><br><span class="line"></span><br><span class="line">    vec3 lightDir = <span class="built_in">normalize</span>(light.lightPos - fragPos);</span><br><span class="line">    <span class="type">float</span> diff = <span class="built_in">max</span>(<span class="built_in">dot</span>(normal, lightDir), <span class="number">0.0</span>);</span><br><span class="line">    vec3 diffuse = <span class="built_in">vec3</span>(light.diffuseStrength) * light.lightColor * diff * material.diffuse * <span class="built_in">vec3</span>(<span class="built_in">texture</span>(material.diffusemap, TexCoords));</span><br><span class="line"></span><br><span class="line">    vec3 reflectDir = <span class="built_in">reflect</span>(-lightDir, normal);</span><br><span class="line">    <span class="type">float</span> spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(viewDir, reflectDir), <span class="number">0.0</span>), material.shininess);</span><br><span class="line">    vec3 specular = <span class="built_in">vec3</span>(light.specularStrength) * light.lightColor * spec * material.specular * <span class="built_in">vec3</span>(<span class="built_in">texture</span>(material.specularmap, TexCoords));</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> theta     = <span class="built_in">dot</span>(lightDir, <span class="built_in">normalize</span>(-light.lightDirection));</span><br><span class="line">    <span class="type">float</span> epsilon   = light.cutOff - light.outerCutOff;</span><br><span class="line">    <span class="type">float</span> intensity = <span class="built_in">clamp</span>((theta - light.outerCutOff) / epsilon, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line">    diffuse  *= intensity;</span><br><span class="line">    specular *= intensity;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (ambient + diffuse + specular);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>最后将所有光照结果在main函数中进行合并：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 norm = <span class="built_in">normalize</span>(Normal);</span><br><span class="line">    vec3 viewDir = <span class="built_in">normalize</span>(viewPos - FragPos);</span><br><span class="line"></span><br><span class="line">    vec3 result = <span class="built_in">CalcDirLight</span>(dirLight, norm, viewDir);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; NR_POINT_LIGHTS; i++)</span><br><span class="line">        result += <span class="built_in">CalcPointLight</span>(pointLights[i], norm, FragPos, viewDir);    </span><br><span class="line">    result += <span class="built_in">CalcSpotLight</span>(spotLight, norm, FragPos, viewDir);    </span><br><span class="line"></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(result, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 norm = <span class="built_in">normalize</span>(Normal);</span><br><span class="line">    vec3 viewDir = <span class="built_in">normalize</span>(viewPos - FragPos);</span><br><span class="line"></span><br><span class="line">    vec3 result = <span class="built_in">CalcDirLight</span>(dirLight, norm, viewDir);</span><br><span class="line">    result += <span class="built_in">CalcPointLight</span>(pointLight, norm, FragPos, viewDir);    </span><br><span class="line">    result += <span class="built_in">CalcSpotLight</span>(spotLight, norm, FragPos, viewDir);    </span><br><span class="line"></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(result, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>对主程序的ui进行了一些修改，最终效果如下：</p>
+<img src="/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/image-20240110205816249.png" class="" title="image-20240110205816249">
+
+<p>可以在这里获取完整的代码</p>
 
     </div>
 

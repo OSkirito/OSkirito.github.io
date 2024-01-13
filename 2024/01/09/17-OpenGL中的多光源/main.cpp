@@ -557,6 +557,14 @@ void processInput(GLFWwindow *window, float cameraSpeed)
     {
         cameraPos -= cameraSpeed * cameraUp;
     }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
+    {
+        enableMouse = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+    {
+        enableMouse = false;
+    }
 
     // 摄像机重置
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)

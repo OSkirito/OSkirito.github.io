@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-24 16:09:16" itemprop="dateModified" datetime="2024-01-24T16:09:16+08:00">2024-01-24</time>
+                <time title="修改时间：2024-01-24 17:32:15" itemprop="dateModified" datetime="2024-01-24T17:32:15+08:00">2024-01-24</time>
               </span>
 
           
@@ -311,6 +311,13 @@
 <p>所以现在不仅有了个灵活的模型加载系统，也获得了一个加载对象很快的优化版本。</p>
 <p>可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/01/14/18-%E5%9C%A8OpenGL%E4%B8%AD%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/model.h">这里</a>获取到model类代码，将它添加到我们的项目：</p>
 <img src="/2024/01/14/18-%E5%9C%A8OpenGL%E4%B8%AD%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/image-20240123165741355.png" class="" title="image-20240123165741355">
+
+<h2 id="加载模型"><a href="#加载模型" class="headerlink" title="加载模型"></a>加载模型</h2><p>首先需要在主程序中引入头文件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;tool/mesh.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;tool/model.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>调用model类并传入模型进行绘制：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Model <span class="title">myModel</span><span class="params">(<span class="string">&quot;./static/model/nanosuit/nanosuit.obj&quot;</span>)</span></span>;</span><br><span class="line"><span class="keyword">while</span>(!<span class="built_in">glfwWindowShouldClose</span>(window))</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">	myModel.<span class="built_in">Draw</span>(myShader);</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>

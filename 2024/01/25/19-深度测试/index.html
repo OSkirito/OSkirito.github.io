@@ -20,34 +20,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="首先准备好需要的贴图（此处使用抬眉皱纹演示，中性表情和抬眉表情的颜色贴图及法线，左右眉蒙版）   打开含有绑定完好角色的Maya文件，选择头部模型创建两个属性（设置属性名称、类型、最大最小值、默认值）   打开关键帧驱动窗口，设置相应的驱动范围（最小值k一下，最大值k一下）     打开材质编辑器，选择头部材质，导入蒙版贴图，创建乘法节点（通过属性值驱动蒙版强度）   打开连接编辑器，将属性值与蒙">
+  <meta name="description" content="深度测试深度缓冲就像颜色缓冲一样，在每个片段中储存了信息，并且和颜色缓冲有着一样的宽度和高度。深度缓冲是由窗口系统自动创建的，它会以16、24或32位float的形式储存它的深度值。在大部分的系统中，深度缓冲的精度都是24位。 当深度测试(Depth Testing)被启用的时候，OpenGL会将一个片段的深度值与深度缓冲的内容进行对比。OpenGL会执行一个深度测试，如果这个测试通过了的话，深度">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Maya中实现简单的褶皱纹理变化">
-<meta property="og:url" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/index.html">
+<meta property="og:title" content="19-深度测试">
+<meta property="og:url" content="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="首先准备好需要的贴图（此处使用抬眉皱纹演示，中性表情和抬眉表情的颜色贴图及法线，左右眉蒙版）   打开含有绑定完好角色的Maya文件，选择头部模型创建两个属性（设置属性名称、类型、最大最小值、默认值）   打开关键帧驱动窗口，设置相应的驱动范围（最小值k一下，最大值k一下）     打开材质编辑器，选择头部材质，导入蒙版贴图，创建乘法节点（通过属性值驱动蒙版强度）   打开连接编辑器，将属性值与蒙">
+<meta property="og:description" content="深度测试深度缓冲就像颜色缓冲一样，在每个片段中储存了信息，并且和颜色缓冲有着一样的宽度和高度。深度缓冲是由窗口系统自动创建的，它会以16、24或32位float的形式储存它的深度值。在大部分的系统中，深度缓冲的精度都是24位。 当深度测试(Depth Testing)被启用的时候，OpenGL会将一个片段的深度值与深度缓冲的内容进行对比。OpenGL会执行一个深度测试，如果这个测试通过了的话，深度">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521181559601.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183125175.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183318678.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183512309.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183854030.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184024439.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184223406.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184344616.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184404136.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184446495.png">
-<meta property="og:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/%E8%A4%B6%E7%9A%B1%E6%BC%94%E7%A4%BA.gif">
-<meta property="article:published_time" content="2023-05-22T02:22:35.000Z">
-<meta property="article:modified_time" content="2023-05-22T02:23:53.385Z">
+<meta property="article:published_time" content="2024-01-25T10:23:35.000Z">
+<meta property="article:modified_time" content="2024-02-21T09:09:28.889Z">
 <meta property="article:author" content="OSkirito">
-<meta property="article:tag" content="Maya">
-<meta property="article:tag" content="Arnold">
-<meta property="article:tag" content="着色器">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Shader">
+<meta property="article:tag" content="OpenGL">
+<meta property="article:tag" content="GLSL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521181559601.png">
 
-<link rel="canonical" href="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/">
+<link rel="canonical" href="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
 
 
 <script id="page-configurations">
@@ -60,7 +49,7 @@
   };
 </script>
 
-  <title>Maya中实现简单的褶皱纹理变化 | OS's Blog</title>
+  <title>19-深度测试 | OS's Blog</title>
   
 
 
@@ -180,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head_image.png">
@@ -193,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Maya中实现简单的褶皱纹理变化
+          19-深度测试
         </h1>
 
         <div class="post-meta">
@@ -202,10 +191,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-05-22 10:22:35 / 修改时间：10:23:53" itemprop="dateCreated datePublished" datetime="2023-05-22T10:22:35+08:00">2023-05-22</time>
+              <time title="创建时间：2024-01-25 18:23:35" itemprop="dateCreated datePublished" datetime="2024-01-25T18:23:35+08:00">2024-01-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-02-21 17:09:28" itemprop="dateModified" datetime="2024-02-21T17:09:28+08:00">2024-02-21</time>
+              </span>
 
           
 
@@ -218,36 +213,65 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>首先准备好需要的贴图（此处使用抬眉皱纹演示，中性表情和抬眉表情的颜色贴图及法线，左右眉蒙版）</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521181559601.png" class="" title="image-20230521181559601">
+        <h2 id="深度测试"><a href="#深度测试" class="headerlink" title="深度测试"></a>深度测试</h2><p>深度缓冲就像颜色缓冲一样，在每个片段中储存了信息，并且和颜色缓冲有着一样的宽度和高度。深度缓冲是由窗口系统自动创建的，它会以16、24或32位float的形式储存它的深度值。在大部分的系统中，深度缓冲的精度都是24位。</p>
+<p>当深度测试(Depth Testing)被启用的时候，OpenGL会将一个片段的深度值与深度缓冲的内容进行对比。OpenGL会执行一个深度测试，如果这个测试通过了的话，深度缓冲将会更新为新的深度值。如果深度测试失败了，片段将会被丢弃。</p>
+<p>深度缓冲在片段着色器之后运行，并且在屏幕空间中运行。屏幕空间坐标与glViewport所定义的视口密切相关，而且可以直接使用gl_FragCoord从片段着色器中直接访问。gl_FragCoord的x和y分量代表了片段的屏幕空间坐标（(0, 0)位于左下角）。gl_FragCoord中包含了一个z分量，它包含了片段真正的深度值。z值就是与深度缓冲内容所对比的值。</p>
+<p>深度测试默认是禁用的，如果要启用深度测试，需要用GL_DEPTH_TEST：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br></pre></td></tr></table></figure>
 
-<p>打开含有绑定完好角色的Maya文件，选择头部模型创建两个属性（设置属性名称、类型、最大最小值、默认值）</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183125175.png" class="" title="image-20230521183125175">
+<p>当启用的时候，如果一个片段通过了深度测试的话，OpenGL会在深度缓冲中储存该片段的z值；如果没有通过深度缓冲，则会丢弃该片段。如果启用了深度缓冲，还应该在每个渲染迭代之前使用GL_DEPTH_BUFFER_BIT来清除深度缓冲，否则仍会在使用上一次渲染迭代中的写入的深度值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
 
-<p>打开关键帧驱动窗口，设置相应的驱动范围（最小值k一下，最大值k一下）</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183318678.png" class="" title="image-20230521183318678">
+<p>在某些情况下需要对所有片段都执行深度测试并丢弃相应的片段，但不希望更新深度缓冲。OpenGL允许禁用深度缓冲的写入，只需要设置它的深度掩码(Depth Mask)设置为GL_FALSE就可以了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthMask</span>(GL_FALSE);</span><br></pre></td></tr></table></figure>
 
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183512309.png" class="" title="image-20230521183512309">
+<p>注意这只在深度测试被启用的时候才有效果。</p>
+<h2 id="深度测试函数"><a href="#深度测试函数" class="headerlink" title="深度测试函数"></a>深度测试函数</h2><p>OpenGL允许修改深度测试中使用的比较运算符。这允许控制OpenGL什么时候该通过或丢弃一个片段，什么时候去更新深度缓冲。可以调用glDepthFunc函数来设置比较运算符（或者说深度函数(Depth Function)）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthFunc</span>(GL_LESS);</span><br></pre></td></tr></table></figure>
 
-<p>打开材质编辑器，选择头部材质，导入蒙版贴图，创建乘法节点（通过属性值驱动蒙版强度）</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521183854030.png" class="" title="image-20230521183854030">
-
-<p>打开连接编辑器，将属性值与蒙版相乘</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184024439.png" class="" title="image-20230521184024439">
-
-<p>将左右蒙版的结果相加，重新生成为贴图再与一个三维向量相乘</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184223406.png" class="" title="image-20230521184223406">
-
-<p>将颜色和法线贴图做如下操作</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184344616.png" class="" title="image-20230521184344616">
-
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184404136.png" class="" title="image-20230521184404136">
-
-<p>将最终的结果与材质对应节点相连并将材质赋予头部模型</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/image-20230521184446495.png" class="" title="image-20230521184446495">
-
-<p>最终效果</p>
-<img src="/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/%E8%A4%B6%E7%9A%B1%E6%BC%94%E7%A4%BA.gif" class="" title="褶皱演示">
+<p>这个函数接受下面表格中的比较运算符：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GL_ALWAYS</td>
+<td align="left">永远通过深度测试</td>
+</tr>
+<tr>
+<td align="left">GL_NEVER</td>
+<td align="left">永远不通过深度测试</td>
+</tr>
+<tr>
+<td align="left">GL_LESS</td>
+<td align="left">在片段深度值小于缓冲的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_EQUAL</td>
+<td align="left">在片段深度值等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_LEQUAL</td>
+<td align="left">在片段深度值小于等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_GREATER</td>
+<td align="left">在片段深度值大于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_NOTEQUAL</td>
+<td align="left">在片段深度值不等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_GEQUAL</td>
+<td align="left">在片段深度值大于等于缓冲区的深度值时通过测试</td>
+</tr>
+</tbody></table>
+<p>默认情况下使用的深度函数是GL_LESS，它将会丢弃深度值大于等于当前深度缓冲值的所有片段。</p>
+<p>让我们看看改变深度函数会对视觉输出有什么影响。我们将使用一个新的代码配置，它会显示一个没有光照的基本场景，里面有两个有纹理的立方体，放置在一个有纹理的地板上。你可以在<a target="_blank" rel="noopener" href="https://learnopengl.com/code_viewer_gh.php?code=src/4.advanced_opengl/1.1.depth_testing/depth_testing.cpp">这里</a>找到源代码。</p>
 
     </div>
 
@@ -263,7 +287,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/2023/05/22/Maya%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E8%A4%B6%E7%9A%B1%E7%BA%B9%E7%90%86%E5%8F%98%E5%8C%96/" title="Maya中实现简单的褶皱纹理变化">http://example.com/2023/05/22/Maya中实现简单的褶皱纹理变化/</a>
+    <a href="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" title="19-深度测试">http://example.com/2024/01/25/19-深度测试/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -274,9 +298,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Maya/" rel="tag"># Maya</a>
-              <a href="/tags/Arnold/" rel="tag"># Arnold</a>
-              <a href="/tags/%E7%9D%80%E8%89%B2%E5%99%A8/" rel="tag"># 着色器</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Shader/" rel="tag"># Shader</a>
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+              <a href="/tags/GLSL/" rel="tag"># GLSL</a>
           </div>
 
         
@@ -285,13 +310,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/" rel="prev" title="在UE中使用UI制作过场动画">
-      <i class="fa fa-chevron-left"></i> 在UE中使用UI制作过场动画
+    <a href="/2024/01/14/18-%E5%9C%A8OpenGL%E4%B8%AD%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/" rel="prev" title="18-在OpenGL中加载模型">
+      <i class="fa fa-chevron-left"></i> 18-在OpenGL中加载模型
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/05/31/Maya%E4%B8%AD%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%BC%A0%E5%8A%9B%E5%9B%BE/" rel="next" title="Maya中创建并使用张力图">
-      Maya中创建并使用张力图 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -350,6 +372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">深度测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">深度测试函数</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

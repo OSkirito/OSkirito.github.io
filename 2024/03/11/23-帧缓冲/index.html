@@ -28,8 +28,15 @@
 <meta property="og:description" content="到目前为止，已经有很多屏幕缓冲了：用于写入颜色值的颜色缓冲、用于写入深度信息的深度缓冲和允许根据条件丢弃特定片段的模板缓冲。这些缓冲结合起来叫做帧缓冲(Framebuffer)，它被储存在内存中。OpenGL允许定义我们自己的帧缓冲，也就是说能够定义我们自己的颜色缓冲，甚至是深度缓冲和模板缓冲。 我们目前所做的所有操作都是在默认帧缓冲的渲染缓冲上进行的。默认的帧缓冲是在你创建窗口的时候生成和配置的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314160426605.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314161435412.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314161905421.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162018510.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162152771.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162600443.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162822797.png">
+<meta property="og:image" content="http://example.com/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314163128094.png">
 <meta property="article:published_time" content="2024-03-11T02:25:08.000Z">
-<meta property="article:modified_time" content="2024-03-14T08:05:07.668Z">
+<meta property="article:modified_time" content="2024-03-14T09:27:51.149Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -201,7 +208,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-14 16:05:07" itemprop="dateModified" datetime="2024-03-14T16:05:07+08:00">2024-03-14</time>
+                <time title="修改时间：2024-03-14 17:27:51" itemprop="dateModified" datetime="2024-03-14T17:27:51+08:00">2024-03-14</time>
               </span>
 
           
@@ -320,13 +327,52 @@
 <p>目前的结果如下所示：</p>
 <img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314160426605.png" class="" title="image-20240314160426605">
 
-<p>在这里获取目前的代码</p>
-<h2 id="后期处理"><a href="#后期处理" class="headerlink" title="后期处理"></a>后期处理</h2><p>能够以一个纹理图像的方式访问已渲染场景中的每个像素，我们可以在片段着色器中创建出非常有趣的效果。这些有趣效果统称为后期处理(Post-processing)效果。</p>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/42bf04b9bcf254159c26574e67a1f7a3c7eacd9e/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/framebuffers_code01.rar">这里</a>获取目前的代码</p>
+<h2 id="后期处理"><a href="#后期处理" class="headerlink" title="后期处理"></a>后期处理</h2><p>能够以一个纹理图像的方式访问已渲染场景中的每个像素，可以在片段着色器中创建出后期处理(Post-processing)效果。</p>
 <h3 id="反相"><a href="#反相" class="headerlink" title="反相"></a>反相</h3><p>我们现在能够访问渲染输出的每个颜色，所以修改屏幕的片段着色器，从屏幕纹理中取颜色值，然后用1.0减去它，对它进行反相：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(<span class="number">1.0</span> - <span class="built_in">texture</span>(screenTexture, TexCoords)), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>尽管反相是一个相对简单的后期处理效果，它已经能创造一些奇怪的效果了：</p>
-<p>在片段着色器中仅仅使用一行代码，就能让整个场景的颜色都反相了。很酷吧？</p>
+<p>现在的运行结果如下：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314161435412.png" class="" title="image-20240314161435412">
+
+<h3 id="灰度"><a href="#灰度" class="headerlink" title="灰度"></a>灰度</h3><p>灰度是移除场景中除了黑白灰以外所有的颜色，让整个图像灰度化(Grayscale)。取所有的颜色分量，将它们平均化，修改屏幕的片段着色器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">texture</span>(screenTexture, TexCoords);</span><br><span class="line">    <span class="type">float</span> average = (FragColor.r + FragColor.g + FragColor.b) / <span class="number">3.0</span>;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(average, average, average, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行效果如下（为了使效果更明显，替换了立方体的贴图）：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314161905421.png" class="" title="image-20240314161905421">
+
+<p>这已经能创造很好的结果了，但人眼会对绿色更加敏感一些，而对蓝色不那么敏感，所以为了获取物理上更精确的效果，需要使用加权的(Weighted)通道：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">texture</span>(screenTexture, TexCoords);</span><br><span class="line">    <span class="type">float</span> average = <span class="number">0.2126</span> * FragColor.r + <span class="number">0.7152</span> * FragColor.g + <span class="number">0.0722</span> * FragColor.b;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(average, average, average, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在的效果如下：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162018510.png" class="" title="image-20240314162018510">
+
+<h3 id="锐化"><a href="#锐化" class="headerlink" title="锐化"></a>锐化</h3><p>在一个纹理图像上做后期处理的另外一个好处是，可以从纹理的其它地方采样颜色值。比如说可以在当前纹理坐标的周围取一小块区域，对当前纹理值周围的多个纹理值进行采样。</p>
+<p>核(Kernel)（或卷积矩阵(Convolution Matrix)）是一个类矩阵的数值数组，它的中心为当前的像素，它会用它的核值乘以周围的像素值，并将结果相加变成一个值。所以，基本上是在对当前像素周围的纹理坐标添加一个小的偏移量，并根据核将结果合并。如下是一个例子：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162152771.png" class="" title="image-20240314162152771">
+
+<p>这个核取了8个周围像素值，将它们乘以2，而把当前的像素乘以-15。这个核的例子将周围的像素乘上了一个权重，并将当前像素乘以一个比较大的负权重来平衡结果。</p>
+<p>注意，大部分核将所有的权重加起来之后都应该会等于1，如果它们加起来不等于1，这就意味着最终的纹理颜色将会比原纹理值更亮或者更暗了。</p>
+<p>我们需要稍微修改一下屏幕的片段着色器，让它能够支持核。假设使用的核都是3x3核（实际上大部分核都是）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">float</span> offset = <span class="number">1.0</span> / <span class="number">300.0</span>;  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec2 offsets[<span class="number">9</span>] = vec2[](</span><br><span class="line">        <span class="built_in">vec2</span>(-offset,  offset), <span class="comment">// 左上</span></span><br><span class="line">        <span class="built_in">vec2</span>( <span class="number">0.0f</span>,    offset), <span class="comment">// 正上</span></span><br><span class="line">        <span class="built_in">vec2</span>( offset,  offset), <span class="comment">// 右上</span></span><br><span class="line">        <span class="built_in">vec2</span>(-offset,  <span class="number">0.0f</span>),   <span class="comment">// 左</span></span><br><span class="line">        <span class="built_in">vec2</span>( <span class="number">0.0f</span>,    <span class="number">0.0f</span>),   <span class="comment">// 中</span></span><br><span class="line">        <span class="built_in">vec2</span>( offset,  <span class="number">0.0f</span>),   <span class="comment">// 右</span></span><br><span class="line">        <span class="built_in">vec2</span>(-offset, -offset), <span class="comment">// 左下</span></span><br><span class="line">        <span class="built_in">vec2</span>( <span class="number">0.0f</span>,   -offset), <span class="comment">// 正下</span></span><br><span class="line">        <span class="built_in">vec2</span>( offset, -offset)  <span class="comment">// 右下</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> kernel[<span class="number">9</span>] = <span class="type">float</span>[](</span><br><span class="line">        <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>,</span><br><span class="line">        <span class="number">-1</span>,  <span class="number">9</span>, <span class="number">-1</span>,</span><br><span class="line">        <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    vec3 sampleTex[<span class="number">9</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        sampleTex[i] = <span class="built_in">vec3</span>(<span class="built_in">texture</span>(screenTexture, TexCoords.st + offsets[i]));</span><br><span class="line">    &#125;</span><br><span class="line">    vec3 col = <span class="built_in">vec3</span>(<span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++)</span><br><span class="line">        col += sampleTex[i] * kernel[i];</span><br><span class="line"></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(col, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在片段着色器中，首先为周围的纹理坐标创建了一个9个<code>vec2</code>偏移量的数组。偏移量是一个常量，可以按照喜好自定义它。之后定义一个核，上面是一个锐化(Sharpen)核，它会采样周围的所有像素，锐化每个颜色值。最后，在采样时我们将每个偏移量加到当前纹理坐标上，获取需要采样的纹理，之后将这些纹理值乘以加权的核值，并将它们加到一起。</p>
+<p>运行的结果如下所示：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162600443.png" class="" title="image-20240314162600443">
+
+<h3 id="模糊"><a href="#模糊" class="headerlink" title="模糊"></a>模糊</h3><p>创建模糊的效果，只需要修改屏幕的片段着色器中的卷积矩阵：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> kernel[<span class="number">9</span>] = <span class="type">float</span>[](</span><br><span class="line">    <span class="number">1.0</span> / <span class="number">16</span>, <span class="number">2.0</span> / <span class="number">16</span>, <span class="number">1.0</span> / <span class="number">16</span>,</span><br><span class="line">    <span class="number">2.0</span> / <span class="number">16</span>, <span class="number">4.0</span> / <span class="number">16</span>, <span class="number">2.0</span> / <span class="number">16</span>,</span><br><span class="line">    <span class="number">1.0</span> / <span class="number">16</span>, <span class="number">2.0</span> / <span class="number">16</span>, <span class="number">1.0</span> / <span class="number">16</span>  </span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314162822797.png" class="" title="image-20240314162822797">
+
+<h3 id="边缘检测"><a href="#边缘检测" class="headerlink" title="边缘检测"></a>边缘检测</h3><p>下面是边缘检测的卷积矩阵：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> kernel[<span class="number">9</span>] = <span class="type">float</span>[](</span><br><span class="line">    <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">    <span class="number">1</span>,<span class="number">-8</span>, <span class="number">1</span>,</span><br><span class="line">    <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<img src="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/image-20240314163128094.png" class="" title="image-20240314163128094">
+
+<p>注意，核在对屏幕纹理的边缘进行采样的时候，由于还会对中心像素周围的8个像素进行采样，其实会取到纹理之外的像素。由于环绕方式默认是GL_REPEAT，所以在没有设置的情况下取到的是屏幕另一边的像素，而另一边的像素本不应该对中心像素产生影响，这就可能会在屏幕边缘产生很奇怪的条纹。为了消除这一问题，我们可以将屏幕纹理的环绕方式都设置为GL_CLAMP_TO_EDGE。这样子在取到纹理外的像素时，就能够重复边缘的像素来更精确地估计最终的值了。</p>
 
     </div>
 
@@ -427,7 +473,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A7%E7%BC%93%E5%86%B2"><span class="nav-number">1.</span> <span class="nav-text">帧缓冲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%9C%9F%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">后期处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E7%9B%B8"><span class="nav-number">2.1.</span> <span class="nav-text">反相</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A7%E7%BC%93%E5%86%B2"><span class="nav-number">1.</span> <span class="nav-text">帧缓冲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%9C%9F%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">后期处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E7%9B%B8"><span class="nav-number">2.1.</span> <span class="nav-text">反相</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B0%E5%BA%A6"><span class="nav-number">2.2.</span> <span class="nav-text">灰度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%90%E5%8C%96"><span class="nav-number">2.3.</span> <span class="nav-text">锐化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E7%B3%8A"><span class="nav-number">2.4.</span> <span class="nav-text">模糊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="nav-number">2.5.</span> <span class="nav-text">边缘检测</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-27 15:42:08" itemprop="dateModified" datetime="2024-03-27T15:42:08+08:00">2024-03-27</time>
+                <time title="修改时间：2024-03-27 17:20:23" itemprop="dateModified" datetime="2024-03-27T17:20:23+08:00">2024-03-27</time>
               </span>
 
           
@@ -295,7 +295,7 @@
 
 <p>最终的标准化设备坐标将永远会有一个等于1.0的z值：最大的深度值。结果就是天空盒只会在没有可见物体的地方渲染了（只有这样才能通过深度测试，其它所有的东西都在天空盒前面）。</p>
 <p>我们还要改变一下深度函数，将它从默认的GL_LESS改为GL_LEQUAL。深度缓冲会填充上天空盒的1.0值，所以需要保证天空盒在值小于或等于深度缓冲而不是小于时通过深度测试。</p>
-<p>在这里可以获得完整的代码</p>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/a5fb81d89bb2f0cf2ebd50f228424ba8bb394028/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_code.rar">这里</a>可以获得完整的代码</p>
 <h1 id="环境映射"><a href="#环境映射" class="headerlink" title="环境映射"></a>环境映射</h1><p>现在将整个环境映射到了一个纹理对象上了，能利用这个的不仅仅只有天空盒。通过使用环境的立方体贴图给物体反射和折射的属性。这样使用环境立方体贴图的技术叫做环境映射(Environment Mapping)，其中最流行的两个是反射(Reflection)和折射(Refraction)。</p>
 <h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>反射这个属性表现为物体（或物体的一部分）反射它周围环境，即根据观察者的视角，物体的颜色或多或少等于它的环境。镜子就是一个反射性物体：它会根据观察者的视角反射它周围的环境。</p>
 <p>下面这张图展示了我们如何计算反射向量，并如何使用这个向量来从立方体贴图中采样：</p>
@@ -320,6 +320,56 @@
 
 <p>编译并运行代码，将会得到一个像是镜子一样的箱子,周围的天空盒被完美地反射在箱子上:</p>
 <img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327153815735.png" class="" title="image-20240327153815735">
+
+<p>这里可以获取完整的代码</p>
+<p>同样的，我们可以将立方体替换为模型，运行效果如下：</p>
+<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327171248065.png" class="" title="image-20240327171248065">
+
+<p>这里获取完整代码</p>
+<h3 id="折射"><a href="#折射" class="headerlink" title="折射"></a>折射</h3><p>环境映射的另一种形式是折射，它和反射很相似。折射是光线由于传播介质的改变而产生的方向变化。在常见的类水表面上所产生的现象就是折射，光线不是直直地传播，而是弯曲了一点。</p>
+<p>折射是通过<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Snell's_law">斯涅尔定律</a>(Snell’s Law)来描述的，使用环境贴图的话看起来像是这样：</p>
+<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_refraction_theory.png" class="" title="img">
+
+<p>同样，有一个观察向量𝐼¯，一个法向量𝑁¯，而这次是折射向量𝑅¯。可以看到，观察向量的方向轻微弯曲了。弯折后的向量𝑅¯将会用来从立方体贴图中采样。</p>
+<p>折射可以使用GLSL的内建refract函数来轻松实现，它需要一个法向量、一个观察方向和两个材质之间的折射率(Refractive Index)。折射率决定了材质中光线弯曲的程度，每个材质都有自己的折射率。一些最常见的折射率可以在下表中找到：</p>
+<table>
+<thead>
+<tr>
+<th align="left">材质</th>
+<th align="left">折射率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">空气</td>
+<td align="left">1.00</td>
+</tr>
+<tr>
+<td align="left">水</td>
+<td align="left">1.33</td>
+</tr>
+<tr>
+<td align="left">冰</td>
+<td align="left">1.309</td>
+</tr>
+<tr>
+<td align="left">玻璃</td>
+<td align="left">1.52</td>
+</tr>
+<tr>
+<td align="left">钻石</td>
+<td align="left">2.42</td>
+</tr>
+</tbody></table>
+<p>使用这些折射率来计算光传播的两种材质间的比值。在目前的例子中，光线/视线从<strong>空气</strong>进入<strong>玻璃</strong>（，所以比值为1.001.52=0.6581.001.52=0.658。使用反射的代码，修改片段着色器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec3 Normal;</span><br><span class="line">in vec3 Position;</span><br><span class="line"></span><br><span class="line">uniform vec3 cameraPos;</span><br><span class="line">uniform samplerCube skybox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="type">float</span> ratio = <span class="number">1.00</span> / <span class="number">1.52</span>;</span><br><span class="line">    vec3 I = <span class="built_in">normalize</span>(Position - cameraPos);</span><br><span class="line">    vec3 R = <span class="built_in">refract</span>(I, <span class="built_in">normalize</span>(Normal), ratio);</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">texture</span>(skybox, R).rgb, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过改变折射率，可以创建完全不同的视觉效果。编译程序并运行，结果如下：</p>
+<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327172003633.png" class="" title="image-20240327172003633">
+
+<p>获取完整代码</p>
+<p>有了光照、反射、折射和顶点移动的组合，可以创建出非常漂亮的水。注意，如果要想获得物理上精确的结果，还需要在光线离开物体的时候再次折射，现在使用的只是单面折射(Single-side Refraction)，但它对大部分场合都是没问题的。</p>
+<h2 id="动态环境贴图"><a href="#动态环境贴图" class="headerlink" title="动态环境贴图"></a>动态环境贴图</h2><p>现在使用的都是静态图像的组合来作为天空盒，看起来很不错，但它没有在场景中包括可移动的物体。通过使用帧缓冲，能够为物体的6个不同角度创建出场景的纹理，并在每个渲染迭代中将它们储存到一个立方体贴图中。之后就可以使用这个（动态生成的）立方体贴图来创建出更真实的，包含其它物体的，反射和折射表面了。这就叫做动态环境映射(Dynamic Environment Mapping)，因为动态创建了物体周围的立方体贴图，并将其用作环境贴图。</p>
+<p>虽然它看起来很棒，但它有一个很大的缺点：需要为使用环境贴图的物体渲染场景6次，这是对程序是非常大的性能开销。现代的程序通常会尽可能使用天空盒，并在可能的时候使用预编译的立方体贴图，只要它们能产生一点动态环境贴图的效果。虽然动态环境贴图是一个很棒的技术，但是要想在不降低性能的情况下让它工作还是需要非常多的技巧的。</p>
 
       
     </div>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="高级数据OpenGL中的缓冲只是一个管理特定内存块的对象，没有其它更多的功能了。将它绑定到一个缓冲目标(Buffer Target)时，才赋予了其意义。当绑定一个缓冲到GL_ARRAY_BUFFER时，它就是一个顶点数组缓冲，但也可以将其绑定到GL_ELEMENT_ARRAY_BUFFER。OpenGL内部会为每个目标储存一个缓冲，并且会根据目标的不同，以不同的方式处理缓冲。 到目前为止，一直是调">
+<meta property="og:type" content="article">
+<meta property="og:title" content="25-高级GLSL">
+<meta property="og:url" content="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="高级数据OpenGL中的缓冲只是一个管理特定内存块的对象，没有其它更多的功能了。将它绑定到一个缓冲目标(Buffer Target)时，才赋予了其意义。当绑定一个缓冲到GL_ARRAY_BUFFER时，它就是一个顶点数组缓冲，但也可以将其绑定到GL_ELEMENT_ARRAY_BUFFER。OpenGL内部会为每个目标储存一个缓冲，并且会根据目标的不同，以不同的方式处理缓冲。 到目前为止，一直是调">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-27T09:53:50.000Z">
+<meta property="article:modified_time" content="2024-04-09T07:41:17.473Z">
+<meta property="article:author" content="OSkirito">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Shader">
+<meta property="article:tag" content="OpenGL">
+<meta property="article:tag" content="GLSL">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>25-高级GLSL | OS's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">41</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          25-高级GLSL
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-27 17:53:50" itemprop="dateCreated datePublished" datetime="2024-03-27T17:53:50+08:00">2024-03-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-09 15:41:17" itemprop="dateModified" datetime="2024-04-09T15:41:17+08:00">2024-04-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="高级数据"><a href="#高级数据" class="headerlink" title="高级数据"></a>高级数据</h2><p>OpenGL中的缓冲只是一个管理特定内存块的对象，没有其它更多的功能了。将它绑定到一个缓冲目标(Buffer Target)时，才赋予了其意义。当绑定一个缓冲到GL_ARRAY_BUFFER时，它就是一个顶点数组缓冲，但也可以将其绑定到GL_ELEMENT_ARRAY_BUFFER。OpenGL内部会为每个目标储存一个缓冲，并且会根据目标的不同，以不同的方式处理缓冲。</p>
+<p>到目前为止，一直是调用glBufferData函数来填充缓冲对象所管理的内存，这个函数会分配一块内存，并将数据添加到这块内存中。如果将它的<code>data</code>参数设置为<code>NULL</code>，那么这个函数将只会分配内存，但不进行填充。这需要预留(Reserve)特定大小的内存，之后回到这个缓冲一点一点填充。</p>
+<p>除了使用一次函数调用填充整个缓冲之外，也可以使用glBufferSubData，填充缓冲的特定区域。这个函数需要一个缓冲目标、一个偏移量、数据的大小和数据本身作为它的参数。这个函数不同的地方在于，可以提供一个偏移量，指定从何处开始填充这个缓冲。要注意的是，缓冲需要有足够的已分配内存，所以对一个缓冲调用glBufferSubData之前必须要先调用glBufferData。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBufferSubData</span>(GL_ARRAY_BUFFER, <span class="number">24</span>, <span class="built_in">sizeof</span>(data), &amp;data); <span class="comment">// 范围： [24, 24 + sizeof(data)]</span></span><br></pre></td></tr></table></figure>
+
+<p>将数据导入缓冲的另外一种方法是，请求缓冲内存的指针，直接将数据复制到缓冲当中。通过调用glMapBuffer函数，OpenGL会返回当前绑定缓冲的内存指针，供我们操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> data[] = &#123;</span><br><span class="line">  <span class="number">0.5f</span>, <span class="number">1.0f</span>, <span class="number">-0.35f</span></span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, buffer);</span><br><span class="line"><span class="comment">// 获取指针</span></span><br><span class="line"><span class="type">void</span> *ptr = <span class="built_in">glMapBuffer</span>(GL_ARRAY_BUFFER, GL_WRITE_ONLY);</span><br><span class="line"><span class="comment">// 复制数据到内存</span></span><br><span class="line"><span class="built_in">memcpy</span>(ptr, data, <span class="built_in">sizeof</span>(data));</span><br><span class="line"><span class="comment">// 记得告诉OpenGL我们不再需要这个指针了</span></span><br><span class="line"><span class="built_in">glUnmapBuffer</span>(GL_ARRAY_BUFFER);</span><br></pre></td></tr></table></figure>
+
+<p>当使用glUnmapBuffer函数，告诉OpenGL已经完成指针操作之后，OpenGL就会知道已经完成了。在解除映射(Unmapping)之后，指针将会不再可用，并且如果OpenGL能够成功将数据映射到缓冲中，这个函数将会返回GL_TRUE。</p>
+<p>如果要直接映射数据到缓冲，而不事先将其存储到临时内存中，glMapBuffer这个函数会很有用。比如说，可以从文件中读取数据，并直接将它们复制到缓冲内存中。</p>
+<p>通过使用glVertexAttribPointer，能够指定顶点数组缓冲内容的属性布局。在顶点数组缓冲中，对属性进行了交错(Interleave)处理，也就是说，将每一个顶点的位置、法线和/或纹理坐标紧密放置在一起。将每一种属性类型的向量数据打包(Batch)为一个大的区块，而不是对它们进行交错储存。与交错布局123123123123不同，我们将采用分批(Batched)的方式111122223333。</p>
+<p>当从文件中加载顶点数据的时候，通常获取到的是一个位置数组、一个法线数组和/或一个纹理坐标数组。需要花点力气才能将这些数组转化为一个大的交错数据数组。使用分批的方式可以很容易使用glBufferSubData函数实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> positions[] = &#123; ... &#125;;</span><br><span class="line"><span class="type">float</span> normals[] = &#123; ... &#125;;</span><br><span class="line"><span class="type">float</span> tex[] = &#123; ... &#125;;</span><br><span class="line"><span class="comment">// 填充缓冲</span></span><br><span class="line"><span class="built_in">glBufferSubData</span>(GL_ARRAY_BUFFER, <span class="number">0</span>, <span class="built_in">sizeof</span>(positions), &amp;positions);</span><br><span class="line"><span class="built_in">glBufferSubData</span>(GL_ARRAY_BUFFER, <span class="built_in">sizeof</span>(positions), <span class="built_in">sizeof</span>(normals), &amp;normals);</span><br><span class="line"><span class="built_in">glBufferSubData</span>(GL_ARRAY_BUFFER, <span class="built_in">sizeof</span>(positions) + <span class="built_in">sizeof</span>(normals), <span class="built_in">sizeof</span>(tex), &amp;tex);</span><br></pre></td></tr></table></figure>
+
+<p>这样子就能直接将属性数组作为一个整体传递给缓冲，而不需要事先处理它们了。仍可以将它们合并为一个大的数组，再使用glBufferData来填充缓冲，但对于这种工作，使用glBufferSubData会更合适一点。</p>
+<p>还需要更新顶点属性指针来反映这些改变：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glVertexAttribPointer</span>(<span class="number">0</span>, <span class="number">3</span>, GL_FLOAT, GL_FALSE, <span class="number">3</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>), <span class="number">0</span>);  </span><br><span class="line"><span class="built_in">glVertexAttribPointer</span>(<span class="number">1</span>, <span class="number">3</span>, GL_FLOAT, GL_FALSE, <span class="number">3</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>), (<span class="type">void</span>*)(<span class="built_in">sizeof</span>(positions)));  </span><br><span class="line"><span class="built_in">glVertexAttribPointer</span>(</span><br><span class="line">  <span class="number">2</span>, <span class="number">2</span>, GL_FLOAT, GL_FALSE, <span class="number">2</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>), (<span class="type">void</span>*)(<span class="built_in">sizeof</span>(positions) + <span class="built_in">sizeof</span>(normals)));</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>stride</code>参数等于顶点属性的大小，因为下一个顶点属性向量能在3个（或2个）分量之后找到。</p>
+<p>使用哪种方法都不会对OpenGL有什么影响，它只是设置顶点属性的一种更整洁的方式。具体使用的方法将完全取决于你的喜好与程序类型。</p>
+<p>当缓冲填充好数据之后，可能会想与其它的缓冲共享其中的数据，或者想要将缓冲的内容复制到另一个缓冲当中。glCopyBufferSubData能够从一个缓冲中复制数据到另一个缓冲中。这个函数的原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">glCopyBufferSubData</span><span class="params">(GLenum readtarget, GLenum writetarget, GLintptr readoffset,</span></span></span><br><span class="line"><span class="params"><span class="function">                         GLintptr writeoffset, GLsizeiptr size)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>readtarget</code>和<code>writetarget</code>参数需要填入复制源和复制目标的缓冲目标。比如说，可以将VERTEX_ARRAY_BUFFER缓冲复制到VERTEX_ELEMENT_ARRAY_BUFFER缓冲，分别将这些缓冲目标设置为读和写的目标。当前绑定到这些缓冲目标的缓冲将会被影响到。</p>
+<p>不能同时将两个缓冲绑定到同一个缓冲目标上。正是出于这个原因，OpenGL提供给另外两个缓冲目标，叫做GL_COPY_READ_BUFFER和GL_COPY_WRITE_BUFFER。接下来就可以将需要的缓冲绑定到这两个缓冲目标上，并将这两个目标作为<code>readtarget</code>和<code>writetarget</code>参数。接下来glCopyBufferSubData会从<code>readtarget</code>中读取<code>size</code>大小的数据，并将其写入<code>writetarget</code>缓冲的<code>writeoffset</code>偏移量处：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> vertexData[] = &#123; ... &#125;;</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_COPY_READ_BUFFER, vbo1);</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_COPY_WRITE_BUFFER, vbo2);</span><br><span class="line"><span class="built_in">glCopyBufferSubData</span>(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, <span class="number">0</span>, <span class="number">0</span>, <span class="built_in">sizeof</span>(vertexData));</span><br></pre></td></tr></table></figure>
+
+<p>也可以只将<code>writetarget</code>缓冲绑定为新的缓冲目标类型之一：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> vertexData[] = &#123; ... &#125;;</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo1);</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_COPY_WRITE_BUFFER, vbo2);</span><br><span class="line"><span class="built_in">glCopyBufferSubData</span>(GL_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER, <span class="number">0</span>, <span class="number">0</span>, <span class="built_in">sizeof</span>(vertexData));</span><br></pre></td></tr></table></figure>
+
+<h2 id="GLSL的内建变量"><a href="#GLSL的内建变量" class="headerlink" title="GLSL的内建变量"></a>GLSL的内建变量</h2><p>着色器都是最简化的，如果需要当前着色器以外地方的数据的话，必须要将数据传进来。我们已经学会使用顶点属性、uniform和采样器来完成这一任务了。除此之外，GLSL还定义了另外几个以<code>gl_</code>为前缀的变量，它们能提供给更多的方式来读取/写入数据。如果想知道所有的内建变量的话，请查看OpenGL的<a target="_blank" rel="noopener" href="http://www.opengl.org/wiki/Built-in_Variable_(GLSL)">wiki</a>。</p>
+<h3 id="顶点着色器变量"><a href="#顶点着色器变量" class="headerlink" title="顶点着色器变量"></a>顶点着色器变量</h3><p>我们已经见过gl_Position了，它是顶点着色器的裁剪空间输出位置向量。如果想在屏幕上显示任何东西，在顶点着色器中设置gl_Position是必须的步骤。这已经是它的全部功能了。</p>
+<h4 id="gl-PointSize"><a href="#gl-PointSize" class="headerlink" title="gl_PointSize"></a>gl_PointSize</h4><p>我们能够选用的其中一个图元是GL_POINTS，如果使用它的话，每一个顶点都是一个图元，都会被渲染为一个点。可以通过OpenGL的glPointSize函数来设置渲染出来的点的大小，但也可以在顶点着色器中修改这个值。</p>
+<p>GLSL定义了一个叫做gl_PointSize输出变量，它是一个float变量，可以使用它来设置点的宽高（像素）。在顶点着色器中修改点的大小的话，就能对每个顶点设置不同的值了。</p>
+<p>在顶点着色器中修改点大小的功能默认是禁用的，如果需要启用它，可以使用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_PROGRAM_POINT_SIZE);</span><br></pre></td></tr></table></figure>
+
+<p>将点的大小设置为裁剪空间位置的z值，也就是顶点距观察者的距离。点的大小会随着观察者距顶点距离变远而增大。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    gl_Position = projection * view * model * <span class="built_in">vec4</span>(aPos, <span class="number">1.0</span>);    </span><br><span class="line">    gl_PointSize = gl_Position.z;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果就是，当远离这些点的时候，它们会变得更大：</p>
+<h4 id="gl-VertexID"><a href="#gl-VertexID" class="headerlink" title="gl_VertexID"></a>gl_VertexID</h4><p>gl_Position和gl_PointSize都是输出变量，因为它们的值是作为顶点着色器的输出被读取的。可以对它们进行写入，来改变结果。顶点着色器还提供了一个有趣的输入变量，我们只能对它进行读取，它叫做gl_VertexID。</p>
+<p>整型变量gl_VertexID储存了正在绘制顶点的当前ID。当（使用glDrawElements）进行索引渲染的时候，这个变量会存储正在绘制顶点的当前索引。当（使用glDrawArrays）不使用索引进行绘制的时候，这个变量会储存从渲染调用开始的已处理顶点数量。</p>
+<h3 id="片段着色器变量"><a href="#片段着色器变量" class="headerlink" title="片段着色器变量"></a>片段着色器变量</h3><p>在片段着色器中，也能访问到一些变量。GLSL提供了两个输入变量：gl_FragCoord和gl_FrontFacing。</p>
+<h4 id="gl-FragCoord"><a href="#gl-FragCoord" class="headerlink" title="gl_FragCoord"></a>gl_FragCoord</h4><p>在深度测试的时候，已经使用过gl_FragCoord很多次了，因为gl_FragCoord的z分量等于对应片段的深度值。然而，也能使用它的x和y分量来实现一些有趣的效果。</p>
+<p>gl_FragCoord的x和y分量是片段的窗口空间(Window-space)坐标，其原点为窗口的左下角。我们已经使用glViewport设定了一个800x600的窗口了，所以片段窗口空间坐标的x分量将在0到800之间，y分量在0到600之间。</p>
+<p>通过利用片段着色器，我们可以根据片段的窗口坐标，计算出不同的颜色。gl_FragCoord的一个常见用处是用于对比不同片段计算的视觉输出效果，这在技术演示中可以经常看到。比如说，我们能够将屏幕分成两部分，在窗口的左侧渲染一种输出，在窗口的右侧渲染另一种输出。下面这个例子片段着色器会根据窗口坐标输出不同的颜色：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="keyword">if</span>(gl_FragCoord.x &lt; <span class="number">400</span>)</span><br><span class="line">        FragColor = <span class="built_in">vec4</span>(<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        FragColor = <span class="built_in">vec4</span>(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>);        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为窗口的宽度是800。当一个像素的x坐标小于400时，它一定在窗口的左侧，所以我们给它一个不同的颜色。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>OSkirito
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/" title="25-高级GLSL">http://example.com/2024/03/27/25-高级GLSL/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Shader/" rel="tag"># Shader</a>
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+              <a href="/tags/GLSL/" rel="tag"># GLSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/" rel="prev" title="24-立方体贴图">
+      <i class="fa fa-chevron-left"></i> 24-立方体贴图
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">高级数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GLSL%E7%9A%84%E5%86%85%E5%BB%BA%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">GLSL的内建变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">顶点着色器变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gl-PointSize"><span class="nav-number">2.1.1.</span> <span class="nav-text">gl_PointSize</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gl-VertexID"><span class="nav-number">2.1.2.</span> <span class="nav-text">gl_VertexID</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%87%E6%AE%B5%E7%9D%80%E8%89%B2%E5%99%A8%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">片段着色器变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gl-FragCoord"><span class="nav-number">2.2.1.</span> <span class="nav-text">gl_FragCoord</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

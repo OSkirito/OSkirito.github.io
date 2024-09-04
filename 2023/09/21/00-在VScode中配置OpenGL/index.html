@@ -1,242 +1,171 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.2">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>00-00-在VScode中配置OpenGL - OS&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
 
+  
+  
+  
+  <meta property="og:title" content="00-00-在VScode中配置OpenGL - OS&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2023-09-21T02:48:13.000Z" />
+  
+  <meta property="og:article:author" content="OSkirito" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
 <link rel="stylesheet" href="/css/main.css">
 
+  
+<link rel="stylesheet" href="/css/typography.css">
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
+  
+<link rel="stylesheet" href="/css/components.css">
 
-  <meta name="description" content="首先下载[MinGW](MinGW - Minimalist GNU for Windows download | SourceForge.net) 下载文件后解压，双击运行guimain.exe文件   安装下列三个文件并更新配置   安装完成后，将..\MinGW\bin添加到环境变量   在cmd中进行验证   将mingw32-make.exe创建副本重命名覆盖make.exe   在cm">
-<meta property="og:type" content="article">
-<meta property="og:title" content="00-00-在VScode中配置OpenGL">
-<meta property="og:url" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/index.html">
-<meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="首先下载[MinGW](MinGW - Minimalist GNU for Windows download | SourceForge.net) 下载文件后解压，双击运行guimain.exe文件   安装下列三个文件并更新配置   安装完成后，将..\MinGW\bin添加到环境变量   在cmd中进行验证   将mingw32-make.exe创建副本重命名覆盖make.exe   在cm">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921105739503.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20231129155711977.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921110442456.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921110556502.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921112817561.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921113024702.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921151743776.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152238812.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152259595.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921152417704.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153030075.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153233934.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153335999.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921153541080.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921154202377.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921154631866.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921160808741.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921160950774.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223525495.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223602084.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921223923694.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20231129174349831.png">
-<meta property="og:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20231129174502731.png">
-<meta property="article:published_time" content="2023-09-21T02:48:13.000Z">
-<meta property="article:modified_time" content="2023-11-29T09:45:15.000Z">
-<meta property="article:author" content="OSkirito">
-<meta property="article:tag" content="图形学">
-<meta property="article:tag" content="Shader">
-<meta property="article:tag" content="OpenGL">
-<meta property="article:tag" content="VScode">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921105739503.png">
+  
+<link rel="stylesheet" href="/css/nav.css">
 
-<link rel="canonical" href="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/">
+  
+<link rel="stylesheet" href="/css/paginator.css">
 
+  
+<link rel="stylesheet" href="/css/footer.css">
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
+  
+<link rel="stylesheet" href="/css/post-list.css">
 
-  <title>00-00-在VScode中配置OpenGL | OS's Blog</title>
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
   
 
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">OS's Blog</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">41</span></a>
-
-  </li>
-  </ul>
-</nav>
-
-
-
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
             
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          00-00-在VScode中配置OpenGL
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-21 10:48:13" itemprop="dateCreated datePublished" datetime="2023-09-21T10:48:13+08:00">2023-09-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-29 17:45:15" itemprop="dateModified" datetime="2023-11-29T17:45:15+08:00">2023-11-29</time>
-              </span>
-
-          
-
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
         </div>
-      </header>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>21,</span>
+            <span>2023</span>
+        </div>
+        
 
-      
+        <h1 class="title">00-00-在VScode中配置OpenGL</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
         <p>首先下载[MinGW](<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/mingw/">MinGW - Minimalist GNU for Windows download | SourceForge.net</a>)</p>
 <p>下载文件后解压，双击运行guimain.exe文件</p>
 <img src="/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/image-20230921105739503.png" class="" title="image-20230921105739503">
@@ -311,221 +240,149 @@
     </div>
 
     
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>OSkirito
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://example.com/2023/09/21/00-%E5%9C%A8VScode%E4%B8%AD%E9%85%8D%E7%BD%AEOpenGL/" title="00-00-在VScode中配置OpenGL">http://example.com/2023/09/21/00-在VScode中配置OpenGL/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
-              <a href="/tags/Shader/" rel="tag"># Shader</a>
-              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
-              <a href="/tags/VScode/" rel="tag"># VScode</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2023/07/16/%E5%9C%A8UE%E4%B8%AD%E5%88%9B%E5%BB%BA%E5%8F%AF%E7%A7%BB%E5%8A%A8%E7%9A%84NPC/" rel="prev" title="在UE中创建可移动的NPC">
-      <i class="fa fa-chevron-left"></i> 在UE中创建可移动的NPC
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/" rel="next" title="01-OpenGL简述">
-      01-OpenGL简述 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by OSkirito, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="OSkirito"
-      src="/images/head_image.png">
-  <p class="site-author-name" itemprop="name">OSkirito</p>
-  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">18</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
-
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/图形学/" class="tag">#图形学</a><a href="/tags/Shader/" class="tag">#Shader</a><a href="/tags/OpenGL/" class="tag">#OpenGL</a><a href="/tags/VScode/" class="tag">#VScode</a>
+        </p>
+        
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2023/09/23/01-OpenGL%E7%AE%80%E8%BF%B0/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">01-OpenGL简述</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2023/07/16/%E5%9C%A8UE%E4%B8%AD%E5%88%9B%E5%BB%BA%E5%8F%AF%E7%A7%BB%E5%8A%A8%E7%9A%84NPC/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">在UE中创建可移动的NPC</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2024 OSkirito<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
 
 
-      </div>
-    </main>
+        
+<script src="/js/main.js"></script>
 
-    <footer class="footer">
-      <div class="footer-inner">
+        
+        
         
 
         
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">OSkirito</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
-  </div>
-
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
         
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-</body>
+    </body>
 </html>

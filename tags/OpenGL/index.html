@@ -1,473 +1,557 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head prefix="og: https://ogp.me/ns#">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  
-  <title>#OpenGL - OS&#39;s Blog</title>
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    <link rel='manifest' href='/manifest.json'>
-  
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-  
-  
-  
-  <meta property="og:title" content="#OpenGL - OS&#39;s Blog" />
-  
-  <meta property="og:type" content="website" />
-  
-  <meta property="og:url" content="http://example.com/tags/OpenGL/index.html" />
-  
-  <meta property="og:image" content="/favicon.png" />
-  
-  
-
-  
-<link rel="stylesheet" href="/css/var.css">
-
-  
 <link rel="stylesheet" href="/css/main.css">
 
-  
-<link rel="stylesheet" href="/css/typography.css">
 
-  
-<link rel="stylesheet" href="/css/code-highlighting.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-  
-<link rel="stylesheet" href="/css/components.css">
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
-  
-<link rel="stylesheet" href="/css/nav.css">
+  <meta name="description" content="CG技术的记录与分享">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OS&#39;s Blog">
+<meta property="og:url" content="http://example.com/tags/OpenGL/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="CG技术的记录与分享">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="OSkirito">
+<meta name="twitter:card" content="summary">
 
-  
-<link rel="stylesheet" href="/css/paginator.css">
+<link rel="canonical" href="http://example.com/tags/OpenGL/">
 
-  
-<link rel="stylesheet" href="/css/footer.css">
 
-  
-<link rel="stylesheet" href="/css/post-list.css">
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
 
-  
-  
-<link rel="stylesheet" href="/css/rainbow-banner.css">
-
-  
-  
-  
-<link rel="stylesheet" href="/css/toc.css">
-
-  
-  
-  
-  
-  
-<link rel="stylesheet" href="/css/post.css">
-
-  
-  
-  
-<link rel="stylesheet" href="/css/archive.css">
-
-  
-  
-  
+  <title>标签: OpenGL | OS's Blog</title>
   
 
-  
-<meta name="generator" content="Hexo 5.4.2"></head>
-    <body
-        data-color-scheme="auto"
-        data-uppercase-categories="true"
-        
-        data-rainbow-banner="true"
-        data-rainbow-banner-shown="always"
-        data-rainbow-banner-month="auto"
-        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
-        
-        data-config-root="/"
-        
-        data-toc="true"
-        data-toc-max-depth="2"
-        
-        
-    >
-        <nav id="theme-nav">
-    <div class="inner">
-        <a class="title" href="/">Blog</a>
-        <div class="nav-arrow"></div>
-        <div class="nav-items">
-            <a class="nav-item nav-item-home" href="/">Home</a>
-            
-            
-            <a class="nav-item" href="/archives">Archives</a>
-            
-            
-            
-            <a class="nav-item" href="/friends">Friends</a>
-            
-            
-            
-            <a class="nav-item" href="/projects">Projects</a>
-            
-            
-            
-            <a class="nav-item" href="/about">About</a>
-            
-            
-            
-            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
-            
-            
-        </div>
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">41</span></a>
+
+  </li>
+  </ul>
 </nav>
-        <div class="container">
-    <div class="meta">
-        <div class="type">
-            
-            Tag
-        </div>
 
-        <h2 class="title">#OpenGL</h2>
-    </div>
 
-    <div class="divider"></div>
 
-    <div class="post-list archives">
-        
-        <article class="post-list-item">
-            <a href="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        25-高级GLSL
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>March</span>
-                        <span>&nbsp;27,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        24-立方体贴图
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>March</span>
-                        <span>&nbsp;14,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        23-帧缓冲
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>March</span>
-                        <span>&nbsp;11,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/03/08/22-%E9%9D%A2%E5%89%94%E9%99%A4/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        22-面剔除
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>March</span>
-                        <span>&nbsp;8,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/02/28/21-%E6%B7%B7%E5%90%88/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        21-混合
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>February</span>
-                        <span>&nbsp;28,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        20-模板测试
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>February</span>
-                        <span>&nbsp;22,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        19-深度测试
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>January</span>
-                        <span>&nbsp;25,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/01/14/18-%E5%9C%A8OpenGL%E4%B8%AD%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        18-在OpenGL中加载模型
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>January</span>
-                        <span>&nbsp;14,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        17-OpenGL中的多光源
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>January</span>
-                        <span>&nbsp;9,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/01/05/16-OpenGL%E4%B8%AD%E7%9A%84%E5%85%89%E6%BA%90/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        16-OpenGL中的光源
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>January</span>
-                        <span>&nbsp;5,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-    </div>
+
+</div>
+    </header>
 
     
-<div class="paginator">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/OpenGL/page/2/">2</a><a class="page-number" href="/tags/OpenGL/page/3/">3</a><a class="page-number" href="/tags/OpenGL/page/4/">4</a><a class="extend next" rel="next" href="/tags/OpenGL/page/2/">Next</a>
-</div>
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-</div>
-        <footer>
-    <div class="inner">
-        <div class="links">
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content tag">
             
-            <div class="group">
-                <h2 class="title">Blog</h2>
-                
-                <a href="/" class="item">Blog</a>
-                
-                <a href="/archives" class="item">Archives</a>
-                
-                <a href="/tags" class="item">Tags</a>
-                
-                <a href="/categories" class="item">Categories</a>
-                
-                <a href="/search" class="item">Search</a>
-                
-                <a href="/friends" class="item">Friends</a>
-                
-                <a href="/projects" class="item">Projects</a>
-                
-                <a href="/resume" class="item">Resume</a>
-                
-                <a href="/about" class="item">About</a>
-                
-                <a href="/atom.xml" class="item">RSS</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Projects</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Me</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
-                
-                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
-                
-                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
-                
-                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
-                
-                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
-                
-                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
-                
-            </div>
-            
-        </div>
-        <span>&copy; 2024 OSkirito<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
-        
-        
-            <br>
-            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
-                <label>
-                    <input type="radio" value="light">
-                    <span>Light</span>
-                </label>
-                <label>
-                    <input type="radio" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label>
-                    <input type="radio" value="auto">
-                    <span>Auto</span>
-                </label>
-            </div>
-        
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h2 class="collection-header">OpenGL
+          <small>标签</small>
+        </h2>
+      </div>
+
+      
+    <div class="collection-year">
+      <span class="collection-header">2024</span>
     </div>
-</footer>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-03-27T17:53:50+08:00"
+              content="2024-03-27">
+          03-27
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/" itemprop="url">
+            <span itemprop="name">25-高级GLSL</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-03-14T17:33:43+08:00"
+              content="2024-03-14">
+          03-14
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/" itemprop="url">
+            <span itemprop="name">24-立方体贴图</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-03-11T10:25:08+08:00"
+              content="2024-03-11">
+          03-11
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/03/11/23-%E5%B8%A7%E7%BC%93%E5%86%B2/" itemprop="url">
+            <span itemprop="name">23-帧缓冲</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-03-08T15:00:28+08:00"
+              content="2024-03-08">
+          03-08
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/03/08/22-%E9%9D%A2%E5%89%94%E9%99%A4/" itemprop="url">
+            <span itemprop="name">22-面剔除</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-02-28T17:26:52+08:00"
+              content="2024-02-28">
+          02-28
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/02/28/21-%E6%B7%B7%E5%90%88/" itemprop="url">
+            <span itemprop="name">21-混合</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-02-22T16:37:25+08:00"
+              content="2024-02-22">
+          02-22
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/" itemprop="url">
+            <span itemprop="name">20-模板测试</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-01-25T18:23:35+08:00"
+              content="2024-01-25">
+          01-25
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" itemprop="url">
+            <span itemprop="name">19-深度测试</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-01-14T21:11:35+08:00"
+              content="2024-01-14">
+          01-14
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/01/14/18-%E5%9C%A8OpenGL%E4%B8%AD%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/" itemprop="url">
+            <span itemprop="name">18-在OpenGL中加载模型</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-01-09T14:05:28+08:00"
+              content="2024-01-09">
+          01-09
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/" itemprop="url">
+            <span itemprop="name">17-OpenGL中的多光源</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2024-01-05T17:03:52+08:00"
+              content="2024-01-05">
+          01-05
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/01/05/16-OpenGL%E4%B8%AD%E7%9A%84%E5%85%89%E6%BA%90/" itemprop="url">
+            <span itemprop="name">16-OpenGL中的光源</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/tags/OpenGL/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/tags/OpenGL/page/4/">4</a><a class="extend next" rel="next" href="/tags/OpenGL/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
         
-<script src="/js/main.js"></script>
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
 
         
-        
-        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
 
         
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            window.addEventListener('load', () => {
-                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
-                ScrollReveal().reveal('.post-list-item .cover-img img')
-                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
-            })
-        </script>
-        
-    </body>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
 </html>

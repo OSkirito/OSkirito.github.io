@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。一个有色玻璃窗是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。 透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个物">
+  <meta name="description" content="OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。比如有色玻璃窗就是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。 透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="21-混合">
 <meta property="og:url" content="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/index.html">
 <meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。一个有色玻璃窗是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。 透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个物">
+<meta property="og:description" content="OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。比如有色玻璃窗就是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。 透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/grass.png">
 <meta property="og:image" content="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240304151817554.png">
@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240307205941960.png">
 <meta property="og:image" content="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240308143341358.png">
 <meta property="article:published_time" content="2024-02-28T09:26:52.000Z">
-<meta property="article:modified_time" content="2024-03-08T06:46:18.908Z">
+<meta property="article:modified_time" content="2024-09-13T08:29:46.592Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -210,7 +210,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-08 14:46:18" itemprop="dateModified" datetime="2024-03-08T14:46:18+08:00">2024-03-08</time>
+                <time title="修改时间：2024-09-13 16:29:46" itemprop="dateModified" datetime="2024-09-13T16:29:46+08:00">2024-09-13</time>
               </span>
 
           
@@ -224,9 +224,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。一个有色玻璃窗是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。</p>
-<p>透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个物体的透明度是通过它颜色的alpha值来决定的。Alpha颜色值是颜色向量的第四个分量，对每个纹素(Texel)都包含了一个alpha值。这个alpha值精确地代表纹理各个部分的透明度。</p>
-<h2 id="舍弃片段"><a href="#舍弃片段" class="headerlink" title="舍弃片段"></a>舍弃片段</h2><p>有些图片并不需要半透明，只需要根据纹理颜色值，显示一部分，或者不显示一部分，没有中间情况。比如说草，如果想不太费劲地创建草这种东西，你需要将一个草的纹理贴在一个2D四边形(Quad)上，然后将这个四边形放到场景中。然而，草的形状和2D四边形的形状并不完全相同，所以你只想显示草纹理的某些部分，而忽略剩下的部分。</p>
+        <p>OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。比如有色玻璃窗就是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。</p>
+<p>透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个物体的透明度是通过它颜色的alpha值来决定的。Alpha颜色值是颜色向量的第四个分量，对每个纹素(Texel)都包含了一个alpha值。这个alpha值精确地代表纹理在此处的透明度。</p>
+<h2 id="舍弃片段"><a href="#舍弃片段" class="headerlink" title="舍弃片段"></a>舍弃片段</h2><p>有些图片并不需要半透明，只需要根据纹理颜色值，显示一部分，或者不显示一部分，没有中间情况。比如说草，如果想不太费劲地创建草这种东西，你需要将一个草的纹理贴在一个2D四边形(Quad)上，然后将这个四边形放到场景中。然而，草的形状和2D四边形的形状完全不同，所以我们想只显示草纹理的部分，而忽略剩下的部分。</p>
 <p>下图这个纹理正是这样的，它要么是完全不透明的，要么是完全透明的，没有中间情况。可以看到，只要不是草的部分，这个图片显示的都是背景颜色而不是它本身的颜色。</p>
 <img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/grass.png" class="" title="grass">
 
@@ -258,7 +258,7 @@
 <h2 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h2><p>虽然直接丢弃片段很好，但不能渲染半透明的图像。要想渲染有多个透明度级别的图像，需要启用混合(Blending)。和OpenGL大多数的功能一样，可以启用GL_BLEND来启用混合：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_BLEND);</span><br></pre></td></tr></table></figure>
 
-<p>启用了混合之后，我们需要告诉OpenGL它该如何混合。OpenGL中的混合是通过下面这个方程来实现的：</p>
+<p>启用了混合之后，需要告诉OpenGL它该如何混合。OpenGL中的混合是通过下面这个方程来实现的：</p>
 <img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240306173043115.png" class="" title="image-20240306173043115">
 
 <ul>
@@ -289,11 +289,11 @@
 </thead>
 <tbody><tr>
 <td align="left"><code>GL_ZERO</code></td>
-<td align="left">因子等于00</td>
+<td align="left">因子等于0</td>
 </tr>
 <tr>
 <td align="left"><code>GL_ONE</code></td>
-<td align="left">因子等于11</td>
+<td align="left">因子等于1</td>
 </tr>
 <tr>
 <td align="left"><code>GL_SRC_COLOR</code></td>
@@ -389,7 +389,7 @@
 <img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240308143341358.png" class="" title="image-20240308143341358">
 
 <p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/18db67053d9186fa26b93c4874c49c0888f291e9/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_code_02.rar">这里</a>获取完整的源代码。</p>
-<p>虽然按照距离排序物体这种方法对我们这个场景能够正常工作，但它并没有考虑旋转、缩放或者其它的变换，奇怪形状的物体需要一个不同的计量，而不是仅仅一个位置向量。在场景中排序物体是一个很困难的技术，很大程度上由场景的类型所决定，更别说它额外需要消耗的处理能力了。完整渲染一个包含不透明和透明物体的场景并不是那么容易。更高级的技术还有次序无关透明度(Order Independent Transparency, OIT)。</p>
+<p>虽然按照距离排序物体这种方法对我们这个场景能够正常工作，但它并没有考虑旋转、缩放或者其它的变换，奇怪形状的物体需要一个不同的计量，而不是仅仅一个位置向量。在场景中排序物体是一个很困难的技术，很大程度上由场景的类型所决定，更别说需要额外消耗的性能了。完整渲染一个包含不透明和透明物体的场景并不是那么容易。更高级的技术还有次序无关透明度(Order Independent Transparency, OIT)。</p>
 
     </div>
 

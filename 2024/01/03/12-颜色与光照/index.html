@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，我们可以定义这样的一个颜色向量： 1glm::vec3 coral(1.0f, 0.5f, 0.31f);  在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜">
+  <meta name="description" content="颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，可以定义这样的一个颜色向量： 1glm::vec3 coral(1.0f, 0.5f, 0.31f);  在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜色。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="12-颜色与光照">
 <meta property="og:url" content="http://example.com/2024/01/03/12-%E9%A2%9C%E8%89%B2%E4%B8%8E%E5%85%89%E7%85%A7/index.html">
 <meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，我们可以定义这样的一个颜色向量： 1glm::vec3 coral(1.0f, 0.5f, 0.31f);  在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜">
+<meta property="og:description" content="颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，可以定义这样的一个颜色向量： 1glm::vec3 coral(1.0f, 0.5f, 0.31f);  在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜色。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/01/03/12-%E9%A2%9C%E8%89%B2%E4%B8%8E%E5%85%89%E7%85%A7/image-20240103114723755.png">
 <meta property="og:image" content="http://example.com/2024/01/03/12-%E9%A2%9C%E8%89%B2%E4%B8%8E%E5%85%89%E7%85%A7/image-20240103151355150.png">
 <meta property="article:published_time" content="2024-01-03T02:57:34.000Z">
-<meta property="article:modified_time" content="2024-01-03T07:14:00.187Z">
+<meta property="article:modified_time" content="2024-09-11T10:50:14.435Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -194,10 +194,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-01-03 10:57:34 / 修改时间：15:14:00" itemprop="dateCreated datePublished" datetime="2024-01-03T10:57:34+08:00">2024-01-03</time>
+              <time title="创建时间：2024-01-03 10:57:34" itemprop="dateCreated datePublished" datetime="2024-01-03T10:57:34+08:00">2024-01-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-11 18:50:14" itemprop="dateModified" datetime="2024-09-11T18:50:14+08:00">2024-09-11</time>
+              </span>
 
           
 
@@ -210,10 +216,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，我们可以定义这样的一个颜色向量：</p>
+        <p>颜色可以由数字化的红色(Red)、绿色(Green)和蓝色(Blue)三个分量组成，它们通常被缩写为RGB。仅仅用这三个值就可以组合出任意一种颜色。例如，要获取一个珊瑚红(Coral)色的话，可以定义这样的一个颜色向量：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">glm::vec3 <span class="title">coral</span><span class="params">(<span class="number">1.0f</span>, <span class="number">0.5f</span>, <span class="number">0.31f</span>)</span></span>;</span><br></pre></td></tr></table></figure>
 
-<p>在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜色。换句话说，那些不能被物体所吸收的颜色（被拒绝的颜色）就是我们能够感知到的物体的颜色。在OpenGL中创建一个光源时，给光源一个颜色，把光源的颜色与物体的颜色值相乘，所得到的就是这个物体所反射的颜色。将这两个颜色向量作分量相乘，结果就是最终的颜色向量了：</p>
+<p>在现实生活中看到某一物体的颜色并不是这个物体真正拥有的颜色，而是它所反射的(Reflected)颜色。换句话说，那些不能被物体所吸收的颜色就是物体的颜色。在OpenGL中创建一个光源时，给光源一个颜色，把光源的颜色与物体的颜色值相乘，所得到的就是这个物体所反射的颜色。将这两个颜色向量作分量相乘，结果就是最终的颜色向量了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">glm::vec3 <span class="title">lightColor</span><span class="params">(<span class="number">1.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span>)</span></span>;</span><br><span class="line"><span class="function">glm::vec3 <span class="title">toyColor</span><span class="params">(<span class="number">1.0f</span>, <span class="number">0.5f</span>, <span class="number">0.31f</span>)</span></span>;</span><br><span class="line">glm::vec3 result = lightColor * toyColor; <span class="comment">// = (1.0f, 0.5f, 0.31f);</span></span><br></pre></td></tr></table></figure>
 
 <p>相应的，如果使用一个绿色的光源照亮物体：</p>
@@ -238,7 +244,7 @@
 <p>修改片段着色器：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">uniform vec3 objectColor;</span><br><span class="line">uniform vec3 lightColor;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(lightColor * objectColor, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>要注意的是，当修改顶点或者片段着色器后，灯的位置或颜色也会随之改变，我们希望灯一直保持明亮，不受其它颜色变化的影响。所以需要为灯的绘制创建另外的一套着色器。顶点着色器与我们当前的顶点着色器是一样的，所以可以直接把现在的顶点着色器用在灯上。灯的片段着色器给灯定义了一个不变的常量白色，保证了灯的颜色一直是亮的：</p>
+<p>要注意的是，当修改顶点或者片段着色器后，灯的位置或颜色也会随之改变，并且我们希望灯一直保持明亮，不受其它颜色变化的影响。所以需要为灯的绘制创建另外的一套着色器。顶点着色器与我们当前的顶点着色器是一样的，所以可以直接把现在的顶点着色器用在灯上。灯的片段着色器给灯定义了一个不变的常量白色，保证了灯的颜色一直是亮的：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>在程序中创建新的着色器并使用：</p>

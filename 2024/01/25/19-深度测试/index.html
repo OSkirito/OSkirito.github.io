@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222162151787.png">
 <meta property="og:image" content="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222163116475.png">
 <meta property="article:published_time" content="2024-01-25T10:23:35.000Z">
-<meta property="article:modified_time" content="2024-02-22T08:31:18.865Z">
+<meta property="article:modified_time" content="2024-09-13T07:39:22.464Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -210,7 +210,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-02-22 16:31:18" itemprop="dateModified" datetime="2024-02-22T16:31:18+08:00">2024-02-22</time>
+                <time title="修改时间：2024-09-13 15:39:22" itemprop="dateModified" datetime="2024-09-13T15:39:22+08:00">2024-09-13</time>
               </span>
 
           
@@ -236,11 +236,11 @@
 <p>在某些情况下需要对所有片段都执行深度测试并丢弃相应的片段，但不希望更新深度缓冲。OpenGL允许禁用深度缓冲的写入，只需要设置它的深度掩码(Depth Mask)设置为GL_FALSE就可以了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthMask</span>(GL_FALSE);</span><br></pre></td></tr></table></figure>
 
-<p>注意这只在深度测试被启用的时候才有效果。</p>
+<p>这只在深度测试被启用的时候才有效果。</p>
 <h2 id="深度测试函数"><a href="#深度测试函数" class="headerlink" title="深度测试函数"></a>深度测试函数</h2><p>OpenGL允许修改深度测试中使用的比较运算符。这允许控制OpenGL什么时候该通过或丢弃一个片段，什么时候去更新深度缓冲。可以调用glDepthFunc函数来设置比较运算符（或者说深度函数(Depth Function)）：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthFunc</span>(GL_LESS);</span><br></pre></td></tr></table></figure>
 
-<p>这个函数接受下面表格中的比较运算符：</p>
+<p>接受的比较运算符如下面表格中所示：</p>
 <table>
 <thead>
 <tr>
@@ -282,14 +282,14 @@
 </tr>
 </tbody></table>
 <p>默认情况下使用的深度函数是GL_LESS，它将会丢弃深度值大于等于当前深度缓冲值的所有片段。</p>
-<p>我们将使用一个新的示例代码，它会显示一个没有光照的基本场景，里面有两个有纹理的立方体，放置在一个有纹理的地板上。你可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/3c03ce1661a77f3d4988a2ccf2a840987a70565b/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depthtesting_code.rar">这里</a>找到源代码。</p>
+<p>我们将使用一个新的示例代码，它会显示一个没有光照的基本场景，里面有两个有纹理的立方体，放置在一个有纹理的地板上。可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/3c03ce1661a77f3d4988a2ccf2a840987a70565b/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depthtesting_code.rar">这里</a>获取源代码。</p>
 <p>在源代码中，将深度函数改为GL_ALWAYS：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br><span class="line"><span class="built_in">glDepthFunc</span>(GL_ALWAYS);</span><br></pre></td></tr></table></figure>
 
-<p>这将会模拟没有启用深度测试时所得到的结果。深度测试将会永远通过，所以最后绘制的片段将会总是会渲染在之前绘制片段的上面，即使之前绘制的片段本就应该渲染在最前面。因为是最后渲染地板的，它会覆盖所有的箱子片段：</p>
+<p>这将会模拟没有启用深度测试时所得到的结果。深度测试将会永远通过，所以最后绘制的片段将会总是会渲染在之前绘制片段的上面。因为是最后渲染的地板，它会覆盖所有箱子的片段：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222155306409.png" class="" title="image-20240222155306409">
 
-<p>将它重新设置为GL_LESS，这会将场景还原为正常的样子：</p>
+<p>深度函数重新设置为GL_LESS，这会将场景还原为正常的样子：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222160132912.png" class="" title="image-20240222160132912">
 
 <h2 id="深度值精度"><a href="#深度值精度" class="headerlink" title="深度值精度"></a>深度值精度</h2><p>深度缓冲包含了一个介于0.0和1.0之间的深度值，它将会与观察者视角所看见的场景中所有物体的z值进行比较。观察空间的z值可能是投影平截头体的近平面(Near)和远平面(Far)之间的任何值。我们需要一种方式来将这些观察空间的z值变换到[0, 1]范围之间，其中的一种方式就是将它们线性变换到[0, 1]范围之间。下面这个（线性）方程将z值变换到了0.0到1.0之间的深度值：</p>
@@ -302,10 +302,10 @@
 <p>然而，在实践中是几乎不会使用线性深度缓冲(Linear Depth Buffer)的。要想有正确的投影性质，需要使用一个非线性的深度方程，它是与 1/z 成正比的。它做的就是在z值很小的时候提供非常高的精度，而在z值很远的时候提供更少的精度。方程是这样的：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161043829.png" class="" title="image-20240222161043829">
 
-<p>深度缓冲中0.5的值并不代表着物体的z值是位于平截头体的中间了，这个顶点的z值实际上非常接近近平面！可以在下图中看到z值和最终的深度缓冲值之间的非线性关系：</p>
+<p>深度缓冲中0.5的值并不代表着物体的z值是位于平截头体的中间了，这个顶点的z值实际上非常接近近平面。可以在下图中看到z值和最终的深度缓冲值之间的非线性关系：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depth_non_linear_graph.png" class="" title="img">
 
-<p>可以看到，深度值很大一部分是由很小的z值所决定的，这给了近处的物体很大的深度精度。这个（从观察者的视角）变换z值的方程是嵌入在投影矩阵中的，所以当我们想将一个顶点坐标从观察空间至裁剪空间的时候这个非线性方程就被应用了。</p>
+<p>可以看到，深度值很大一部分是由很小的z值所决定的，这给了近处的物体很大的深度精度。这个（从观察者的视角）变换z值的方程是嵌入在投影矩阵中的，这个非线性方程就被用于将一个顶点坐标从观察空间至裁剪空间。</p>
 <h2 id="深度缓冲的可视化"><a href="#深度缓冲的可视化" class="headerlink" title="深度缓冲的可视化"></a>深度缓冲的可视化</h2><p>如果我们想要可视化深度缓冲的话，非线性方程的效果很快就会变得很清楚。</p>
 <p>我们知道片段着色器中，内建gl_FragCoord向量的z值包含了那个特定片段的深度值。如果我们将这个深度值输出为颜色，我们可以显示场景中所有片段的深度值。修改片段着色器：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(gl_FragCoord.z), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -313,33 +313,31 @@
 <p>如果再次运行程序的话，结果如下所示：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161914264.png" class="" title="image-20240222161914264">
 
-<p>你可能会注意到所有东西都是白色的，看起来就想我们所有的深度值都是最大的1.0。所以为什么没有靠近0.0（即变暗）的深度值呢？</p>
-<p>你可能还记得在上一部分中说到，屏幕空间中的深度值是非线性的，即它在z值很小的时候有很高的精度，而z值很大的时候有较低的精度。片段的深度值会随着距离迅速增加，所以几乎所有的顶点的深度值都是接近于1.0的。如果我们小心地靠近物体，你可能会最终注意到颜色会渐渐变暗，显示它们的z值在逐渐变小：</p>
+<p>你可能会注意到所有东西都是白色的，看起来就想我们所有的深度值都是最大的1.0。在上面说到，屏幕空间中的深度值是非线性的，即它在z值很小的时候有很高的精度，而z值很大的时候有较低的精度。片段的深度值会随着距离迅速增加，所以几乎所有的顶点的深度值都是接近于1.0的。如果慢慢靠近物体，可能会注意到颜色会渐渐变暗，显示它们的z值在逐渐变小：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161838373.png" class="" title="image-20240222161838373">
 
-<p>这很清楚地展示了深度值的非线性性质。近处的物体比起远处的物体对深度值有着更大的影响。只需要移动几厘米就能让颜色从暗完全变白。</p>
-<p>也可以让片段非线性的深度值变换为线性的。要实现这个，我们需要仅仅反转深度值的投影变换。这也就意味着我们需要首先将深度值从[0, 1]范围重新变换到[-1, 1]范围的标准化设备坐标（裁剪空间）。接下来需要像投影矩阵那样反转这个非线性方程，并将这个反转的方程应用到最终的深度值上。</p>
+<p>也可以让片段非线性的深度值变换为线性的。要实现这个，我们仅需要反转深度值的投影变换。这也就意味着我们需要首先将深度值从[0, 1]范围重新变换到[-1, 1]范围的标准化设备坐标（裁剪空间）。接下来需要像投影矩阵那样反转这个非线性方程，并将这个反转的方程应用到最终的深度值上。</p>
 <p>修改片段着色器如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line"><span class="type">float</span> near = <span class="number">0.1</span>; </span><br><span class="line"><span class="type">float</span> far  = <span class="number">100.0</span>; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">LinearizeDepth</span><span class="params">(<span class="type">float</span> depth)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">float</span> z = depth * <span class="number">2.0</span> - <span class="number">1.0</span>; <span class="comment">// back to NDC </span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">2.0</span> * near * far) / (far + near - z * (far - near));    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="type">float</span> depth = <span class="built_in">LinearizeDepth</span>(gl_FragCoord.z) / far; <span class="comment">// 为了演示除以 far</span></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(depth), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222162151787.png" class="" title="image-20240222162151787">
 
-<p>颜色大部分都是黑色，因为深度值的范围是0.1的<strong>近</strong>平面到100的<strong>远</strong>平面，它离我们还是非常远的。结果就是，我们相对靠近近平面，所以会得到更低的（更暗的）深度值。</p>
+<p>颜色大部分都是黑色，因为深度值的范围是0.1的<strong>近</strong>平面到100的<strong>远</strong>平面，它离我们还是非常远的。如果相对靠近近平面，所以会得到更低的（更暗的）深度值。</p>
 <h2 id="深度冲突"><a href="#深度冲突" class="headerlink" title="深度冲突"></a>深度冲突</h2><p>在两个平面或者三角形非常紧密地平行排列在一起时，会发生一个很常见的视觉错误，深度缓冲没有足够的精度来决定两个形状哪个在前面。结果就是这两个形状不断地在切换前后顺序，这会导致很奇怪的花纹。这个现象叫做深度冲突(Z-fighting)，因为它看起来像是这两个形状在争夺(Fight)谁该处于顶端。</p>
 <p>在场景中，有几个地方的深度冲突还是非常明显的。箱子被放置在地板的同一高度上，这也就意味着箱子的底面和地板是共面的(Coplanar)。这两个面的深度值都是一样的，所以深度测试没有办法决定应该显示哪一个。</p>
-<p>如果你将摄像机移动到其中一个箱子的内部，你就能清楚地看到这个效果的，箱子的底部不断地在箱子底面与地板之间切换，形成一个锯齿的花纹：</p>
+<p>如果将摄像机移动到其中一个箱子的内部，你就能清楚地看到这个效果的，箱子的底部不断地在箱子底面与地板之间切换，形成一个锯齿状的花纹：</p>
 <img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222163116475.png" class="" title="image-20240222163116475">
 
 <p>深度冲突是深度缓冲的一个常见问题，当物体在远处时效果会更明显（因为深度缓冲在z值比较大的时候有着更小的精度）。深度冲突不能够被完全避免，但一般会有一些技巧有助于在场景中减轻或者完全避免深度冲突。</p>
 <ul>
-<li><p>第一个也是最重要的技巧是永远不要把多个物体摆得太靠近，以至于它们的一些三角形会重叠。通过在两个物体之间设置一个用户无法注意到的偏移值，可以完全避免这两个物体之间的深度冲突。在箱子和地板的例子中，我们可以将箱子沿着正y轴稍微移动一点。箱子位置的这点微小改变将不太可能被注意到，但它能够完全减少深度冲突的发生。然而，这需要对每个物体都手动调整，并且需要进行彻底的测试来保证场景中没有物体会产生深度冲突。</p>
+<li><p>第一个也是最重要的技巧是永远不要把多个物体摆得太靠近，以至于它们的一些三角形会重叠。在两个物体之间设置一个用户无法察觉的偏移值，可以完全避免这两个物体之间的深度冲突。在箱子和地板的例子中，可以将箱子沿着正y轴稍微移动一点。箱子位置的这点微小改变将不太可能被注意到，但它能够完全减少深度冲突的发生。然而，这需要对每个物体都手动调整，并且进行彻底的测试来保证场景中没有物体会产生深度冲突。</p>
 </li>
 <li><p>第二个技巧是尽可能将近平面设置远一些。在前面提到了精度在靠近近平面时是非常高的，所以如果我们将近平面远离观察者，将会对整个平截头体有着更大的精度。然而，将近平面设置太远将会导致近处的物体被裁剪掉，所以这通常需要实验和微调来决定最适合你的场景的近平面距离。</p>
 </li>
-<li><p>另外一个很好的技巧是牺牲一些性能，使用更高精度的深度缓冲。大部分深度缓冲的精度都是24位的，但现在大部分的显卡都支持32位的深度缓冲，这将会极大地提高精度。所以，牺牲掉一些性能，就能获得更高精度的深度测试，减少深度冲突。</p>
+<li><p>另外一个技巧是牺牲一些性能，使用更高精度的深度缓冲。大部分深度缓冲的精度都是24位的，但现在大部分的显卡都支持32位的深度缓冲，这将会极大地提高精度。所以，牺牲掉一些性能，就能获得更高精度的深度测试，减少深度冲突。</p>
 </li>
 </ul>
-<p>上面讨论的三个技术是最普遍也是很容易实现的抗深度冲突技术了。还有一些更复杂的技术，但它们依然不能完全消除深度冲突。深度冲突是一个常见的问题，但如果组合使用了上面的技术，可能不会再需要处理深度冲突了。</p>
+<p>上面的三个技术是最普遍也是很容易实现的抗深度冲突的技术了。还有一些更复杂的技术，但它们依然不能完全消除深度冲突。深度冲突是一个常见的问题，有时候甚至需要组合使用了上面的技术。</p>
 
     </div>
 

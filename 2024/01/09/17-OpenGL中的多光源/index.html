@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="到此目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。 为了在场景">
+  <meta name="description" content="目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。 为了在场景中使">
 <meta property="og:type" content="article">
 <meta property="og:title" content="17-OpenGL中的多光源">
 <meta property="og:url" content="http://example.com/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/index.html">
 <meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="到此目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。 为了在场景">
+<meta property="og:description" content="目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。 为了在场景中使">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/01/09/17-OpenGL%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%89%E6%BA%90/image-20240110205816249.png">
 <meta property="article:published_time" content="2024-01-09T06:05:28.000Z">
-<meta property="article:modified_time" content="2024-01-10T16:16:30.434Z">
+<meta property="article:modified_time" content="2024-09-13T04:25:59.698Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -201,7 +201,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-11 00:16:30" itemprop="dateModified" datetime="2024-01-11T00:16:30+08:00">2024-01-11</time>
+                <time title="修改时间：2024-09-13 12:25:59" itemprop="dateModified" datetime="2024-09-13T12:25:59+08:00">2024-09-13</time>
               </span>
 
           
@@ -215,8 +215,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>到此目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。</p>
-<p>为了在场景中使用多个光源，需要将光照计算封装到GLSL函数中。因为每一种光源都需要一种不同的计算方法，而一旦想对多个光源进行光照计算时，代码很快就会变得非常复杂。只在main函数中进行所有的这些计算，代码很快。GLSL中的函数和C函数很相似，它有一个函数名、一个返回值类型，如果函数不是在main函数之前声明的，还必须在代码文件顶部声明一个原型。</p>
+        <p>目前，我们的程序包括了冯氏着色(Phong Shading)、材质(Material)、光照贴图(Lighting Map)以及不同种类的光源(Light Caster)。接下来，结合之前的知识，创建一个包含六个光源的场景，模拟一个类似太阳的定向光(Directional Light)光源，四个分散在场景中的点光源(Point Light)，以及一个手电筒(Flashlight)。</p>
+<p>为了在场景中使用多个光源，需要将光照计算封装到GLSL函数中。因为每一种光源都需要一种不同的计算方法，而一旦想对多个光源进行光照计算时，代码很快就会变得非常复杂。在main函数中进行所有的这些计算，代码才会很快。GLSL中的函数和C函数很相似，它有一个函数名、一个返回值类型，如果函数不是在main函数之前声明的，还必须在代码文件顶部声明一个原型。</p>
 <p>在场景中使用多个光源时，通常使用以下方法：需要有一个单独的颜色向量代表片段的输出颜色。对于每一个光源，它对片段的贡献颜色将会加到片段的输出颜色向量上。所以场景中的每个光源都会计算它们各自对片段的影响，并结合为一个最终的输出颜色。大体的结构会像是这样：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">out vec4 FragColor;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// 定义一个输出颜色值</span></span><br><span class="line">  vec3 output;</span><br><span class="line">  <span class="comment">// 将定向光的贡献加到输出中</span></span><br><span class="line">  output += <span class="built_in">someFunctionToCalculateDirectionalLight</span>();</span><br><span class="line">  <span class="comment">// 对所有的点光源也做相同的事情</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; nr_of_point_lights; i++)</span><br><span class="line">    output += <span class="built_in">someFunctionToCalculatePointLight</span>();</span><br><span class="line">  <span class="comment">// 也加上其它的光源（比如聚光）</span></span><br><span class="line">  output += <span class="built_in">someFunctionToCalculateSpotLight</span>();</span><br><span class="line">  FragColor = <span class="built_in">vec4</span>(output, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

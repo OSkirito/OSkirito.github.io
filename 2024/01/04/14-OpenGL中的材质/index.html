@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果我们想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。 在上一节中，我们定义">
+  <meta name="description" content="在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。 在上一节中，我们定义了一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="14-OpenGL中的材质">
 <meta property="og:url" content="http://example.com/2024/01/04/14-OpenGL%E4%B8%AD%E7%9A%84%E6%9D%90%E8%B4%A8/index.html">
 <meta property="og:site_name" content="OS&#39;s Blog">
-<meta property="og:description" content="在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果我们想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。 在上一节中，我们定义">
+<meta property="og:description" content="在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。 在上一节中，我们定义了一">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2024/01/04/14-OpenGL%E4%B8%AD%E7%9A%84%E6%9D%90%E8%B4%A8/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.gif">
 <meta property="article:published_time" content="2024-01-04T07:31:41.000Z">
-<meta property="article:modified_time" content="2024-01-04T10:31:34.033Z">
+<meta property="article:modified_time" content="2024-09-13T03:37:00.653Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -193,10 +193,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-01-04 15:31:41 / 修改时间：18:31:34" itemprop="dateCreated datePublished" datetime="2024-01-04T15:31:41+08:00">2024-01-04</time>
+              <time title="创建时间：2024-01-04 15:31:41" itemprop="dateCreated datePublished" datetime="2024-01-04T15:31:41+08:00">2024-01-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-13 11:37:00" itemprop="dateModified" datetime="2024-09-13T11:37:00+08:00">2024-09-13</time>
+              </span>
 
           
 
@@ -209,12 +215,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果我们想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。</p>
+        <p>在现实世界里，每个物体会对光产生不同的反应。比如，钢制物体看起来通常会比陶土花瓶更闪闪发光，一个木头箱子也不会与一个钢制箱子反射同样程度的光。有些物体反射光的时候不会有太多的散射(Scatter)，因而产生较小的高光点，而有些物体则会散射很多，产生一个有着更大半径的高光点。如果想要在OpenGL中模拟多种类型的物体，必须针对每种表面定义不同的材质(Material)属性。</p>
 <p>在上一节中，我们定义了一个物体和光的颜色，并结合环境光与镜面强度分量，来决定物体的视觉输出。当描述一个表面时，可以分别为三个光照分量定义一个材质颜色(Material Color)：环境光照(Ambient Lighting)、漫反射光照(Diffuse Lighting)和镜面光照(Specular Lighting)。通过为每个分量指定一个颜色，就能够对表面的颜色输出精细的控制了。现在，再添加一个反光度(Shininess)分量，结合上述的三个颜色，我们就有了全部所需的材质属性了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Material</span> &#123;</span><br><span class="line">    vec3 ambient;</span><br><span class="line">    vec3 diffuse;</span><br><span class="line">    vec3 specular;</span><br><span class="line">    <span class="type">float</span> shininess;</span><br><span class="line">&#125;; </span><br><span class="line">uniform Material material;</span><br></pre></td></tr></table></figure>
 
 <p>在片段着色器中，创建一个结构体(Struct)来储存物体的材质属性。也可以储存为独立的uniform值，但作为一个结构体来储存会更有条理一些。首先定义结构体的布局(Layout)，然后简单地以刚创建的结构体作为类型声明一个uniform变量。</p>
-<p>ambient材质向量定义了在环境光照下这个表面反射的是什么颜色，通常与表面的颜色相同。diffuse材质向量定义了在漫反射光照下表面的颜色，漫反射颜色（和环境光照一样）也被设置为我们期望的物体颜色。specular材质向量设置的是表面上镜面高光的颜色（或者甚至可能反映一个特定表面的颜色）。最后，shininess影响镜面高光的散射/半径。有这4个元素定义一个物体的材质，我们能够模拟很多现实世界中的材质。下面是一个常用的材质表格：</p>
+<p>ambient材质向量定义了在环境光照下这个表面反射的是什么颜色，通常与表面的颜色相同。diffuse材质向量定义了在漫反射光照下表面的颜色，漫反射颜色（和环境光照一样）也被设置为我们期望的物体颜色。specular材质向量设置的是表面上镜面高光的颜色（或者甚至可能反映一个特定表面的颜色）。最后，shininess影响镜面高光的散射/半径。有这4个元素定义一个物体的材质，我们能够模拟很多现实世界中的材质。下面是常用一些常用的材质：</p>
 <table>
 <thead>
 <tr>

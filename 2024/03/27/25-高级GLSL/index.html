@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/advanced_glsl_binding_points.png">
 <meta property="og:image" content="http://example.com/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/image-20240919185115661.png">
 <meta property="article:published_time" content="2024-03-27T09:53:50.000Z">
-<meta property="article:modified_time" content="2024-09-19T10:51:45.942Z">
+<meta property="article:modified_time" content="2024-09-19T11:25:45.963Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -144,7 +144,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">41</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">42</span></a>
 
   </li>
   </ul>
@@ -205,7 +205,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-19 18:51:45" itemprop="dateModified" datetime="2024-09-19T18:51:45+08:00">2024-09-19</time>
+                <time title="修改时间：2024-09-19 19:25:45" itemprop="dateModified" datetime="2024-09-19T19:25:45+08:00">2024-09-19</time>
               </span>
 
           
@@ -265,7 +265,7 @@
 <p>结果如下：</p>
 <img src="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/image-20240914114001663.png" class="" title="image-20240914114001663">
 
-<p>这里获取完整代码。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/advanced_GLSL_gl_PointSize.rar">这里</a>获取完整代码。</p>
 <h4 id="gl-VertexID"><a href="#gl-VertexID" class="headerlink" title="gl_VertexID"></a>gl_VertexID</h4><p>gl_Position和gl_PointSize都是输出变量，因为它们的值是作为顶点着色器的输出被读取的。可以对它们进行写入，来改变结果。顶点着色器还提供了一个只能进行读取的输入变量gl_VertexID。</p>
 <p>整型变量gl_VertexID储存了正在绘制顶点的当前ID。当（使用glDrawElements）进行索引渲染的时候，这个变量会存储正在绘制顶点的当前索引。当（使用glDrawArrays）不使用索引进行绘制的时候，这个变量会储存从渲染调用开始已处理顶点的数量。</p>
 <h3 id="片段着色器变量"><a href="#片段着色器变量" class="headerlink" title="片段着色器变量"></a>片段着色器变量</h3><p>在片段着色器中，也能访问到一些变量。GLSL提供了两个输入变量：gl_FragCoord和gl_FrontFacing。</p>
@@ -277,7 +277,7 @@
 <p>因为窗口的宽度是800。当一个像素的x坐标小于400时，它一定在窗口的左侧，所以我们给它一个不同的颜色。</p>
 <img src="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/image-20240914122146864.png" class="" title="image-20240914122146864">
 
-<p>这里获取完整代码。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/advanced_GLSL_gl_FragCoord.rar">这里</a>获取完整代码。</p>
 <p>现在可以计算出两个完全不同的片段着色器结果，并将它们显示在窗口的两侧，可以将它用于不同的光照的同屏对比。</p>
 <h4 id="gl-FrontFacing"><a href="#gl-FrontFacing" class="headerlink" title="gl_FrontFacing"></a>gl_FrontFacing</h4><p>gl_FrontFacing变量是一个bool，如果当前片段是正向面的一部分那么就是<code>true</code>，否则就是<code>false</code>。比如，可以创建一个立方体，在内部和外部使用不同的纹理：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec2 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform sampler2D frontTexture;</span><br><span class="line">uniform sampler2D backTexture;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="keyword">if</span>(gl_FrontFacing)</span><br><span class="line">        FragColor = <span class="built_in">texture</span>(frontTexture, TexCoords);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        FragColor = <span class="built_in">texture</span>(backTexture, TexCoords);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -285,7 +285,7 @@
 <p>如果我们往箱子里面看，就能看到使用的是不同的纹理。</p>
 <img src="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/image-20240918141803844.png" class="" title="image-20240918141803844">
 
-<p>注意，如果开启了面剔除，就看不到箱子内部的面了。这里获取完整代码。</p>
+<p>注意，如果开启了面剔除，就看不到箱子内部的面了。<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/advanced_GLSL_gl_FrontFacing.rar">这里</a>获取完整代码。</p>
 <h4 id="gl-FragDepth"><a href="#gl-FragDepth" class="headerlink" title="gl_FragDepth"></a>gl_FragDepth</h4><p>gl_FragCoord能让我们读取当前片段的窗口空间坐标，并获取它的深度值，但它是一个只读(Read-only)变量。不能修改片段的窗口空间坐标，但实际上是可以修改片段的深度值的。GLSL提供了一个输出变量gl_FragDepth，可以使用它来在着色器内设置片段的深度值。</p>
 <p>要想设置深度值，直接写入一个0.0到1.0之间的float值到输出变量就可以了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gl_FragDepth = <span class="number">0.0</span>; <span class="comment">// 这个片段现在的深度值为 0.0</span></span><br></pre></td></tr></table></figure>
@@ -431,7 +431,7 @@
 <img src="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/image-20240919185115661.png" class="" title="image-20240919185115661">
 
 <p>因为修改了模型矩阵，每个立方体都移动到了窗口的一边，并且由于使用了不同的片段着色器，它们的颜色也不同。这只是一个很简单的情景，我们可能会需要使用Uniform缓冲对象，但任何大型的渲染程序都可能同时激活有上百个着色器程序，这时候Uniform缓冲对象的优势就会很大地体现出来了。</p>
-<p>这里获取完整源代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/advanced_GLSL.rar">这里</a>获取完整源代码</p>
 <p>Uniform缓冲对象比起独立的uniform有很多好处。第一，一次设置很多uniform会比一个一个设置多个uniform要快很多；第二，比起在多个着色器中修改同样的uniform，在Uniform缓冲中修改一次会更容易一些。最后一个，如果使用Uniform缓冲对象的话，可以在着色器中使用更多的uniform。OpenGL限制了它能够处理的uniform数量，这可以通过GL_MAX_VERTEX_UNIFORM_COMPONENTS来查询。当你达到了uniform的最大数量时（比如再做骨骼动画的时候），可以选择使用Uniform缓冲对象。</p>
 
     </div>
@@ -474,7 +474,10 @@
     <a href="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/" rel="prev" title="24-立方体贴图">
       <i class="fa fa-chevron-left"></i> 24-立方体贴图
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/" rel="next" title="26-几何着色器">
+      26-几何着色器 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -549,7 +552,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

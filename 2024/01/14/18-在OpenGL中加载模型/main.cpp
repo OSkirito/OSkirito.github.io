@@ -454,9 +454,9 @@ void processInput(GLFWwindow *window, float cameraSpeed)
     // 摄像机重置
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
     {
-        glm::vec3 cameraPos   = glm::vec3(16.0f, 18.0f, 25.0f);
-        glm::vec3 cameraFront = glm::vec3(-0.5f, -0.5f, -1.0f);
-        glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
+        cameraPos   = glm::vec3(16.0f, 18.0f, 25.0f);
+        cameraFront = glm::vec3(-0.5f, -0.5f, -1.0f);
+        cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
     }
 }
 

@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://example.com/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/image-20240923183406635.png">
 <meta property="og:image" content="http://example.com/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/image-20240923185733015.png">
 <meta property="article:published_time" content="2024-09-19T11:26:54.000Z">
-<meta property="article:modified_time" content="2024-09-23T10:59:15.657Z">
+<meta property="article:modified_time" content="2024-09-23T11:16:35.923Z">
 <meta property="article:author" content="OSkirito">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Shader">
@@ -149,7 +149,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">42</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">43</span></a>
 
   </li>
   </ul>
@@ -210,7 +210,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-23 18:59:15" itemprop="dateModified" datetime="2024-09-23T18:59:15+08:00">2024-09-23</time>
+                <time title="修改时间：2024-09-23 19:16:35" itemprop="dateModified" datetime="2024-09-23T19:16:35+08:00">2024-09-23</time>
               </span>
 
           
@@ -323,7 +323,7 @@
 <p>所有发射出的顶点都将嵌有最后储存在fColor中的值，即顶点的颜色属性值。所有的房子都会有它们自己的颜色了：</p>
 <img src="/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/image-20240923133910010.png" class="" title="image-20240923133910010">
 
-<p>这里获取完整代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/geometry_shader_house.rar">这里</a>获取完整代码</p>
 <h2 id="爆破物体"><a href="#爆破物体" class="headerlink" title="爆破物体"></a>爆破物体</h2><p>当我们说爆破一个物体时，并不是指要将宝贵的顶点集给炸掉，而是要将每个三角形沿着法向量的方向移动一小段时间。整个物体看起来像是沿着每个三角形的法线向量爆炸一样。使用几何着色器的好处是，无论物体有多复杂，它都能够应用上去。</p>
 <p>因为我们想要沿着三角形的法向量位移每个顶点，首先需要计算这个法向量。所以要做的是计算垂直于三角形表面的向量，仅使用我们能够访问的3个顶点。如果我们能够获取两个平行于三角形表面的向量a和b，我们就能够对这两个向量进行叉乘来获取法向量。下面这个几何着色器函数做的正是这个，来使用3个输入顶点坐标来获取法向量：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vec3 <span class="title">GetNormal</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   vec3 a = <span class="built_in">vec3</span>(gl_in[<span class="number">0</span>].gl_Position) - <span class="built_in">vec3</span>(gl_in[<span class="number">1</span>].gl_Position);</span><br><span class="line">   vec3 b = <span class="built_in">vec3</span>(gl_in[<span class="number">2</span>].gl_Position) - <span class="built_in">vec3</span>(gl_in[<span class="number">1</span>].gl_Position);</span><br><span class="line">   <span class="keyword">return</span> <span class="built_in">normalize</span>(<span class="built_in">cross</span>(a, b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -342,7 +342,7 @@
 <p>最终的效果是，3D模型看起来随着时间不断在爆破它的顶点，在这之后又回到正常状态。</p>
 <img src="/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/image-20240923182239872.png" class="" title="image-20240923182239872">
 
-<p>这里获得完整的代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/geometry_shader_exploding.rar">这里</a>获得完整的代码</p>
 <h2 id="法向量可视化"><a href="#法向量可视化" class="headerlink" title="法向量可视化"></a>法向量可视化</h2><p>当编写光照着色器时，可能会最终会得到一些奇怪的视觉输出，但又很难确定导致问题的原因。一个常见的原因就是法向量错误，这可能是由于不正确加载顶点数据、错误地将它们定义为顶点属性或在着色器中不正确地管理所导致的。我们想要的是使用某种方式来检测提供的法向量是正确的。通过几何着色器实现法向量可视化，可以用于检测法向量是否正确。</p>
 <p>首先不使用几何着色器正常绘制场景。然后再次绘制场景，但这次只显示通过几何着色器生成法向量。几何着色器接收一个三角形图元，并沿着法向量生成三条线——每个顶点一个法向量。伪代码看起来会像是这样：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shader.<span class="built_in">use</span>();</span><br><span class="line"><span class="built_in">DrawScene</span>();</span><br><span class="line">normalDisplayShader.<span class="built_in">use</span>();</span><br><span class="line"><span class="built_in">DrawScene</span>();</span><br></pre></td></tr></table></figure>
@@ -366,7 +366,7 @@
 <p>最终运行结果如下：</p>
 <img src="/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/image-20240923185733015.png" class="" title="image-20240923185733015">
 
-<p>在这里获取完整的代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/19/26-%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/geometry_shader_normal.rar">这里</a>获取完整的代码</p>
 
     </div>
 
@@ -408,7 +408,10 @@
     <a href="/2024/03/27/25-%E9%AB%98%E7%BA%A7GLSL/" rel="prev" title="25-高级GLSL">
       <i class="fa fa-chevron-left"></i> 25-高级GLSL
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/09/23/27-%E5%AE%9E%E4%BE%8B%E5%8C%96/" rel="next" title="27-实例化">
+      27-实例化 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -483,7 +486,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

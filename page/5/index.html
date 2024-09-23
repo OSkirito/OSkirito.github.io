@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">42</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">43</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,94 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/" class="post-title-link" itemprop="url">在UE中使用UI制作过场动画</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-05-21 12:53:36 / 修改时间：17:50:33" itemprop="dateCreated datePublished" datetime="2023-05-21T12:53:36+08:00">2023-05-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>创建一个媒体播放器，勾选创建媒体纹理</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521131324792.png" class="" title="image-20230521131324792"><img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521131506039.png" class="" title="image-20230521131506039">
+
+<p>创建文件媒体源和媒体播放列表，进行相应的设置</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521132403049.png" class="" title="image-20230521132403049">
+
+<p>创建一个材质，进行设置后，将媒体纹理连接到基础颜色</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521132719471.png" class="" title="image-20230521132719471">
+
+<p>创建一个用户控件蓝图，新建画布和图像，设置调整图像层赋予媒体材质</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521133155383.png" class="" title="image-20230521133155383">
+
+<p>在控件蓝图中创建一个类型为媒体播放器对象引用的变量，指定默认值为之前创建的媒体播放器，进行蓝图绘制</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521133744335.png" class="" title="image-20230521133744335">
+
+<p>打开关卡蓝图，调用对应的过场动画</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521134308879.png" class="" title="image-20230521134308879">
+
+<p>运行发现视频有了，但是没有声音，所以我们接下来就创建音效</p>
+<p>首先对之前的视频进行处理，提取视频的音轨导出为wav格式并导入到项目中，选择该文件创建一个cue</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521135728756.png" class="" title="image-20230521135728756">
+
+<p>可双击进入cue进行一些设置（衰减等），将cue放入场景中并在细节面板中取消勾选自动启用</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521140502011.png" class="" title="image-20230521140502011">
+
+<p>在关卡蓝图中继续完善，就大功告成了</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521140730365.png" class="" title="image-20230521140730365">
+
+<p>注：如果需要打包项目，视频文件需要严格按照UE项目规范放置（如下所示，记得在UE中修改文件路径），否则打包出去没有视频播放</p>
+<img src="/2023/05/21/%E5%9C%A8UE%E4%B8%AD%E4%BD%BF%E7%94%A8UI%E5%88%B6%E4%BD%9C%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB/image-20230521141327347.png" class="" title="image-20230521141327347">
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -13533,7 +13621,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

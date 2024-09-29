@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在学习OpenGL的时候，你可能会时不时遇到模型边缘有锯齿的情况。这些锯齿边缘(Jagged Edges)的产生和光栅器将顶点数据转化为片段的方式有关。能够清楚看见形成边缘的像素，这种现象被称之为走样(Aliasing)。缓解这种现象的技术叫做抗锯齿（Anti-aliasing，也被称为反走样），让我们的渲染产生更平滑的边缘。   有一种叫做超采样抗锯齿(Super Sample Anti-ali">
+<meta property="og:type" content="article">
+<meta property="og:title" content="28-抗锯齿">
+<meta property="og:url" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="在学习OpenGL的时候，你可能会时不时遇到模型边缘有锯齿的情况。这些锯齿边缘(Jagged Edges)的产生和光栅器将顶点数据转化为片段的方式有关。能够清楚看见形成边缘的像素，这种现象被称之为走样(Aliasing)。缓解这种现象的技术叫做抗锯齿（Anti-aliasing，也被称为反走样），让我们的渲染产生更平滑的边缘。   有一种叫做超采样抗锯齿(Super Sample Anti-ali">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181219864.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_filled.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_sample_points.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples_filled.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181208850.png">
+<meta property="og:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929190749871.png">
+<meta property="article:published_time" content="2024-09-29T06:46:47.000Z">
+<meta property="article:modified_time" content="2024-09-29T11:08:32.658Z">
+<meta property="article:author" content="OSkirito">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Shader">
+<meta property="article:tag" content="OpenGL">
+<meta property="article:tag" content="GLSL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181219864.png">
+
+<link rel="canonical" href="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>28-抗锯齿 | OS's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">44</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          28-抗锯齿
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-09-29 14:46:47 / 修改时间：19:08:32" itemprop="dateCreated datePublished" datetime="2024-09-29T14:46:47+08:00">2024-09-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在学习OpenGL的时候，你可能会时不时遇到模型边缘有锯齿的情况。这些锯齿边缘(Jagged Edges)的产生和光栅器将顶点数据转化为片段的方式有关。能够清楚看见形成边缘的像素，这种现象被称之为走样(Aliasing)。缓解这种现象的技术叫做抗锯齿（Anti-aliasing，也被称为反走样），让我们的渲染产生更平滑的边缘。</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181219864.png" class="" title="image-20240929181219864">
+
+<p>有一种叫做超采样抗锯齿(Super Sample Anti-aliasing, SSAA)的技术，它会使用比正常分辨率更高的分辨率（即超采样）来渲染场景，当图像输出在帧缓冲中更新时，分辨率会被下采样(Downsample)至正常的分辨率。这些额外的分辨率会被用来防止锯齿边缘的产生。虽然它确实能够解决走样的问题，但是由于这样比平时要绘制更多的片段，它也会带来很大的性能开销。所以这项技术只拥有了短暂的辉煌。</p>
+<p>然而，在这项技术的基础上也诞生了更为现代的技术，叫做多重采样抗锯齿(Multisample Anti-aliasing, MSAA)。它借鉴了SSAA背后的理念，但却以更加高效的方式实现了抗锯齿。</p>
+<h2 id="多重采样"><a href="#多重采样" class="headerlink" title="多重采样"></a>多重采样</h2><p>为了理解什么是多重采样(Multisampling)，以及它是如何解决锯齿问题的，我们有必要更加深入地了解OpenGL光栅器的工作方式。</p>
+<p>光栅器是位于最终处理过的顶点之后到片段着色器之前所经过的所有的算法与过程的总和。光栅器会将一个图元的所有顶点作为输入，并将它转换为一系列的片段。顶点坐标理论上可以取任意值，但片段不行，因为它们受限于你窗口的分辨率。顶点坐标与片段之间几乎永远也不会有一对一的映射，所以光栅器必须以某种方式来决定每个顶点最终所在的片段/屏幕坐标。</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization.png" class="" title="img">
+
+<p>这里我们可以看到一个屏幕像素的网格，每个像素的中心包含有一个采样点(Sample Point)，它会被用来决定这个三角形是否遮盖了某个像素。图中红色的采样点被三角形所遮盖，在每一个遮住的像素处都会生成一个片段。虽然三角形边缘的一些部分也遮住了某些屏幕像素，但是这些像素的采样点并没有被三角形内部所遮盖，所以它们不会受到片段着色器的影响。</p>
+<p>现在走样就产生了，完整渲染后的三角形在屏幕上会是这样的：</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_filled.png" class="" title="img">
+
+<p>由于屏幕像素总量的限制，有些边缘的像素能够被渲染出来，而有些则不会。结果就是我们使用了不光滑的边缘来渲染图元，导致了之前讨论到的锯齿边缘。</p>
+<p>多重采样所做的正是将单一的采样点变为多个采样点（这也是它名称的由来）。我们不再使用像素中心的单一采样点，取而代之的是以特定图案排列的4个子采样点(Subsample)。我们将用这些子采样点来决定像素的遮盖度。当然，这也意味着颜色缓冲的大小会随着子采样点的增加而增加。</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_sample_points.png" class="" title="img">
+
+<p>上图的左侧展示了正常情况下判定三角形是否遮盖的方式。在例子中的这个像素上不会运行片段着色器（所以它会保持空白）。因为它的采样点并未被三角形所覆盖。上图的右侧展示的是实施多重采样之后的版本，每个像素包含有4个采样点。这里，只有两个采样点遮盖住了三角形。采样点的数量可以是任意的，更多的采样点能带来更精确的遮盖率。</p>
+<p>我们知道三角形只遮盖了2个子采样点，所以下一步是决定这个像素的颜色。你的猜想可能是，我们对每个被遮盖住的子采样点运行一次片段着色器，最后将每个像素所有子采样点的颜色平均一下。在这个例子中，我们需要在两个子采样点上对被插值的顶点数据运行两次片段着色器，并将结果的颜色储存在这些采样点中。但是这并不是它工作的方式，因为这本质上说还是需要运行更多次的片段着色器，会显著地降低性能。</p>
+<p>MSAA真正的工作方式是，无论三角形遮盖了多少个子采样点，（每个图元中）每个像素只运行一次片段着色器，片段着色器所使用的顶点数据会插值到每个像素的中心，所得到的结果颜色会被储存在每个被遮盖住的子采样点中。当颜色缓冲的子样本被图元的所有颜色填满时，所有的这些颜色将会在每个像素内部平均化。因为上图的4个采样点中只有2个被遮盖住了，这个像素的颜色将会是三角形颜色与其他两个采样点的颜色（在这里是无色）的平均值，最终形成一种淡蓝色。</p>
+<p>这样子做之后，颜色缓冲中所有的图元边缘将会产生一种更平滑的图形：</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples.png" class="" title="img">
+
+<p>这里，每个像素包含4个子采样点（不相关的采样点都没有标注），蓝色的采样点被三角形所遮盖，而灰色的则没有。对于三角形的内部的像素，片段着色器只会运行一次，颜色输出会被存储到全部的4个子样本中。而在三角形的边缘，并不是所有的子采样点都被遮盖，所以片段着色器的结果将只会储存到部分的子样本中。根据被遮盖的子样本的数量，最终的像素颜色将由三角形的颜色与其它子样本中所储存的颜色来决定。简单来说，一个像素中如果有更多的采样点被三角形遮盖，那么这个像素的颜色就会更接近于三角形的颜色。如果我们给上面的三角形填充颜色，就能得到以下的效果：</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples_filled.png" class="" title="img">
+
+<p>对于每个像素来说，越少的子采样点被三角形所覆盖，那么它受到三角形的影响就越小。三角形的不平滑边缘被稍浅的颜色所包围后，从远处观察时就会显得更加平滑了。不仅仅是颜色值会受到多重采样的影响，深度和模板测试也能够使用多个采样点。对深度测试来说，每个顶点的深度值会在运行深度测试之前被插值到各个子样本中。对模板测试来说，我们对每个子样本，而不是每个像素，存储一个模板值。当然，这也意味着深度和模板缓冲的大小会乘以子采样点的个数。</p>
+<h2 id="OpenGL中的MSAA"><a href="#OpenGL中的MSAA" class="headerlink" title="OpenGL中的MSAA"></a>OpenGL中的MSAA</h2><p>如果我们想要在OpenGL中使用MSAA，必须要使用一个能在每个像素中存储大于1个颜色值的颜色缓冲（因为多重采样需要为每个采样点都储存一个颜色）。所以，需要一个新的缓冲类型，来存储特定数量的多重采样样本，它叫做多重采样缓冲(Multisample Buffer)。大多数的窗口系统都应该提供了一个多重采样缓冲，用以代替默认的颜色缓冲。GLFW同样给了我们这个功能，我们所要做的只是告诉GLFW，我们希望使用一个包含N个样本的多重采样缓冲。这可以在创建窗口之前调用glfwWindowHint来完成。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glfwWindowHint</span>(GLFW_SAMPLES, <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>现在再调用glfwCreateWindow创建渲染窗口时，每个屏幕坐标就会使用一个包含4个子采样点的颜色缓冲了。GLFW会自动创建一个每像素4个子采样点的深度和样本缓冲。这也意味着所有缓冲的大小都增长了4倍。</p>
+<p>现在我们已经向GLFW请求了多重采样缓冲，我们还需要调用glEnable并启用GL_MULTISAMPLE，来启用多重采样。在大多数OpenGL的驱动上，多重采样都是默认启用的，所以这个调用可能会有点多余，但显式地调用一下会更保险一点。这样子不论是什么OpenGL的实现都能够正常启用多重采样了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_MULTISAMPLE);</span><br></pre></td></tr></table></figure>
+
+<p>只要默认的帧缓冲有了多重采样缓冲的附件，我们所要做的只是调用glEnable来启用多重采样。因为多重采样的算法都在OpenGL驱动的光栅器中实现了，我们不需要再多做什么。如果现在再来渲染本节一开始的那个绿色的立方体，我们应该能看到更平滑的边缘：</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181208850.png" class="" title="image-20240929181208850">
+
+<p>这里获取完整代码</p>
+<h2 id="离屏MSAA"><a href="#离屏MSAA" class="headerlink" title="离屏MSAA"></a>离屏MSAA</h2><p>由于GLFW负责了创建多重采样缓冲，启用MSAA非常简单。然而，如果我们想要使用我们自己的帧缓冲来进行离屏渲染，那么我们就必须要自己动手生成多重采样缓冲了。有两种方式可以创建多重采样缓冲，将其作为帧缓冲的附件：纹理附件和渲染缓冲附件。</p>
+<h3 id="多重采样纹理附件"><a href="#多重采样纹理附件" class="headerlink" title="多重采样纹理附件"></a>多重采样纹理附件</h3><p>为了创建一个支持储存多个采样点的纹理，我们使用glTexImage2DMultisample来替代glTexImage2D，它的纹理目标是GL_TEXTURE_2D_MULTISAPLE。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D_MULTISAMPLE, tex);</span><br><span class="line"><span class="built_in">glTexImage2DMultisample</span>(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, width, height, GL_TRUE);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D_MULTISAMPLE, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>它的第二个参数设置的是纹理所拥有的样本个数。如果最后一个参数为GL_TRUE，图像将会对每个纹素使用相同的样本位置以及相同数量的子采样点个数。我们使用glFramebufferTexture2D将多重采样纹理附加到帧缓冲上，但这里纹理类型使用的是GL_TEXTURE_2D_MULTISAMPLE。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glFramebufferTexture2D</span>(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>当前绑定的帧缓冲现在就有了一个纹理图像形式的多重采样颜色缓冲。</p>
+<h3 id="多重采样渲染缓冲对象"><a href="#多重采样渲染缓冲对象" class="headerlink" title="多重采样渲染缓冲对象"></a>多重采样渲染缓冲对象</h3><p>和纹理类似，创建一个多重采样渲染缓冲对象并不难。我们所要做的只是在指定（当前绑定的）渲染缓冲的内存存储时，将glRenderbufferStorage的调用改为glRenderbufferStorageMultisample就可以了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glRenderbufferStorageMultisample</span>(GL_RENDERBUFFER, <span class="number">4</span>, GL_DEPTH24_STENCIL8, width, height);</span><br></pre></td></tr></table></figure>
+
+<p>函数中，渲染缓冲对象后的参数我们将设定为样本的数量，在当前使用的是4。</p>
+<h3 id="渲染到多重采样帧缓冲"><a href="#渲染到多重采样帧缓冲" class="headerlink" title="渲染到多重采样帧缓冲"></a>渲染到多重采样帧缓冲</h3><p>渲染到多重采样帧缓冲对象的过程都是自动的。只要我们在帧缓冲绑定时绘制任何东西，光栅器就会负责所有的多重采样运算。我们最终会得到一个多重采样颜色缓冲以及/或深度和模板缓冲。因为多重采样缓冲有一点特别，我们不能直接将它们的缓冲图像用于其他运算，比如在着色器中对它们进行采样。</p>
+<p>一个多重采样的图像包含比普通图像更多的信息，我们所要做的是缩小或者还原(Resolve)图像。多重采样帧缓冲的还原通常是通过glBlitFramebuffer来完成，它能够将一个帧缓冲中的某个区域复制到另一个帧缓冲中，并且将多重采样缓冲还原。</p>
+<p>glBlitFramebuffer会将一个用4个屏幕空间坐标所定义的源区域复制到一个同样用4个屏幕空间坐标所定义的目标区域中。在之前使用帧缓冲的时候，当我们绑定到GL_FRAMEBUFFER时，我们是同时绑定了读取和绘制的帧缓冲目标。我们也可以将帧缓冲分开绑定至GL_READ_FRAMEBUFFER与GL_DRAW_FRAMEBUFFER。glBlitFramebuffer函数会根据这两个目标，决定哪个是源帧缓冲，哪个是目标帧缓冲。接下来，我们可以将图像位块传送(Blit)到默认的帧缓冲中，将多重采样的帧缓冲传送到屏幕上。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_READ_FRAMEBUFFER, multisampledFBO);</span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_DRAW_FRAMEBUFFER, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">glBlitFramebuffer</span>(<span class="number">0</span>, <span class="number">0</span>, width, height, <span class="number">0</span>, <span class="number">0</span>, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);</span><br></pre></td></tr></table></figure>
+
+<p>如果现在再来渲染这个程序，我们会得到与之前完全一样的结果：一个使用MSAA显示出来的立方体，而且锯齿边缘明显减少了（下图是运行了后期处理的效果）：</p>
+<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929190749871.png" class="" title="image-20240929190749871">
+
+<p>这里获取完整代码</p>
+<p>因为屏幕纹理又变回了一个只有单一采样点的普通纹理，像是边缘检测这样的后期处理滤镜会再次出现锯齿。为了补偿这一问题，你可以之后对纹理进行模糊处理，或者想出你自己的抗锯齿算法。</p>
+<p>你可以看到，如果将多重采样与离屏渲染结合起来，我们需要自己负责一些额外的细节。但所有的这些细节都是值得额外的努力的，因为多重采样能够显著提升场景的视觉质量。当然，要注意，如果使用的采样点非常多，启用多重采样会显著降低程序的性能，通常采用的是4采样点的MSAA。</p>
+<h2 id="自定义抗锯齿算法"><a href="#自定义抗锯齿算法" class="headerlink" title="自定义抗锯齿算法"></a>自定义抗锯齿算法</h2><p>将一个多重采样的纹理图像不进行还原直接传入着色器也是可行的。GLSL提供了这样的选项，让我们能够对纹理图像的每个子样本进行采样，所以可以创建我们自己的抗锯齿算法，在大型的图形应用中通常都会这么做。要想获取每个子样本的颜色值，你需要将纹理uniform采样器设置为sampler2DMS，而不是平常使用的sampler2D：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uniform sampler2DMS screenTextureMS;</span><br></pre></td></tr></table></figure>
+
+<p>使用texelFetch函数就能够获取每个子样本的颜色值了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vec4 colorSample = <span class="built_in">texelFetch</span>(screenTextureMS, TexCoords, <span class="number">3</span>);  <span class="comment">// 第4个子样本</span></span><br></pre></td></tr></table></figure>
+
+<p>我们不会深入探究自定义抗锯齿技术的细节，这里仅仅是一点点启发。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>OSkirito
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/" title="28-抗锯齿">http://example.com/2024/09/29/28-抗锯齿/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Shader/" rel="tag"># Shader</a>
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+              <a href="/tags/GLSL/" rel="tag"># GLSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/09/23/27-%E5%AE%9E%E4%BE%8B%E5%8C%96/" rel="prev" title="27-实例化">
+      <i class="fa fa-chevron-left"></i> 27-实例化
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E9%87%87%E6%A0%B7"><span class="nav-number">1.</span> <span class="nav-text">多重采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenGL%E4%B8%AD%E7%9A%84MSAA"><span class="nav-number">2.</span> <span class="nav-text">OpenGL中的MSAA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E5%B1%8FMSAA"><span class="nav-number">3.</span> <span class="nav-text">离屏MSAA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E9%87%87%E6%A0%B7%E7%BA%B9%E7%90%86%E9%99%84%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">多重采样纹理附件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E9%87%87%E6%A0%B7%E6%B8%B2%E6%9F%93%E7%BC%93%E5%86%B2%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.2.</span> <span class="nav-text">多重采样渲染缓冲对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E5%88%B0%E5%A4%9A%E9%87%8D%E9%87%87%E6%A0%B7%E5%B8%A7%E7%BC%93%E5%86%B2"><span class="nav-number">3.3.</span> <span class="nav-text">渲染到多重采样帧缓冲</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8A%97%E9%94%AF%E9%BD%BF%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">自定义抗锯齿算法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

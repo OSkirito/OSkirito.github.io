@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">45</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
 
   </li>
   </ul>
@@ -162,6 +162,64 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/30/30-Gammma%E6%A0%A1%E6%AD%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/09/30/30-Gammma%E6%A0%A1%E6%AD%A3/" class="post-title-link" itemprop="url">30-Gammma校正</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-09-30 17:45:28 / 修改时间：17:45:49" itemprop="dateCreated datePublished" datetime="2024-09-30T17:45:28+08:00">2024-09-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -185,10 +243,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-09-29 20:46:52 / 修改时间：21:00:35" itemprop="dateCreated datePublished" datetime="2024-09-29T20:46:52+08:00">2024-09-29</time>
+              <time title="创建时间：2024-09-29 20:46:52" itemprop="dateCreated datePublished" datetime="2024-09-29T20:46:52+08:00">2024-09-29</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-30 17:43:36" itemprop="dateModified" datetime="2024-09-30T17:43:36+08:00">2024-09-30</time>
+              </span>
 
           
 
@@ -208,11 +272,11 @@
 <p>然而，这种想法仅仅只适用于漫反射分量。当考虑漫反射光的时候，如果法线和光源夹角大于90度，光源会处于被照表面的下方，这个时候光照的漫反射分量的确是为0.0。但是，在考虑镜面高光时，我们测量的角度并不是光源与法线的夹角，而是视线与反射光线向量的夹角。看一下下面这两张图：</p>
 <img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_over_90.png" class="" title="img">
 
-<p>现在问题就应该很明显了。左图中是我们熟悉的风氏光照中的反射向量，其中θ角小于90度。而右图中，视线与反射方向之间的夹角明显大于90度，这种情况下镜面光分量会变为0.0。这在大多数情况下都不是什么问题，因为观察方向离反射方向都非常远。然而，当物体的反光度非常小时，它产生的镜面高光半径足以让这些相反方向的光线对亮度产生足够大的影响。在这种情况下就不能忽略它们对镜面光分量的贡献了。</p>
-<p>1977年，James F. Blinn在风氏着色模型上加以拓展，引入了Blinn-Phong着色模型。Blinn-Phong模型与风氏模型非常相似，但是它对镜面光模型的处理上有一些不同，让我们能够解决之前提到的问题。Blinn-Phong模型不再依赖于反射向量，而是采用了所谓的半程向量(Halfway Vector)，即光线与视线夹角一半方向上的一个单位向量。当半程向量与法线向量越接近时，镜面光分量就越大。</p>
+<p>现在问题就应该很明显了。左图中是我们熟悉的冯氏光照中的反射向量，其中θ角小于90度。而右图中，视线与反射方向之间的夹角明显大于90度，这种情况下镜面光分量会变为0.0。这在大多数情况下都不是什么问题，因为观察方向离反射方向都非常远。然而，当物体的反光度非常小时，它产生的镜面高光半径足以让这些相反方向的光线对亮度产生足够大的影响。在这种情况下就不能忽略它们对镜面光分量的贡献了。</p>
+<p>1977年，James F. Blinn在冯氏着色模型上加以拓展，引入了Blinn-Phong着色模型。Blinn-Phong模型与冯氏模型非常相似，但是它对镜面光模型的处理上有一些不同，让我们能够解决之前提到的问题。Blinn-Phong模型不再依赖于反射向量，而是采用了所谓的半程向量(Halfway Vector)，即光线与视线夹角一半方向上的一个单位向量。当半程向量与法线向量越接近时，镜面光分量就越大。</p>
 <img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_halfway_vector.png" class="" title="img">
 
-<p>当视线正好与（现在不需要的）反射向量对齐时，半程向量就会与法线完美契合。所以当观察者视线越接近于原本反射光线的方向时，镜面高光就会越强。现在，不论观察者向哪个方向看，半程向量与表面法线之间的夹角都不会超过90度（除非光源在表面以下）。它产生的效果会与风氏光照有些许不同，但是大部分情况下看起来会更自然一点，特别是低高光的区域。Blinn-Phong着色模型正是早期固定渲染管线时代时OpenGL所采用的光照模型。</p>
+<p>当视线正好与（现在不需要的）反射向量对齐时，半程向量就会与法线完美契合。所以当观察者视线越接近于原本反射光线的方向时，镜面高光就会越强。现在，不论观察者向哪个方向看，半程向量与表面法线之间的夹角都不会超过90度（除非光源在表面以下）。它产生的效果会与冯氏光照有些许不同，但是大部分情况下看起来会更自然一点，特别是低高光的区域。Blinn-Phong着色模型正是早期固定渲染管线时代时OpenGL所采用的光照模型。</p>
 <p>获取半程向量的方法很简单，只需要将光线的方向向量和观察向量加到一起，并将结果正规化(Normalize)就可以了：</p>
 <img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/image-20240929205225538.png" class="" title="image-20240929205225538">
 
@@ -222,19 +286,19 @@
 <p>接下来，镜面光分量的实际计算只不过是对表面法线和半程向量进行一次约束点乘(Clamped Dot Product)，让点乘结果不为负，从而获取它们之间夹角的余弦值，之后我们对这个值取反光度次方：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), shininess);</span><br><span class="line">vec3 specular = lightColor * spec;</span><br></pre></td></tr></table></figure>
 
-<p>除此之外Blinn-Phong模型就没什么好说的了，Blinn-Phong与风氏模型唯一的区别就是，Blinn-Phong测量的是法线与半程向量之间的夹角，而风氏模型测量的是观察方向与反射向量间的夹角。</p>
-<p>在引入半程向量之后，我们现在应该就不会再看到风氏光照中高光断层的情况了。下面两个图片展示的是两种方法在镜面光分量为0.5时的对比：</p>
+<p>除此之外Blinn-Phong模型就没什么好说的了，Blinn-Phong与冯氏模型唯一的区别就是，Blinn-Phong测量的是法线与半程向量之间的夹角，而冯氏模型测量的是观察方向与反射向量间的夹角。</p>
+<p>在引入半程向量之后，我们现在应该就不会再看到冯氏光照中高光断层的情况了。下面两个图片展示的是两种方法在镜面光分量为0.5时的对比：</p>
 <img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_comparrison.png" class="" title="img">
 
-<p>除此之外，风氏模型与Blinn-Phong模型也有一些细微的差别：半程向量与表面法线的夹角通常会小于观察与反射向量的夹角。所以，如果你想获得和风氏着色类似的效果，就必须在使用Blinn-Phong模型时将镜面反光度设置更高一点。通常我们会选择风氏着色时反光度分量的2到4倍。</p>
-<p>下面是风氏着色反光度为8.0，Blinn-Phong着色反光度为32.0时的一个对比：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_comparrison2.png" class="" title="img">
+<p>除此之外，冯氏模型与Blinn-Phong模型也有一些细微的差别：半程向量与表面法线的夹角通常会小于观察与反射向量的夹角。所以，如果你想获得和冯氏着色类似的效果，就必须在使用Blinn-Phong模型时将镜面反光度设置更高一点。通常我们会选择冯氏着色时反光度分量的2到4倍。</p>
+<p>下面是冯氏着色与Blinn-Phong着色的一个对比（左边为phong，右边为blinn-phong）：</p>
+<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/image-20240930174245958.png" class="" title="image-20240930174245958">
 
-<p>你可以看到，Blinn-Phong的镜面光分量会比风氏模型更锐利一些。为了得到与风氏模型类似的结果，你可能会需要不断进行一些微调，但Blinn-Phong模型通常会产出更真实的结果。</p>
-<p>这里，我们使用了一个简单的片段着色器，让我们能够在风氏反射与Blinn-Phong反射间进行切换：</p>
+<p>你可以看到，Blinn-Phong的镜面光分量会比冯氏模型更锐利一些。为了得到与冯氏模型类似的结果，你可能会需要不断进行一些微调，但Blinn-Phong模型通常会产出更真实的结果。</p>
+<p>这里，我们使用了一个简单的片段着色器，让我们能够在冯氏反射与Blinn-Phong反射间进行切换：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    [...]</span><br><span class="line">    <span class="type">float</span> spec = <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">if</span>(blinn)</span><br><span class="line">    &#123;</span><br><span class="line">        vec3 halfwayDir = <span class="built_in">normalize</span>(lightDir + viewDir);  </span><br><span class="line">        spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), <span class="number">16.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        vec3 reflectDir = <span class="built_in">reflect</span>(-lightDir, normal);</span><br><span class="line">        spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(viewDir, reflectDir), <span class="number">0.0</span>), <span class="number">8.0</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>你可以在<a target="_blank" rel="noopener" href="https://learnopengl.com/code_viewer_gh.php?code=src/5.advanced_lighting/1.advanced_lighting/advanced_lighting.cpp">这里</a>找到这个Demo的源代码。你可以按下<code>B</code>键来切换风氏光照与Blinn-Phong光照。</p>
+<p>这里获取完整的代码，可以按下<code>B</code>键来切换冯氏光照与Blinn-Phong光照。</p>
 
       
     </div>
@@ -1791,195 +1855,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">20-模板测试</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-22 16:37:25" itemprop="dateCreated datePublished" datetime="2024-02-22T16:37:25+08:00">2024-02-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-13 15:50:17" itemprop="dateModified" datetime="2024-09-13T15:50:17+08:00">2024-09-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="模板测试"><a href="#模板测试" class="headerlink" title="模板测试"></a>模板测试</h2><p>当片段着色器处理完一个片段之后，模板测试(Stencil Test)会开始执行，和深度测试一样，它也会丢弃片段，被保留的片段会进入深度测试，它可能会丢弃更多的片段。模板测试是根据另一个缓冲来进行的，它叫做模板缓冲(Stencil Buffer)，可以在渲染的时候更新它来获得一些很有意思的效果。</p>
-<p>一个模板缓冲中，每个模板值(Stencil Value)是8位的。所以每个像素/片段一共能有256种不同的模板值。我们可以将这些模板值设置为想要的值，然后当某个片段有某个模板值的时候，就可以选择丢弃或是保留这个片段。</p>
-<p>模板缓冲的例子如下：</p>
-<img src="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/stencil_buffer.png" class="" title="img">
-
-<p>模板缓冲首先会被清除为0，之后在模板缓冲中使用1填充了一个空心矩形。场景中的片段将会只在片段的模板值为1的时候会被渲染（其它的都被丢弃了）。</p>
-<p>模板缓冲操作允许在渲染片段时将模板缓冲设定为一个特定的值。通过在渲染时修改模板缓冲的内容，写入模板缓冲。在同一个（或者接下来的）渲染迭代中，可以读取这些值，来决定丢弃还是保留某个片段。使用模板缓冲的时候可以尽情发挥，但大体的步骤如下：</p>
-<ul>
-<li>启用模板缓冲的写入。</li>
-<li>渲染物体，更新模板缓冲的内容。</li>
-<li>禁用模板缓冲的写入。</li>
-<li>渲染（其它）物体，这次根据模板缓冲的内容丢弃特定的片段。</li>
-</ul>
-<p>所以，通过使用模板缓冲，可以根据场景中已绘制的其它物体的片段，来决定是否丢弃特定的片段。</p>
-<p>可以用GL_STENCIL_TEST来启用模板测试。在这行代码之后，所有的渲染调用都会以某种方式影响模板缓冲。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_STENCIL_TEST);</span><br></pre></td></tr></table></figure>
-
-<p>注意，和颜色和深度缓冲一样，也需要在每次迭代之前清除模板缓冲。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
-
-<p>和深度测试的glDepthMask函数一样，模板缓冲也有一个类似的函数。glStencilMask允许我们设置一个位掩码(Bitmask)，它会与将要写入缓冲的模板值进行与(AND)运算。默认情况下设置的位掩码所有位都为1，不影响输出，但如果我们将它设置为<code>0x00</code>，写入缓冲的所有模板值最后都会变成0。这与深度测试中的glDepthMask(GL_FALSE)是等价的。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0xFF</span>); <span class="comment">// 每一位写入模板缓冲时都保持原样</span></span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0x00</span>); <span class="comment">// 每一位在写入模板缓冲时都会变成0（禁用写入）</span></span><br></pre></td></tr></table></figure>
-
-<p>大部分情况下都只会使用<code>0x00</code>或者<code>0xFF</code>作为模板掩码(Stencil Mask)，但知道有选项可以设置自定义的位掩码总是好的。</p>
-<p>和深度测试一样，对模板缓冲应该通过还是失败，以及它应该如何影响模板缓冲，也是有一定控制的。一共有两个函数能够用来配置模板测试：glStencilFunc和glStencilOp。</p>
-<p>glStencilFunc(GLenum sfunc, GLint ref, GLuint mask)一共包含三个参数：</p>
-<ul>
-<li><code>sfunc</code>：设置模板测试函数(Stencil Test Function)。这个测试函数将会应用到已储存的模板值上和glStencilFunc函数的<code>ref</code>值上。可用的选项有：GL_NEVER、GL_LESS、GL_LEQUAL、GL_GREATER、GL_GEQUAL、GL_EQUAL、GL_NOTEQUAL和GL_ALWAYS。它们的语义和深度缓冲的函数类似。</li>
-<li><code>ref</code>：设置了模板测试的参考值(Reference Value)。模板缓冲的内容将会与这个值进行比较。</li>
-<li><code>mask</code>：设置一个掩码，它将会与参考值和储存的模板值在测试比较它们之前进行与(AND)运算。初始情况下所有位都为1。</li>
-</ul>
-<p>上面那个简单的模板例子中，函数被设置为：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glStencilFunc</span>(GL_EQUAL, <span class="number">1</span>, <span class="number">0xFF</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这会告诉OpenGL，只要一个片段的模板值等于(<code>GL_EQUAL</code>)参考值1，片段将会通过测试并被绘制，否则会被丢弃。但是glStencilFunc仅仅描述了OpenGL应该对模板缓冲内容做什么，而不是应该如何更新缓冲。这就需要glStencilOp这个函数了。</p>
-<p>glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)一共包含三个选项，我们能够设定每个选项应该采取的行为：</p>
-<ul>
-<li><code>sfail</code>：模板测试失败时采取的行为。</li>
-<li><code>dpfail</code>：模板测试通过，但深度测试失败时采取的行为。</li>
-<li><code>dppass</code>：模板测试和深度测试都通过时采取的行为。</li>
-</ul>
-<p>每个选项都可以选用以下的其中一种行为：</p>
-<table>
-<thead>
-<tr>
-<th align="left">行为</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">GL_KEEP</td>
-<td align="left">保持当前储存的模板值</td>
-</tr>
-<tr>
-<td align="left">GL_ZERO</td>
-<td align="left">将模板值设置为0</td>
-</tr>
-<tr>
-<td align="left">GL_REPLACE</td>
-<td align="left">将模板值设置为glStencilFunc函数设置的<code>ref</code>值</td>
-</tr>
-<tr>
-<td align="left">GL_INCR</td>
-<td align="left">如果模板值小于最大值则将模板值加1</td>
-</tr>
-<tr>
-<td align="left">GL_INCR_WRAP</td>
-<td align="left">与GL_INCR一样，但如果模板值超过了最大值则归零</td>
-</tr>
-<tr>
-<td align="left">GL_DECR</td>
-<td align="left">如果模板值大于最小值则将模板值减1</td>
-</tr>
-<tr>
-<td align="left">GL_DECR_WRAP</td>
-<td align="left">与GL_DECR一样，但如果模板值小于0则将其设置为最大值</td>
-</tr>
-<tr>
-<td align="left">GL_INVERT</td>
-<td align="left">按位翻转当前的模板缓冲值</td>
-</tr>
-</tbody></table>
-<p>默认情况下glStencilOp是设置为<code>(GL_KEEP, GL_KEEP, GL_KEEP)</code>的，所以不论任何测试的结果是如何，模板缓冲都会保留它的值。默认的行为不会更新模板缓冲，所以如果你想写入模板缓冲的话，你需要至少对其中一个选项设置不同的值。</p>
-<p>所以，通过使用glStencilFunc和glStencilOp，可以精确地指定更新模板缓冲的时机与行为了，也可以指定什么时候该让模板缓冲通过，即什么时候片段需要被丢弃。</p>
-<h2 id="物体轮廓"><a href="#物体轮廓" class="headerlink" title="物体轮廓"></a>物体轮廓</h2><p>接下来将会展示一个使用模板测试就可以完成的有用特性，它叫做物体轮廓(Object Outlining)。</p>
-<p>物体轮廓会为每个（或者一个）物体在它周围创建一个有色边框，即描边。为物体创建轮廓的步骤如下：</p>
-<ol>
-<li>在绘制（需要添加轮廓的）物体之前，将模板函数设置为GL_ALWAYS，每当物体的片段被渲染时，将模板缓冲更新为1。</li>
-<li>渲染物体。</li>
-<li>禁用模板写入以及深度测试。</li>
-<li>将每个物体缩放一点点。</li>
-<li>使用一个不同的片段着色器，输出一个单独的（边框）颜色。</li>
-<li>再次绘制物体，但只在它们片段的模板值不等于1时才绘制。</li>
-<li>再次启用模板写入和深度测试。</li>
-</ol>
-<p>这个过程将每个物体的片段的模板缓冲设置为1，当我们想要绘制边框的时候，我们主要绘制放大版本的物体中模板测试通过的部分，也就是物体的边框的位置。我们主要使用模板缓冲丢弃了放大版本中属于原物体片段的部分。</p>
-<p>所以我们首先来创建一个很简单的片段着色器，它会输出一个边框颜色。我们简单地给它设置一个硬编码的颜色值，将这个着色器命名为shaderSingleColor：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="number">0.79</span>, <span class="number">0.02</span>, <span class="number">0.02</span>, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们只想给那两个箱子加上边框，所以我们让地板不参与这个过程。我们希望首先绘制地板，再绘制两个箱子，之后绘制放大的箱子。</p>
-<p>我们首先启用模板测试，并设置测试通过或失败时的行为：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_STENCIL_TEST);</span><br><span class="line"><span class="built_in">glStencilOp</span>(GL_KEEP, GL_KEEP, GL_REPLACE);</span><br></pre></td></tr></table></figure>
-
-<p>如果其中的一个测试失败了，什么都不做，仅仅保留当前储存在模板缓冲中的值。如果模板测试和深度测试都通过了，那么将储存的模板值设置为参考值，参考值能够通过glStencilFunc来设置，之后设置为1。</p>
-<p>将模板缓冲清除为0，对箱子中所有绘制的片段，将模板值更新为1：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glStencilFunc</span>(GL_ALWAYS, <span class="number">1</span>, <span class="number">0xFF</span>); <span class="comment">// 所有的片段都应该更新模板缓冲</span></span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0xFF</span>); <span class="comment">// 启用模板缓冲写入</span></span><br><span class="line">normalShader.<span class="built_in">use</span>();</span><br><span class="line"><span class="built_in">DrawTwoContainers</span>();</span><br></pre></td></tr></table></figure>
-
-<p>通过使用GL_ALWAYS模板测试函数，保证了箱子的每个片段都会将模板缓冲的模板值更新为1。因为片段永远会通过模板测试，在绘制片段的地方，模板缓冲会被更新为参考值。</p>
-<p>现在模板缓冲在箱子被绘制的地方都更新为1了，将要绘制放大的箱子，但这次要禁用模板缓冲的写入：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glStencilFunc</span>(GL_NOTEQUAL, <span class="number">1</span>, <span class="number">0xFF</span>);</span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0x00</span>); <span class="comment">// 禁止模板缓冲的写入</span></span><br><span class="line"><span class="built_in">glDisable</span>(GL_DEPTH_TEST);</span><br><span class="line">shaderSingleColor.<span class="built_in">use</span>(); </span><br><span class="line"><span class="built_in">DrawTwoScaledUpContainers</span>();</span><br></pre></td></tr></table></figure>
-
-<p>将模板函数设置为GL_NOTEQUAL，它会保证我们只绘制箱子上模板值不为1的部分，即只绘制箱子在之前绘制的箱子之外的部分。注意我们也禁用了深度测试，让放大的箱子，即边框，不会被地板所覆盖。</p>
-<p>记得要在完成之后重新启用深度缓冲。</p>
-<p>完整步骤的代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br><span class="line"><span class="built_in">glStencilOp</span>(GL_KEEP, GL_KEEP, GL_REPLACE);  </span><br><span class="line"></span><br><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); </span><br><span class="line"></span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0x00</span>); <span class="comment">// 记得保证我们在绘制地板的时候不会更新模板缓冲</span></span><br><span class="line">normalShader.<span class="built_in">use</span>();</span><br><span class="line"><span class="built_in">DrawFloor</span>();  </span><br><span class="line"></span><br><span class="line"><span class="built_in">glStencilFunc</span>(GL_ALWAYS, <span class="number">1</span>, <span class="number">0xFF</span>); </span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0xFF</span>); </span><br><span class="line"><span class="built_in">DrawTwoContainers</span>();</span><br><span class="line"></span><br><span class="line"><span class="built_in">glStencilFunc</span>(GL_NOTEQUAL, <span class="number">1</span>, <span class="number">0xFF</span>);</span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0x00</span>); </span><br><span class="line"><span class="built_in">glDisable</span>(GL_DEPTH_TEST);</span><br><span class="line">shaderSingleColor.<span class="built_in">use</span>(); </span><br><span class="line"><span class="built_in">DrawTwoScaledUpContainers</span>();</span><br><span class="line"><span class="built_in">glStencilMask</span>(<span class="number">0xFF</span>);</span><br><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);  </span><br></pre></td></tr></table></figure>
-
-<p>运行程序结果如下：</p>
-<img src="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/image-20240222182639500.png" class="" title="image-20240222182639500">
-
-<p>除了物体轮廓之外，模板测试还有很多用途，比如在一个后视镜中绘制纹理，让它能够绘制到镜子形状中，或者使用一个叫做阴影体积(Shadow Volume)的模板缓冲技术渲染实时阴影。模板缓冲为已经很丰富的OpenGL工具箱又提供了一个很好的功能。</p>
-<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/beffe639fa4b6f859bf4b88a0d53ee8ff6985ff9/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/stenciltesting_code.rar">这里</a>可以获取完整的代码。</p>
-<p>对之前加载模型的代码进行修改，可以得到下图效果：</p>
-<img src="/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/image-20240228172504772.png" class="" title="image-20240228172504772">
-
-<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/c8ec55540b279519890cfe8c529acfc7d37cda40/2024/02/22/20-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/model_single.rar">这里</a>可以获得代码。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2051,7 +1926,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

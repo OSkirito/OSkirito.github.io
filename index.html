@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">47</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,63 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/14/31-%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/14/31-%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE/" class="post-title-link" itemprop="url">31-阴影贴图</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-14 20:45:41" itemprop="dateCreated datePublished" datetime="2024-10-14T20:45:41+08:00">2024-10-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -193,7 +250,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-10-14 19:01:57" itemprop="dateModified" datetime="2024-10-14T19:01:57+08:00">2024-10-14</time>
+                <time title="修改时间：2024-10-14 20:44:38" itemprop="dateModified" datetime="2024-10-14T20:44:38+08:00">2024-10-14</time>
               </span>
 
           
@@ -261,7 +318,7 @@
 
 <p>这种差异产生的原因是，光的衰减方程改变了亮度值，而且屏幕上显示出来的也不是线性空间，在监视器上效果最好的衰减方程，并不是符合物理的。想想平方衰减方程，如果我们使用这个方程，而且不进行gamma校正，显示在监视器上的衰减方程实际上将变成(1.0/distance2)2.2。若不进行gamma校正，将产生更强烈的衰减。这也解释了为什么双曲线不用gamma校正时看起来更真实，因为它实际变成了(1.0/distance)2.2=1.0/distance2.2。这和物理公式是很相似的。</p>
 <p>我们在基础光照教程中讨论的更高级的那个衰减方程在有gamma校正的场景中也仍然有用，因为它可以让我们对衰减拥有更多准确的控制权（不过，在进行gamma校正的场景中当然需要不同的参数）。</p>
-<p>这有一个简单的demo场景，你可以在这里找到源代码。按下空格就能在有gamma校正和无gamma校正的场景进行切换，两个场景使用的是相同的纹理和衰减。</p>
+<p>这有一个简单的demo场景，你可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/30/30-Gammma%E6%A0%A1%E6%AD%A3/gamma_correction.rar">这里</a>找到源代码。按下空格就能在有gamma校正和无gamma校正的场景进行切换，两个场景使用的是相同的纹理和衰减。</p>
 <p>总而言之，gamma校正使你可以在线性空间中进行操作。因为线性空间更符合物理世界，大多数物理公式现在都可以获得较好效果，比如真实的光的衰减。你的光照越真实，使用gamma校正获得漂亮的效果就越容易。这也正是为什么当引进gamma校正时，建议只去调整光照参数的原因。</p>
 
       
@@ -1687,236 +1744,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/28/21-%E6%B7%B7%E5%90%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/28/21-%E6%B7%B7%E5%90%88/" class="post-title-link" itemprop="url">21-混合</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-28 17:26:52" itemprop="dateCreated datePublished" datetime="2024-02-28T17:26:52+08:00">2024-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-13 16:29:46" itemprop="dateModified" datetime="2024-09-13T16:29:46+08:00">2024-09-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>OpenGL中，混合(Blending)通常是实现物体透明度(Transparency)的一种技术。透明就是说一个物体不是纯色，它的颜色是物体本身的颜色和它背后其它物体的颜色的不同强度结合。比如有色玻璃窗就是一个透明的物体，玻璃有它自己的颜色，但它最终的颜色还包含了玻璃之后所有物体的颜色。</p>
-<p>透明的物体可以是完全透明的（让所有的颜色穿过），或者是半透明的（它让颜色通过，同时也会显示自身的颜色）。一个物体的透明度是通过它颜色的alpha值来决定的。Alpha颜色值是颜色向量的第四个分量，对每个纹素(Texel)都包含了一个alpha值。这个alpha值精确地代表纹理在此处的透明度。</p>
-<h2 id="舍弃片段"><a href="#舍弃片段" class="headerlink" title="舍弃片段"></a>舍弃片段</h2><p>有些图片并不需要半透明，只需要根据纹理颜色值，显示一部分，或者不显示一部分，没有中间情况。比如说草，如果想不太费劲地创建草这种东西，你需要将一个草的纹理贴在一个2D四边形(Quad)上，然后将这个四边形放到场景中。然而，草的形状和2D四边形的形状完全不同，所以我们想只显示草纹理的部分，而忽略剩下的部分。</p>
-<p>下图这个纹理正是这样的，它要么是完全不透明的，要么是完全透明的，没有中间情况。可以看到，只要不是草的部分，这个图片显示的都是背景颜色而不是它本身的颜色。</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/grass.png" class="" title="grass">
-
-<p>所以当添加像草这样的植被到场景中时，只显示草的部。这就需要丢弃(Discard)显示纹理中透明部分的片段，不将这些片段存储到颜色缓冲中。在此之前，还要知道如何加载一个透明的纹理。要想加载有alpha值的纹理，stb_image在纹理有alpha通道的时候会自动加载，但仍要告诉OpenGL，现在使用alpha通道了：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glTexImage2D</span>(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, width, height, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, data);</span><br></pre></td></tr></table></figure>
-
-<p>并且需要保证片段着色器中获取了纹理的全部4个颜色分量：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">texture</span>(texture1, TexCoords);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建一个vector，向里面添加几个glm::vec3变量来代表草的位置：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vector &lt;glm::vec3&gt; vegetation;</span><br><span class="line">vegetation.<span class="built_in">push_back</span>(glm::<span class="built_in">vec3</span>(<span class="number">-1.5f</span>,  <span class="number">0.0f</span>, <span class="number">-0.48f</span>));</span><br><span class="line">vegetation.<span class="built_in">push_back</span>(glm::<span class="built_in">vec3</span>( <span class="number">1.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.51f</span>));</span><br><span class="line">vegetation.<span class="built_in">push_back</span>(glm::<span class="built_in">vec3</span>( <span class="number">0.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.7f</span>));</span><br><span class="line">vegetation.<span class="built_in">push_back</span>(glm::<span class="built_in">vec3</span>(<span class="number">-0.3f</span>,  <span class="number">0.0f</span>, <span class="number">-2.3f</span>));</span><br><span class="line">vegetation.<span class="built_in">push_back</span>(glm::<span class="built_in">vec3</span>( <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-0.6f</span>));</span><br></pre></td></tr></table></figure>
-
-<p>因为草的纹理是添加到四边形对象上的，还需要创建另外一个VAO，填充VBO，设置正确的顶点属性指针。接下来，在绘制完地板和两个立方体后，将绘制草：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindVertexArray</span>(vegetationVAO);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, grassTexture);  </span><br><span class="line"><span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; vegetation.<span class="built_in">size</span>(); i++) </span><br><span class="line">&#123;</span><br><span class="line">    model = glm::<span class="built_in">mat4</span>(<span class="number">1.0f</span>);</span><br><span class="line">    model = glm::<span class="built_in">translate</span>(model, vegetation[i]);               </span><br><span class="line">    shader.<span class="built_in">setMat4</span>(<span class="string">&quot;model&quot;</span>, model);</span><br><span class="line">    <span class="built_in">glDrawArrays</span>(GL_TRIANGLES, <span class="number">0</span>, <span class="number">6</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行程序你将看到：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240304151817554.png" class="" title="image-20240304151817554">
-
-<p>出现这种情况是OpenGL默认不知道怎么处理alpha值的，更不知道什么时候应该丢弃片段。GLSL中的discard命令，一旦被调用，它就会保证片段不会被进一步处理，所以就不会进入颜色缓冲。有了这个指令，就能够在片段着色器中检测一个片段的alpha值是否低于某个阈值，如果是的话，则丢弃这个片段，就好像它不存在一样：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec2 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform sampler2D texture1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    vec4 texColor = <span class="built_in">texture</span>(texture1, TexCoords);</span><br><span class="line">    <span class="keyword">if</span>(texColor.a &lt; <span class="number">0.1</span>)</span><br><span class="line">        discard;</span><br><span class="line">    FragColor = texColor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这里检测被采样的纹理颜色的alpha值是否低于0.1的阈值，如果是的话，则丢弃这个片段。片段着色器保证了它只会渲染不是（几乎）完全透明的片段，现在的运行结果如下：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240304153852736.png" class="" title="image-20240304153852736">
-
-<p>注意，当采样纹理的边缘的时候，OpenGL会对边缘的值和纹理下一个重复的值进行插值（因为我们将它的环绕方式设置为了GL_REPEAT。这通常是没问题的，但是由于使用了透明值，纹理图像的顶部将会与底部边缘的纯色值进行插值）。这样的结果是一个半透明的有色边框，你可能会看见它环绕着你的纹理四边形。要想避免这个，每当你alpha纹理的时候，请将纹理的环绕方式设置为GL_CLAMP_TO_EDGE：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);</span><br><span class="line">glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);</span><br></pre></td></tr></table></figure>
-
-<p>可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/42a74efb9767caf8d469ed855e9b18e0b516d2ea/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_code_01.rar">这里</a>获取到完整的代码</p>
-<h2 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h2><p>虽然直接丢弃片段很好，但不能渲染半透明的图像。要想渲染有多个透明度级别的图像，需要启用混合(Blending)。和OpenGL大多数的功能一样，可以启用GL_BLEND来启用混合：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_BLEND);</span><br></pre></td></tr></table></figure>
-
-<p>启用了混合之后，需要告诉OpenGL它该如何混合。OpenGL中的混合是通过下面这个方程来实现的：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240306173043115.png" class="" title="image-20240306173043115">
-
-<ul>
-<li>方程右边第一个符号代表源颜色向量。这是源自纹理的颜色向量。</li>
-<li>方程右边第二个符号代表源因子值。指定了alpha值对源颜色的影响。</li>
-<li>方程右边第三个符号代表目标颜色向量。这是当前储存在颜色缓冲中的颜色向量。</li>
-<li>方程右边第四个符号代表目标因子值。指定了alpha值对目标颜色的影响。</li>
-</ul>
-<p>片段着色器运行完成后，并且所有的测试都通过之后，这个混合方程(Blend Equation)才会应用到片段颜色输出与当前颜色缓冲中的值（当前片段之前储存的之前片段的颜色）上。源颜色和目标颜色将会由OpenGL自动设定，但源因子和目标因子的值可以由我们来决定。先来看一个例子：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_equation.png" class="" title="img">
-
-<p>有两个方形，我们希望将这个半透明的绿色方形绘制在红色方形之上。红色的方形将会是目标颜色（所以它应该先在颜色缓冲中），我们将要在这个红色方形之上绘制这个绿色方形。</p>
-<p>将源因子值设置为源颜色向量的alpha值，也就是0.6。目标方形的贡献应该为剩下的alpha值。如果绿色方形对最终颜色贡献了60%，那么红色方块应该对最终颜色贡献了40%，即1.0 - 0.6。所以将目标因子值设置为1减去源颜色向量的alpha值。这个方程变成了：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240306173523895.png" class="" title="image-20240306173523895">
-
-<p>结果就是重叠方形的片段包含了一个60%绿色，40%红色的一种脏兮兮的颜色：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_equation_mixed.png" class="" title="img">
-
-<p>最终的颜色将会被储存到颜色缓冲中，替代之前的颜色。</p>
-<p>该如何让OpenGL使用这样的因子呢？正好有一个专门的函数，叫做glBlendFunc。</p>
-<p>glBlendFunc(GLenum sfactor, GLenum dfactor)函数接受两个参数，来设置源和目标因子。OpenGL定义了很多个选项，在下面列出大部分最常用的选项。注意常数源颜色向量可以通过glBlendColor函数来另外设置。</p>
-<table>
-<thead>
-<tr>
-<th align="left">选项</th>
-<th align="left">值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>GL_ZERO</code></td>
-<td align="left">因子等于0</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE</code></td>
-<td align="left">因子等于1</td>
-</tr>
-<tr>
-<td align="left"><code>GL_SRC_COLOR</code></td>
-<td align="left">因子等于源颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_SRC_COLOR</code></td>
-<td align="left">因子等于1−源颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_DST_COLOR</code></td>
-<td align="left">因子等于目标颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_DST_COLOR</code></td>
-<td align="left">因子等于1−目标颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_SRC_ALPHA</code></td>
-<td align="left">因子等于源颜色向量的alpha分量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_SRC_ALPHA</code></td>
-<td align="left">因子等于1−源颜色向量的alpha分量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_DST_ALPHA</code></td>
-<td align="left">因子等于目标颜色向量的alpha分量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_DST_ALPHA</code></td>
-<td align="left">因子等于1−目标颜色向量的alpha分量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_CONSTANT_COLOR</code></td>
-<td align="left">因子等于常数颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_CONSTANT_COLOR</code></td>
-<td align="left">因子等于1−常数颜色向量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_CONSTANT_ALPHA</code></td>
-<td align="left">因子等于常数颜色向量的alpha分量</td>
-</tr>
-<tr>
-<td align="left"><code>GL_ONE_MINUS_CONSTANT_ALPHA</code></td>
-<td align="left">因子等于1−常数颜色向量的alpha分量</td>
-</tr>
-</tbody></table>
-<p>为了获得之前两个方形的混合结果，我们需要使用源颜色向量的alpha作为源因子，使用1−alpha作为目标因子。这将会产生以下的glBlendFunc：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBlendFunc</span>(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);</span><br></pre></td></tr></table></figure>
-
-<p>也可以使用glBlendFuncSeparate为RGB和alpha通道分别设置不同的选项：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBlendFuncSeparate</span>(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);</span><br></pre></td></tr></table></figure>
-
-<p>这个函数和之前设置的那样设置了RGB分量，但这样只能让最终的alpha分量被源颜色向量的alpha值所影响到。</p>
-<p>OpenGL甚至给了更多的灵活性，允许改变方程中源和目标部分的运算符。当前源和目标是相加的，但如果愿意的话，也可以让它们相减。glBlendEquation(GLenum mode)允许我们设置运算符，它提供了三个选项：</p>
-<ul>
-<li>GL_FUNC_ADD：默认选项，将两个分量相加：result=𝑆𝑟𝑐+𝐷𝑠𝑡。</li>
-<li>GL_FUNC_SUBTRACT：将两个分量相减： result=𝑆𝑟𝑐−𝐷𝑠𝑡。</li>
-<li>GL_FUNC_REVERSE_SUBTRACT：将两个分量相减，但顺序相反：result=𝐷𝑠𝑡−𝑆𝑟𝑐。</li>
-</ul>
-<p>通常都可以省略调用glBlendEquation，因为GL_FUNC_ADD对大部分的操作来说都是希望的混合方程。</p>
-<h2 id="渲染半透明纹理"><a href="#渲染半透明纹理" class="headerlink" title="渲染半透明纹理"></a>渲染半透明纹理</h2><p>既然已经知道OpenGL是如何处理混合的了，现在将使用下面的透明的窗户纹理。</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_transparent_window.png" class="" title="blending_transparent_window">
-
-<p>首先，在初始化时启用混合，并设定相应的混合函数：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_BLEND);</span><br><span class="line"><span class="built_in">glBlendFunc</span>(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);</span><br></pre></td></tr></table></figure>
-
-<p>由于启用了混合，就不需要丢弃片段了，所以把片段着色器还原：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec2 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform sampler2D texture1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    FragColor = <span class="built_in">texture</span>(texture1, TexCoords);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>现在每当OpenGL渲染了一个片段时，它都会将当前片段的颜色和当前颜色缓冲中的片段颜色根据alpha值来进行混合。由于窗户纹理的玻璃部分是半透明的，应该能通窗户中看到背后的场景了。</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240307205941960.png" class="" title="image-20240307205941960">
-
-<p>如果仔细看的话，最前面窗户的透明部分遮蔽了背后的窗户。发生这一现象的原因是，深度测试和混合一起使用的时候，当写入深度缓冲时，深度缓冲不会检查片段是否是透明的，透明的部分会和其它值一样写入到深度缓冲中。结果窗户的整个四边形不论透明都会进行深度测试，深度测试丢弃了它们。</p>
-<p>要想保证窗户中能够显示它们背后的窗户，需要先绘制背后的这部分窗户。这也就是说在绘制的时候，必须先手动将窗户按照最远到最近来排序，再按照顺序渲染。注意，对于草这种全透明的物体，可以选择丢弃透明的片段而不是混合它们，这样就解决了这些头疼的问题（没有深度问题）。</p>
-<p>要想让混合在多个物体上工作，需要最先绘制最远的物体，最后绘制最近的物体。普通不需要混合的物体仍然可以使用深度缓冲正常绘制，所以它们不需要排序。但仍要保证它们在绘制（排序的）透明物体之前已经绘制完毕了。当绘制一个有不透明和透明物体的场景的时候，大体的原则如下：</p>
-<ol>
-<li>先绘制所有不透明的物体。</li>
-<li>对所有透明的物体排序。</li>
-<li>按顺序绘制所有透明的物体。</li>
-</ol>
-<p>排序透明物体的一种方法是，从观察者视角获取物体的距离。这可以通过计算摄像机位置向量和物体的位置向量之间的距离所获得。接下来把距离和它对应的位置向量存储到一个STL库的map数据结构中。map会自动根据键值(Key)对它的值排序，所以只要添加了所有的位置，并以它的距离作为键，它们就会自动根据距离值排序了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">std::map&lt;<span class="type">float</span>, glm::vec3&gt; sorted;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; windows.<span class="built_in">size</span>(); i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> distance = glm::<span class="built_in">length</span>(camera.Position - windows[i]);</span><br><span class="line">    sorted[distance] = windows[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后的结果就是一个排序后的容器对象，它根据distance键值从低到高储存了每个窗户的位置。</p>
-<p>之后，这次在渲染的时候，我们将以逆序（从远到近）从map中获取值，之后以正确的顺序绘制对应的窗户：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(std::map&lt;<span class="type">float</span>,glm::vec3&gt;::reverse_iterator it = sorted.<span class="built_in">rbegin</span>(); it != sorted.<span class="built_in">rend</span>(); ++it) </span><br><span class="line">&#123;</span><br><span class="line">    model = glm::<span class="built_in">mat4</span>();</span><br><span class="line">    model = glm::<span class="built_in">translate</span>(model, it-&gt;second);              </span><br><span class="line">    shader.<span class="built_in">setMat4</span>(<span class="string">&quot;model&quot;</span>, model);</span><br><span class="line">    <span class="built_in">glDrawArrays</span>(GL_TRIANGLES, <span class="number">0</span>, <span class="number">6</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们使用了map的一个反向迭代器(Reverse Iterator)，反向遍历其中的条目，并将每个窗户四边形位移到对应的窗户位置上。这是排序透明物体的一个比较简单的实现，它能够修复之前的问题，现在场景看起来是这样的：</p>
-<img src="/2024/02/28/21-%E6%B7%B7%E5%90%88/image-20240308143341358.png" class="" title="image-20240308143341358">
-
-<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/18db67053d9186fa26b93c4874c49c0888f291e9/2024/02/28/21-%E6%B7%B7%E5%90%88/blending_code_02.rar">这里</a>获取完整的源代码。</p>
-<p>虽然按照距离排序物体这种方法对我们这个场景能够正常工作，但它并没有考虑旋转、缩放或者其它的变换，奇怪形状的物体需要一个不同的计量，而不是仅仅一个位置向量。在场景中排序物体是一个很困难的技术，很大程度上由场景的类型所决定，更别说需要额外消耗的性能了。完整渲染一个包含不透明和透明物体的场景并不是那么容易。更高级的技术还有次序无关透明度(Order Independent Transparency, OIT)。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1988,7 +1815,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

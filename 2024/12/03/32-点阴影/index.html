@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="目前为止我们学到了如何使用阴影贴图技术创建动态阴影。效果不错，但它只适合定向光，因为阴影只是在单一定向光源下生成的。所以它也叫定向阴影贴图，深度（阴影）贴图生成自定向光的视角。本节我们的焦点是在各种方向生成动态阴影，这个技术可以适用于点光源，生成所有方向上的阴影。这个技术叫做点光阴影，过去的名字是万向阴影贴图（omnidirectional shadow maps）技术。 本节代码基于前面的阴影贴">
+<meta property="og:type" content="article">
+<meta property="og:title" content="32-点阴影">
+<meta property="og:url" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="目前为止我们学到了如何使用阴影贴图技术创建动态阴影。效果不错，但它只适合定向光，因为阴影只是在单一定向光源下生成的。所以它也叫定向阴影贴图，深度（阴影）贴图生成自定向光的视角。本节我们的焦点是在各种方向生成动态阴影，这个技术可以适用于点光源，生成所有方向上的阴影。这个技术叫做点光阴影，过去的名字是万向阴影贴图（omnidirectional shadow maps）技术。 本节代码基于前面的阴影贴">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/point_shadows_diagram.png">
+<meta property="og:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204122230684.png">
+<meta property="og:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204123534486.png">
+<meta property="og:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204124224499.png">
+<meta property="og:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241217153523483.png">
+<meta property="article:published_time" content="2024-12-03T10:25:21.000Z">
+<meta property="article:modified_time" content="2024-12-17T07:36:43.075Z">
+<meta property="article:author" content="OSkirito">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Shader">
+<meta property="article:tag" content="OpenGL">
+<meta property="article:tag" content="GLSL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/point_shadows_diagram.png">
+
+<link rel="canonical" href="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>32-点阴影 | OS's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">49</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          32-点阴影
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-03 18:25:21" itemprop="dateCreated datePublished" datetime="2024-12-03T18:25:21+08:00">2024-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-17 15:36:43" itemprop="dateModified" datetime="2024-12-17T15:36:43+08:00">2024-12-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>目前为止我们学到了如何使用阴影贴图技术创建动态阴影。效果不错，但它只适合定向光，因为阴影只是在单一定向光源下生成的。所以它也叫定向阴影贴图，深度（阴影）贴图生成自定向光的视角。本节我们的焦点是在各种方向生成动态阴影，这个技术可以适用于点光源，生成所有方向上的阴影。这个技术叫做点光阴影，过去的名字是万向阴影贴图（omnidirectional shadow maps）技术。</p>
+<p>本节代码基于前面的阴影贴图教程， 算法和定向阴影贴图差不多：我们从光的透视图生成一个深度贴图，基于当前fragment位置来对深度贴图采样，然后用储存的深度值和每个fragment进行对比，看看它是否在阴影中。定向阴影贴图和万向阴影贴图的主要不同在于深度贴图的使用上。对于深度贴图，我们需要从一个点光源的所有渲染场景，普通2D深度贴图不能工作；如果我们使用立方体贴图会怎样？因为立方体贴图可以储存6个面的环境数据，它可以将整个场景渲染到立方体贴图的每个面上，把它们当作点光源四周的深度值来采样。</p>
+<img src="/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/point_shadows_diagram.png" class="" title="img">
+
+<p>生成后的深度立方体贴图被传递到光照像素着色器，它会用一个方向向量来采样立方体贴图，从而得到当前的fragment的深度（从光的透视图）。大部分复杂的事情已经在阴影贴图教程中讨论过了。算法只是在深度立方体贴图生成上稍微复杂一点。</p>
+<h2 id="生成深度立方体贴图"><a href="#生成深度立方体贴图" class="headerlink" title="生成深度立方体贴图"></a>生成深度立方体贴图</h2><p>为创建一个光周围的深度值的立方体贴图，我们必须渲染场景6次：每次一个面。显然渲染场景6次需要6个不同的视图矩阵，每次把一个不同的立方体贴图面附加到帧缓冲对象上。这看起来是这样的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    GLuint face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;</span><br><span class="line">    <span class="built_in">glFramebufferTexture2D</span>(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, face, depthCubemap, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">BindViewMatrix</span>(lightViewMatrices[i]);</span><br><span class="line">    <span class="built_in">RenderScene</span>();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这会很耗费性能因为一个深度贴图下需要进行很多渲染调用。我们将转而使用另外的一个小技巧来做这件事，几何着色器允许我们使用一次渲染过程来建立深度立方体贴图。</p>
+<p>首先，我们需要创建一个立方体贴图：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GLuint depthCubemap;</span><br><span class="line"><span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;depthCubemap);</span><br></pre></td></tr></table></figure>
+
+<p>然后生成立方体贴图的每个面，将它们作为2D深度值纹理图像：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> GLuint SHADOW_WIDTH = <span class="number">1024</span>, SHADOW_HEIGHT = <span class="number">1024</span>;</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, depthCubemap);</span><br><span class="line"><span class="keyword">for</span> (GLuint i = <span class="number">0</span>; i &lt; <span class="number">6</span>; ++i)</span><br><span class="line">        <span class="built_in">glTexImage2D</span>(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, <span class="number">0</span>, GL_DEPTH_COMPONENT, </span><br><span class="line">                     SHADOW_WIDTH, SHADOW_HEIGHT, <span class="number">0</span>, GL_DEPTH_COMPONENT, GL_FLOAT, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不要忘记设置合适的纹理参数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);</span><br></pre></td></tr></table></figure>
+
+<p>正常情况下，我们把立方体贴图纹理的一个面附加到帧缓冲对象上，渲染场景6次，每次将帧缓冲的深度缓冲目标改成不同立方体贴图面。由于我们将使用一个几何着色器，它允许我们把所有面在一个过程渲染，我们可以使用glFramebufferTexture直接把立方体贴图附加成帧缓冲的深度附件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_FRAMEBUFFER, depthMapFBO);</span><br><span class="line"><span class="built_in">glFramebufferTexture</span>(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubemap, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">glDrawBuffer</span>(GL_NONE);</span><br><span class="line"><span class="built_in">glReadBuffer</span>(GL_NONE);</span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_FRAMEBUFFER, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>还要记得调用glDrawBuffer和glReadBuffer：当生成一个深度立方体贴图时我们只关心深度值，所以我们必须显式告诉OpenGL这个帧缓冲对象不会渲染到一个颜色缓冲里。</p>
+<p>万向阴影贴图有两个渲染阶段：首先我们生成深度贴图，然后我们正常使用深度贴图渲染，在场景中创建阴影。帧缓冲对象和立方体贴图的处理看起是这样的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. first render to depth cubemap</span></span><br><span class="line"><span class="built_in">glViewport</span>(<span class="number">0</span>, <span class="number">0</span>, SHADOW_WIDTH, SHADOW_HEIGHT);</span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_FRAMEBUFFER, depthMapFBO);</span><br><span class="line"><span class="built_in">glClear</span>(GL_DEPTH_BUFFER_BIT);</span><br><span class="line"><span class="built_in">ConfigureShaderAndMatrices</span>();</span><br><span class="line"><span class="built_in">RenderScene</span>();</span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_FRAMEBUFFER, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 2. then render scene as normal with shadow mapping (using depth cubemap)</span></span><br><span class="line"><span class="built_in">glViewport</span>(<span class="number">0</span>, <span class="number">0</span>, SCR_WIDTH, SCR_HEIGHT);</span><br><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br><span class="line"><span class="built_in">ConfigureShaderAndMatrices</span>();</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, depthCubemap);</span><br><span class="line"><span class="built_in">RenderScene</span>();</span><br></pre></td></tr></table></figure>
+
+<p>这个过程和默认的阴影映射一样，尽管这次我们渲染和使用的是一个立方体贴图深度纹理，而不是2D深度纹理。在我们实际开始从光的视角的所有方向渲染场景之前，我们先得计算出合适的变换矩阵。</p>
+<h3 id="光空间的变换"><a href="#光空间的变换" class="headerlink" title="光空间的变换"></a>光空间的变换</h3><p>设置了帧缓冲和立方体贴图，我们需要一些方法来将场景的所有几何体变换到6个光的方向中相应的光空间。与阴影贴图教程类似，我们需要一个光空间的变换矩阵T，但是这次是每个面都有一个。每个光空间的变换矩阵包含了投影和视图矩阵。对于投影矩阵来说，我们将使用一个透视投影矩阵；光源代表一个空间中的点，所以透视投影矩阵更有意义。每个光空间变换矩阵使用同样的投影矩阵：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GLfloat aspect = (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT;</span><br><span class="line">GLfloat near = <span class="number">1.0f</span>;</span><br><span class="line">GLfloat far = <span class="number">25.0f</span>;</span><br><span class="line">glm::mat4 shadowProj = glm::<span class="built_in">perspective</span>(glm::<span class="built_in">radians</span>(<span class="number">90.0f</span>), aspect, near, far);</span><br></pre></td></tr></table></figure>
+
+<p>非常重要的一点是，这里glm::perspective的视野参数，设置为90度。90度我们才能保证视野足够大到可以合适地填满立方体贴图的一个面，立方体贴图的所有面都能与其他面在边缘对齐。</p>
+<p>因为投影矩阵在每个方向上并不会改变，我们可以在6个变换矩阵中重复使用。我们要为每个方向提供一个不同的视图矩阵。用glm::lookAt创建6个观察方向，每个都按顺序注视着立方体贴图的的一个方向：右、左、上、下、近、远：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;glm::mat4&gt; shadowTransforms;</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">1.0</span>,<span class="number">0.0</span>,<span class="number">0.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">-1.0</span>,<span class="number">0.0</span>)));</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">-1.0</span>,<span class="number">0.0</span>,<span class="number">0.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">-1.0</span>,<span class="number">0.0</span>)));</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">1.0</span>,<span class="number">0.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">1.0</span>)));</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">-1.0</span>,<span class="number">0.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">-1.0</span>)));</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">1.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">-1.0</span>,<span class="number">0.0</span>)));</span><br><span class="line">shadowTransforms.<span class="built_in">push_back</span>(shadowProj * </span><br><span class="line">                 glm::<span class="built_in">lookAt</span>(lightPos, lightPos + glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">0.0</span>,<span class="number">-1.0</span>), glm::<span class="built_in">vec3</span>(<span class="number">0.0</span>,<span class="number">-1.0</span>,<span class="number">0.0</span>)));</span><br></pre></td></tr></table></figure>
+
+<p>这里我们创建了6个视图矩阵，把它们乘以投影矩阵，来得到6个不同的光空间变换矩阵。glm::lookAt的target参数是它注视的立方体贴图的面的一个方向。这些变换矩阵将会被发送到着色器渲染到立方体贴图里。</p>
+<h3 id="深度着色器"><a href="#深度着色器" class="headerlink" title="深度着色器"></a>深度着色器</h3><p>为了把值渲染到深度立方体贴图，我们将需要3个着色器：顶点和像素着色器，以及一个它们之间的几何着色器。几何着色器是负责将所有世界空间的顶点变换到6个不同的光空间的着色器。因此顶点着色器简单地将顶点变换到世界空间，然后直接发送到几何着色器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">0</span>) in vec3 position;</span><br><span class="line"></span><br><span class="line">uniform mat4 model;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    gl_Position = model * <span class="built_in">vec4</span>(position, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>紧接着几何着色器以3个三角形的顶点作为输入，它还有一个光空间变换矩阵的uniform数组。几何着色器接下来会负责将顶点变换到光空间。几何着色器有一个内建变量叫做gl_Layer，它指定发散出基本图形送到立方体贴图的哪个面。当不管它时，几何着色器就会像往常一样把它的基本图形发送到输送管道的下一阶段，但当我们更新这个变量就能控制每个基本图形将渲染到立方体贴图的哪一个面。当然这只有当我们有了一个附加到激活的帧缓冲的立方体贴图纹理才有效：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (triangles) in;</span><br><span class="line"><span class="built_in">layout</span> (triangle_strip, max_vertices=<span class="number">18</span>) out;</span><br><span class="line"></span><br><span class="line">uniform mat4 shadowMatrices[<span class="number">6</span>];</span><br><span class="line"></span><br><span class="line">out vec4 FragPos; <span class="comment">// FragPos from GS (output per emitvertex)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> face = <span class="number">0</span>; face &lt; <span class="number">6</span>; ++face)</span><br><span class="line">    &#123;</span><br><span class="line">        gl_Layer = face; <span class="comment">// built-in variable that specifies to which face we render.</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) <span class="comment">// for each triangle&#x27;s vertices</span></span><br><span class="line">        &#123;</span><br><span class="line">            FragPos = gl_in[i].gl_Position;</span><br><span class="line">            gl_Position = shadowMatrices[face] * FragPos;</span><br><span class="line">            <span class="built_in">EmitVertex</span>();</span><br><span class="line">        &#125;    </span><br><span class="line">        <span class="built_in">EndPrimitive</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>几何着色器相对简单。我们输入一个三角形，输出总共6个三角形（6*3顶点，所以总共18个顶点）。在main函数中，我们遍历立方体贴图的6个面，我们每个面指定为一个输出面，把这个面的interger（整数）存到gl_Layer。然后，我们通过把面的光空间变换矩阵乘以FragPos，将每个世界空间顶点变换到相关的光空间，生成每个三角形。注意，我们还要将最后的FragPos变量发送给像素着色器，我们需要计算一个深度值。在之前的教程中，我们使用的是一个空的像素着色器，让OpenGL配置深度贴图的深度值。但这次我们将计算自己的深度，这个深度就是每个fragment位置和光源位置之间的线性距离。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">in vec4 FragPos;</span><br><span class="line"></span><br><span class="line">uniform vec3 lightPos;</span><br><span class="line">uniform <span class="type">float</span> far_plane;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// get distance between fragment and light source</span></span><br><span class="line">    <span class="type">float</span> lightDistance = <span class="built_in">length</span>(FragPos.xyz - lightPos);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// map to [0;1] range by dividing by far_plane</span></span><br><span class="line">    lightDistance = lightDistance / far_plane;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// write this as modified depth</span></span><br><span class="line">    gl_FragDepth = lightDistance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>像素着色器将来自几何着色器的片段位置、光的位置向量和视锥的远平面值作为输入。这里我们把片段和光源之间的距离，映射到0到1的范围，把它写入为fragment的深度值。使用这些着色器渲染场景，立方体贴图附加的帧缓冲对象激活以后，你会得到一个完全填充的深度立方体贴图，以便于进行第二阶段的阴影计算。</p>
+<h2 id="万向阴影贴图"><a href="#万向阴影贴图" class="headerlink" title="万向阴影贴图"></a>万向阴影贴图</h2><p>所有事情都做好了，是时候来渲染万向阴影(Omnidirectional Shadow)了。这个过程和定向阴影贴图教程相似，尽管这次我们绑定的深度贴图是一个立方体贴图，而不是2D纹理，并且将光的投影的远平面发送给了着色器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glViewport</span>(<span class="number">0</span>, <span class="number">0</span>, SCR_WIDTH, SCR_HEIGHT);</span><br><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br><span class="line">shader.<span class="built_in">Use</span>();  </span><br><span class="line"><span class="comment">// ... send uniforms to shader (including light&#x27;s far_plane value)</span></span><br><span class="line"><span class="built_in">glActiveTexture</span>(GL_TEXTURE0);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, depthCubemap);</span><br><span class="line"><span class="comment">// ... bind other textures</span></span><br><span class="line"><span class="built_in">RenderScene</span>();</span><br></pre></td></tr></table></figure>
+
+<p>这里的renderScene函数在一个大立方体房间中渲染一些立方体，它们散落在大立方体各处，光源在场景中央。顶点着色器和像素着色器和原来的阴影贴图着色器大部分都一样：不同之处是在光空间中像素着色器不再需要一个fragment位置，现在我们可以使用一个方向向量采样深度值。因为这个顶点着色器不再需要将他的位置向量变换到光空间，所以我们可以去掉FragPosLightSpace变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">0</span>) in vec3 position;</span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">1</span>) in vec3 normal;</span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">2</span>) in vec2 texCoords;</span><br><span class="line"></span><br><span class="line">out vec2 TexCoords;</span><br><span class="line"></span><br><span class="line">out VS_OUT &#123;</span><br><span class="line">    vec3 FragPos;</span><br><span class="line">    vec3 Normal;</span><br><span class="line">    vec2 TexCoords;</span><br><span class="line">&#125; vs_out;</span><br><span class="line"></span><br><span class="line">uniform mat4 projection;</span><br><span class="line">uniform mat4 view;</span><br><span class="line">uniform mat4 model;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    gl_Position = projection * view * model * <span class="built_in">vec4</span>(position, <span class="number">1.0f</span>);</span><br><span class="line">    vs_out.FragPos = <span class="built_in">vec3</span>(model * <span class="built_in">vec4</span>(position, <span class="number">1.0</span>));</span><br><span class="line">    vs_out.Normal = <span class="built_in">transpose</span>(<span class="built_in">inverse</span>(<span class="built_in">mat3</span>(model))) * normal;</span><br><span class="line">    vs_out.TexCoords = texCoords;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>片段着色器的Blinn-Phong光照代码和我们之前阴影相乘的结尾部分一样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in VS_OUT &#123;</span><br><span class="line">    vec3 FragPos;</span><br><span class="line">    vec3 Normal;</span><br><span class="line">    vec2 TexCoords;</span><br><span class="line">&#125; fs_in;</span><br><span class="line"></span><br><span class="line">uniform sampler2D diffuseTexture;</span><br><span class="line">uniform samplerCube depthMap;</span><br><span class="line"></span><br><span class="line">uniform vec3 lightPos;</span><br><span class="line">uniform vec3 viewPos;</span><br><span class="line"></span><br><span class="line">uniform <span class="type">float</span> far_plane;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">ShadowCalculation</span><span class="params">(vec3 fragPos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    [...]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;           </span><br><span class="line">    vec3 color = <span class="built_in">texture</span>(diffuseTexture, fs_in.TexCoords).rgb;</span><br><span class="line">    vec3 normal = <span class="built_in">normalize</span>(fs_in.Normal);</span><br><span class="line">    vec3 lightColor = <span class="built_in">vec3</span>(<span class="number">0.3</span>);</span><br><span class="line">    <span class="comment">// Ambient</span></span><br><span class="line">    vec3 ambient = <span class="number">0.3</span> * color;</span><br><span class="line">    <span class="comment">// Diffuse</span></span><br><span class="line">    vec3 lightDir = <span class="built_in">normalize</span>(lightPos - fs_in.FragPos);</span><br><span class="line">    <span class="type">float</span> diff = <span class="built_in">max</span>(<span class="built_in">dot</span>(lightDir, normal), <span class="number">0.0</span>);</span><br><span class="line">    vec3 diffuse = diff * lightColor;</span><br><span class="line">    <span class="comment">// Specular</span></span><br><span class="line">    vec3 viewDir = <span class="built_in">normalize</span>(viewPos - fs_in.FragPos);</span><br><span class="line">    vec3 reflectDir = <span class="built_in">reflect</span>(-lightDir, normal);</span><br><span class="line">    <span class="type">float</span> spec = <span class="number">0.0</span>;</span><br><span class="line">    vec3 halfwayDir = <span class="built_in">normalize</span>(lightDir + viewDir);  </span><br><span class="line">    spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), <span class="number">64.0</span>);</span><br><span class="line">    vec3 specular = spec * lightColor;    </span><br><span class="line">    <span class="comment">// Calculate shadow</span></span><br><span class="line">    <span class="type">float</span> shadow = <span class="built_in">ShadowCalculation</span>(fs_in.FragPos);                      </span><br><span class="line">    vec3 lighting = (ambient + (<span class="number">1.0</span> - shadow) * (diffuse + specular)) * color;    </span><br><span class="line"></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(lighting, <span class="number">1.0f</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有一些细微的不同：光照代码一样，但我们现在有了一个uniform变量samplerCube，shadowCalculation函数用片段的位置作为它的参数，取代了光空间的片段位置。我们现在还要引入光的视锥的远平面值，后面我们会需要它。像素着色器的最后，我们计算出阴影元素，当片段在阴影中时它是1.0，不在阴影中时是0.0。我们使用计算出来的阴影元素去影响光照的diffuse和specular元素。在ShadowCalculation函数中有很多不同之处，现在是从立方体贴图中进行采样，不再使用2D纹理了。</p>
+<p>我们需要做的第一件事是获取立方体贴图的深度。我们已经将深度储存为片段和光位置之间的距离了，所以我们这里采用相似的处理方式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">float</span> <span class="title">ShadowCalculation</span><span class="params">(vec3 fragPos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 fragToLight = fragPos - lightPos; </span><br><span class="line">    <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight).r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们得到了片段的位置与光的位置之间的差向量，使用这个向量作为一个方向向量去对立方体贴图进行采样。方向向量不需要是单位向量，所以无需对它进行标准化。最后的closestDepth是光源和它最接近的可见片段之间的标准化的深度值。closestDepth值现在在0到1的范围内了，所以我们先将其转换回0到far_plane的范围，这需要把他乘以far_plane：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">closestDepth *= far_plane;</span><br></pre></td></tr></table></figure>
+
+<p>下一步我们获取当前fragment和光源之间的深度值，我们可以简单的使用fragToLight的长度来获取它，这取决于我们如何计算立方体贴图中的深度值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> currentDepth = <span class="built_in">length</span>(fragToLight);</span><br></pre></td></tr></table></figure>
+
+<p>返回的是和closestDepth范围相同的深度值。</p>
+<p>现在我们可以将两个深度值对比一下，看看哪一个更接近，以此决定当前的fragment是否在阴影当中。我们还要包含一个阴影偏移，才能避免阴影失真：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> bias = <span class="number">0.05</span>; </span><br><span class="line"><span class="type">float</span> shadow = currentDepth -  bias &gt; closestDepth ? <span class="number">1.0</span> : <span class="number">0.0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>现在完整的ShadowCalculation现在变成了这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">float</span> <span class="title">ShadowCalculation</span><span class="params">(vec3 fragPos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Get vector between fragment position and light position</span></span><br><span class="line">    vec3 fragToLight = fragPos - lightPos;</span><br><span class="line">    <span class="comment">// Use the light to fragment vector to sample from the depth map    </span></span><br><span class="line">    <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight).r;</span><br><span class="line">    <span class="comment">// It is currently in linear range between [0,1]. Re-transform back to original value</span></span><br><span class="line">    closestDepth *= far_plane;</span><br><span class="line">    <span class="comment">// Now get current linear depth as the length between the fragment and light position</span></span><br><span class="line">    <span class="type">float</span> currentDepth = <span class="built_in">length</span>(fragToLight);</span><br><span class="line">    <span class="comment">// Now test for shadows</span></span><br><span class="line">    <span class="type">float</span> bias = <span class="number">0.05</span>; </span><br><span class="line">    <span class="type">float</span> shadow = currentDepth -  bias &gt; closestDepth ? <span class="number">1.0</span> : <span class="number">0.0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shadow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这些着色器，我们已经能得到非常好的阴影效果了，这次从一个点光源所有周围方向上都有阴影。有一个位于场景中心的点光源，看起来会像这样：</p>
+<img src="/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204122230684.png" class="" title="image-20241204122230684">
+
+<p>在这里可以获取程序的完整代码</p>
+<h3 id="显示立方体贴图深度缓冲"><a href="#显示立方体贴图深度缓冲" class="headerlink" title="显示立方体贴图深度缓冲"></a>显示立方体贴图深度缓冲</h3><p>如果要进行调试排错，将深度贴图显示出来以检查其是否正确。因为我们不再用2D深度贴图纹理，一个简单的把深度缓冲显示出来的技巧是，在ShadowCalculation函数中计算标准化的closestDepth变量，把变量显示，修改片段着色器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in VS_OUT &#123;</span><br><span class="line">    vec3 FragPos;</span><br><span class="line">    vec3 Normal;</span><br><span class="line">    vec2 TexCoords;</span><br><span class="line">&#125; fs_in;</span><br><span class="line"></span><br><span class="line">uniform sampler2D diffuseTexture;</span><br><span class="line">uniform samplerCube depthMap;</span><br><span class="line"></span><br><span class="line">uniform vec3 lightPos;</span><br><span class="line">uniform vec3 viewPos;</span><br><span class="line"></span><br><span class="line">uniform <span class="type">float</span> far_plane;</span><br><span class="line">uniform <span class="type">bool</span> shadows;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">ShadowCalculation</span><span class="params">(vec3 fragPos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 fragToLight = fragPos - lightPos;</span><br><span class="line">    <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight).r;</span><br><span class="line">    closestDepth *= far_plane; </span><br><span class="line">    <span class="type">float</span> currentDepth = <span class="built_in">length</span>(fragToLight);</span><br><span class="line">    <span class="type">float</span> bias = <span class="number">0.05</span>;</span><br><span class="line">    <span class="type">float</span> shadow = currentDepth -  bias &gt; closestDepth ? <span class="number">1.0</span> : <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">return</span> shadow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;           </span><br><span class="line">    vec3 color = <span class="built_in">texture</span>(diffuseTexture, fs_in.TexCoords).rgb;</span><br><span class="line">    vec3 normal = <span class="built_in">normalize</span>(fs_in.Normal);</span><br><span class="line">    vec3 lightColor = <span class="built_in">vec3</span>(<span class="number">0.3</span>);</span><br><span class="line">    <span class="comment">// ambient</span></span><br><span class="line">    vec3 ambient = <span class="number">0.3</span> * lightColor;</span><br><span class="line">    <span class="comment">// diffuse</span></span><br><span class="line">    vec3 lightDir = <span class="built_in">normalize</span>(lightPos - fs_in.FragPos);</span><br><span class="line">    <span class="type">float</span> diff = <span class="built_in">max</span>(<span class="built_in">dot</span>(lightDir, normal), <span class="number">0.0</span>);</span><br><span class="line">    vec3 diffuse = diff * lightColor;</span><br><span class="line">    <span class="comment">// specular</span></span><br><span class="line">    vec3 viewDir = <span class="built_in">normalize</span>(viewPos - fs_in.FragPos);</span><br><span class="line">    vec3 reflectDir = <span class="built_in">reflect</span>(-lightDir, normal);</span><br><span class="line">    <span class="type">float</span> spec = <span class="number">0.0</span>;</span><br><span class="line">    vec3 halfwayDir = <span class="built_in">normalize</span>(lightDir + viewDir);  </span><br><span class="line">    spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), <span class="number">64.0</span>);</span><br><span class="line">    vec3 specular = spec * lightColor;    </span><br><span class="line">    <span class="comment">// calculate shadow</span></span><br><span class="line">    <span class="comment">// float shadow = shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;                      </span></span><br><span class="line">    <span class="comment">// vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;</span></span><br><span class="line">    vec3 fragToLight = fs_in.FragPos - lightPos;</span><br><span class="line">    <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight).r;</span><br><span class="line">    closestDepth *= far_plane; </span><br><span class="line">    </span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(closestDepth / far_plane), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果是一个灰度场景，每个颜色代表着场景的线性深度值：</p>
+<img src="/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204123534486.png" class="" title="image-20241204123534486">
+
+<p>你可能也注意到了阴影部分在墙外。如果看起来和这个差不多，你就知道深度立方体贴图生成的没错。否则你可能做错了什么，也许是closestDepth仍然还在0到far_plane的范围。</p>
+<h2 id="PCF"><a href="#PCF" class="headerlink" title="PCF"></a>PCF</h2><p>由于万向阴影贴图基于传统阴影贴图的原则，它便也继承了由解析度产生的非真实感。如果你放大就会看到锯齿边了。PCF（Percentage-closer filtering）允许我们通过对片段位置周围过滤多个样本，并对结果平均化。如果我们用和之前教程同样的那个简单的PCF过滤器，并加入第三个维度，就是这样的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> shadow = <span class="number">0.0</span>;</span><br><span class="line"><span class="type">float</span> bias = <span class="number">0.05</span>; </span><br><span class="line"><span class="type">float</span> samples = <span class="number">4.0</span>;</span><br><span class="line"><span class="type">float</span> offset = <span class="number">0.1</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">float</span> x = -offset; x &lt; offset; x += offset / (samples * <span class="number">0.5</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">float</span> y = -offset; y &lt; offset; y += offset / (samples * <span class="number">0.5</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">float</span> z = -offset; z &lt; offset; z += offset / (samples * <span class="number">0.5</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight + <span class="built_in">vec3</span>(x, y, z)).r; </span><br><span class="line">            closestDepth *= far_plane;   <span class="comment">// Undo mapping [0;1]</span></span><br><span class="line">            <span class="keyword">if</span>(currentDepth - bias &gt; closestDepth)</span><br><span class="line">                shadow += <span class="number">1.0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">shadow /= (samples * samples * samples);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码和我们传统的阴影贴图没有多少不同。这里我们根据样本的数量动态计算了纹理偏移量，我们在三个轴向采样三次，最后对子样本进行平均化。现在阴影看起来更加柔和平滑了，由此得到更加真实的效果：</p>
+<img src="/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241204124224499.png" class="" title="image-20241204124224499">
+
+<p>当samples设置为4.0，每个fragment我们会得到总共64个样本，这太多了！大多数这些采样都是多余的，与其在原始方向向量附近处采样，不如在采样方向向量的垂直方向进行采样更有意义。可是，并没有什么简单的方式能够指出哪一个子方向是多余的。可以使用一个技巧，用一个偏移量方向数组，它们差不多都是分开的，每一个指向完全不同的方向，剔除彼此接近的那些子方向。下面就是一个有着20个偏移方向的数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vec3 sampleOffsetDirections[<span class="number">20</span>] = vec3[]</span><br><span class="line">(</span><br><span class="line">   <span class="built_in">vec3</span>( <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>( <span class="number">1</span>, <span class="number">-1</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>, <span class="number">-1</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">1</span>), </span><br><span class="line">   <span class="built_in">vec3</span>( <span class="number">1</span>,  <span class="number">1</span>, <span class="number">-1</span>), <span class="built_in">vec3</span>( <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>,  <span class="number">1</span>, <span class="number">-1</span>),</span><br><span class="line">   <span class="built_in">vec3</span>( <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">0</span>), <span class="built_in">vec3</span>( <span class="number">1</span>, <span class="number">-1</span>,  <span class="number">0</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>, <span class="number">-1</span>,  <span class="number">0</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">0</span>),</span><br><span class="line">   <span class="built_in">vec3</span>( <span class="number">1</span>,  <span class="number">0</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>,  <span class="number">0</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>( <span class="number">1</span>,  <span class="number">0</span>, <span class="number">-1</span>), <span class="built_in">vec3</span>(<span class="number">-1</span>,  <span class="number">0</span>, <span class="number">-1</span>),</span><br><span class="line">   <span class="built_in">vec3</span>( <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>( <span class="number">0</span>, <span class="number">-1</span>,  <span class="number">1</span>), <span class="built_in">vec3</span>( <span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>), <span class="built_in">vec3</span>( <span class="number">0</span>,  <span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后我们把PCF算法与从sampleOffsetDirections得到的样本数量进行适配，使用它们从立方体贴图里采样。这么做的好处是与之前的PCF算法相比，我们需要的样本数量变少了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">float</span> <span class="title">ShadowCalculation</span><span class="params">(vec3 fragPos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vec3 fragToLight = fragPos - lightPos;</span><br><span class="line">    <span class="type">float</span> currentDepth = <span class="built_in">length</span>(fragToLight);</span><br><span class="line">    <span class="type">float</span> shadow = <span class="number">0.0</span>;</span><br><span class="line">    <span class="type">float</span> bias = <span class="number">0.15</span>;</span><br><span class="line">    <span class="type">int</span> samples = <span class="number">20</span>;</span><br><span class="line">    <span class="type">float</span> viewDistance = <span class="built_in">length</span>(viewPos - fragPos);</span><br><span class="line">    <span class="type">float</span> diskRadius = (<span class="number">1.0</span> + (viewDistance / far_plane)) / <span class="number">25.0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; samples; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">float</span> closestDepth = <span class="built_in">texture</span>(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;</span><br><span class="line">        closestDepth *= far_plane;</span><br><span class="line">        <span class="keyword">if</span>(currentDepth - bias &gt; closestDepth)</span><br><span class="line">            shadow += <span class="number">1.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    shadow /= <span class="built_in">float</span>(samples);  </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> shadow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们把一个偏移量添加到指定的diskRadius中，它在fragToLight方向向量周围从立方体贴图里采样。另一个在这里可以应用的有意思的技巧是，我们可以基于观察者里一个fragment的距离来改变diskRadius；这样我们就能根据观察者的距离来增加偏移半径了，当距离更远的时候阴影更柔和，更近了就更锐利。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> diskRadius = (<span class="number">1.0</span> + (viewDistance / far_plane)) / <span class="number">25.0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这是柔和的阴影效果：</p>
+<img src="/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/image-20241217153523483.png" class="" title="image-20241217153523483">
+
+<p>当然了，我们添加到每个样本的bias（偏移）高度依赖于上下文，总是要根据场景进行微调的。试试这些值，看看怎样影响了场景。 这里是最终的完整代码。</p>
+<p>使用几何着色器来生成深度贴图不一定会比每个面渲染场景6次更快。使用几何着色器有它自己的性能局限，在第一个阶段使用它可能获得更好的性能表现。这取决于环境的类型，以及特定的显卡驱动等等，如果你很关心性能，就要确保对两种方法有大致了解，然后选择对你场景来说更高效的那个。使用几何着色器来进行阴影贴图的绘制的原因很简单，因为它们使用起来更简单。</p>
+<h2 id="附加资源"><a href="#附加资源" class="headerlink" title="附加资源"></a>附加资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=36">Shadow Mapping for point light sources in OpenGL</a>：sunandblackcat的万向阴影贴图教程。</li>
+<li><a target="_blank" rel="noopener" href="http://ogldev.atspace.co.uk/www/tutorial43/tutorial43.html">Multipass Shadow Mapping With Point Lights</a>：ogldev的万向阴影贴图教程。</li>
+<li><a target="_blank" rel="noopener" href="http://www.cg.tuwien.ac.at/~husky/RTR/OmnidirShadows-whyCaps.pdf">Omni-directional Shadows</a>：Peter Houska的关于万向阴影贴图的一组很好的ppt。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>OSkirito
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/12/03/32-%E7%82%B9%E9%98%B4%E5%BD%B1/" title="32-点阴影">http://example.com/2024/12/03/32-点阴影/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Shader/" rel="tag"># Shader</a>
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+              <a href="/tags/GLSL/" rel="tag"># GLSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/14/31-%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE/" rel="prev" title="31-阴影贴图">
+      <i class="fa fa-chevron-left"></i> 31-阴影贴图
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/12/04/33-%E7%BA%A7%E8%81%94%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE/" rel="next" title="33-级联阴影贴图">
+      33-级联阴影贴图 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%B7%B1%E5%BA%A6%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">生成深度立方体贴图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E7%A9%BA%E9%97%B4%E7%9A%84%E5%8F%98%E6%8D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">光空间的变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E7%9D%80%E8%89%B2%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">深度着色器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%87%E5%90%91%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">万向阴影贴图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE%E6%B7%B1%E5%BA%A6%E7%BC%93%E5%86%B2"><span class="nav-number">2.1.</span> <span class="nav-text">显示立方体贴图深度缓冲</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCF"><span class="nav-number">3.</span> <span class="nav-text">PCF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E8%B5%84%E6%BA%90"><span class="nav-number">4.</span> <span class="nav-text">附加资源</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

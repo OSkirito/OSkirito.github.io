@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">49</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">50</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,146 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/" class="post-title-link" itemprop="url">如何使用批处理脚本（bat）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-12-27 11:36:48 / 修改时间：12:59:41" itemprop="dateCreated datePublished" datetime="2024-12-27T11:36:48+08:00">2024-12-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>bat（批处理文件），在DOS和Windows（任意版本）系统中，bat文件是可执行文件，由一系列命令构成，其中可以包含对其他程序的调用。这个文件的每一行都是一条DOS命令（大部分时候就好像我们在DOS提示符下执行的命令行一样），你可以使用DOS下的Edit或者Windows的记事本等任何文本文件编辑工具创建和修改批处理该类型的文件。</p>
+<p>批处理(Batch)，也称为批处理脚本。顾名思义，批处理就是对某对象进行批量的处理，是一种简化的脚本语言，它的扩展名为bat 或cmd。比较常见的批处理包含两类：DOS批处理和PS批处理。PS批处理是基于强大的图片编辑软件Photoshop的，用来批量处理图片的脚本；而DOS批处理则是基于DOS命令的，用来自动地批量地执行DOS命令以实现特定操作的脚本。更复杂的情况，需要使用if、for、goto等命令控制程序的运行过程，如同C、Basic等高级语言一样。如果需要实现更复杂的应用，利用外部程序是必要的，这包括系统本身提供的外部命令和第三方提供的工具或者软件。批处理程序虽然是在命令行环境中运行，但不仅仅能使用命令行软件，任何当前系统下可运行的程序都可以放在批处理文件中运行。</p>
+<p>对于TD/TA工作者来说，bat的编写是一项基本技能，工作中需要经常使用到bat来配置环境并且对DCC软件进行启动，下面对bat脚本进行介绍。</p>
+<h2 id="基本语法和常用命令"><a href="#基本语法和常用命令" class="headerlink" title="基本语法和常用命令"></a>基本语法和常用命令</h2><h3 id="1-常用命令汇总"><a href="#1-常用命令汇总" class="headerlink" title="1.常用命令汇总"></a>1.常用命令汇总</h3><ul>
+<li><code>echo</code>: 显示消息</li>
+<li><code>dir</code>: 列出目录内容</li>
+<li><code>cd</code>: 更改目录</li>
+<li><code>del</code>: 删除文件</li>
+<li><code>copy</code>: 复制文件</li>
+<li><code>move</code>: 移动文件</li>
+<li><code>set</code>: 设置环境变量</li>
+<li><code>start</code>: 启动程序</li>
+<li><code>pause</code>: 暂停</li>
+<li><code>exit</code>: 退出脚本</li>
+</ul>
+<h3 id="2-回显"><a href="#2-回显" class="headerlink" title="2.回显"></a>2.回显</h3><p>在 Batch 文件中，<code>@</code> 符号用于禁止命令回显。通常，Batch 文件中的每一行命令执行时，命令本身都会被显示在命令行窗口中，除非你使用 <code>@echo off</code> 来禁止回显。具体来说：</p>
+<h4 id="1-echo-off"><a href="#1-echo-off" class="headerlink" title="1.@echo off"></a>1.<code>@echo off</code></h4><p><code>@echo off</code> 是 Batch 文件中的常见用法。它用于禁用所有命令本身的回显，也就是不显示脚本执行的命令，在此后的所有命令都不会进行回显。通常放在 Batch 文件的开头，目的是让整个脚本在执行时不会显示命令</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br></pre></td></tr></table></figure>
+
+<p>这条命令会让 Batch 文件在执行时不显示任何命令，只显示输出结果。</p>
+<h4 id="2"><a href="#2" class="headerlink" title="2.@"></a>2.<code>@</code></h4><p>在 <code>@echo off</code> 之外，<code>@</code> 可以加在任何命令的前面，来阻止该条命令的回显。例如：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> Hello, World!</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>@</code> 确保 <code>echo Hello, World!</code> 这一行命令不会被回显，只有它的输出会被显示。</p>
+<h3 id="3-注释"><a href="#3-注释" class="headerlink" title="3. 注释"></a>3. <strong>注释</strong></h3><p>在 Batch 文件中，注释是用 <code>REM</code> 或 <code>::</code> 来表示的：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM 这是一个注释</span></span><br><span class="line">:: 这也是注释</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-命令"><a href="#4-命令" class="headerlink" title="4. 命令"></a>4. <strong>命令</strong></h3><p>Batch 文件的命令通常是 Windows 命令行命令（如 <code>echo</code>、<code>dir</code>、<code>del</code> 等）。每行一个命令：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World!</span><br><span class="line"><span class="built_in">dir</span> C:\Users</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-变量"><a href="#5-变量" class="headerlink" title="5. 变量"></a>5. <strong>变量</strong></h3><p>Batch 文件支持通过 <code>%</code> 访问变量。可以用 <code>set</code> 命令来定义变量：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> MY_VAR=Hello</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%MY_VAR%</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以使用 <code>set</code> 读取和修改环境变量：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> <span class="built_in">PATH</span>=<span class="variable">%PATH%</span>;C:\MyProgram</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-控制流"><a href="#6-控制流" class="headerlink" title="6. 控制流"></a>6. <strong>控制流</strong></h3><p>Batch 文件支持基本的控制流结构，如条件语句和循环。</p>
+<ul>
+<li><p><strong>条件判断（if）</strong>:</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">EXIST</span> &quot;file.txt&quot; (</span><br><span class="line">    <span class="built_in">echo</span> 文件存在</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">    <span class="built_in">echo</span> 文件不存在</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>跳转（goto）</strong>: <code>goto</code> 用于跳转到文件中的指定标签（label）处：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">goto</span> MyLabel</span><br><span class="line">:MyLabel</span><br><span class="line"><span class="built_in">echo</span> 这是标签后的代码</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>循环（for）</strong>: <code>for</code> 循环可以遍历文件、目录、数字等：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="variable">%%i</span> <span class="keyword">in</span> (<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">%%i</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-错误处理"><a href="#7-错误处理" class="headerlink" title="7. 错误处理"></a>7. <strong>错误处理</strong></h3><p>Batch 文件支持基本的错误处理，可以使用 <code>if errorlevel</code> 来检查上一条命令的返回值：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">command</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">errorlevel</span> <span class="number">1</span> (</span><br><span class="line">    <span class="built_in">echo</span> 发生错误</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>errorlevel</code> 返回值通常是 0 表示成功，非零值表示失败。</p>
+<h3 id="8-输入和输出"><a href="#8-输入和输出" class="headerlink" title="8. 输入和输出"></a>8. <strong>输入和输出</strong></h3><ul>
+<li><p><strong>输出（echo）</strong>: <code>echo</code> 用于输出信息到控制台：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World!</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>输入（set /p）</strong>: <code>set /p</code> 用于从用户获取输入：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> /p USER_INPUT=请输入你的名字: </span><br><span class="line"><span class="built_in">echo</span> 你好, <span class="variable">%USER_INPUT%</span>！</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="9-文件操作"><a href="#9-文件操作" class="headerlink" title="9. 文件操作"></a>9. <strong>文件操作</strong></h3><p>Batch 文件可以进行常见的文件操作，如删除、复制、移动等：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">del</span> file.txt           # 删除文件</span><br><span class="line"><span class="built_in">copy</span> file.txt D:\backup\ # 复制文件</span><br><span class="line"><span class="built_in">move</span> file.txt D:\backup\ # 移动文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-暂停"><a href="#10-暂停" class="headerlink" title="10. 暂停"></a>10. <strong>暂停</strong></h3><p>使用 <code>pause</code> 命令来暂停脚本的执行，直到用户按下任意键：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-启动外部程序"><a href="#11-启动外部程序" class="headerlink" title="11. 启动外部程序"></a>11. <strong>启动外部程序</strong></h3><p>Batch 文件可以启动外部程序或命令：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">start</span> &quot;notepad.exe&quot;</span><br><span class="line">：：或者</span><br><span class="line">&quot;notepad.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-退出脚本"><a href="#12-退出脚本" class="headerlink" title="12. 退出脚本"></a>12. <strong>退出脚本</strong></h3><p><code>exit</code> 命令用于退出脚本：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="13-批量处理命令输出"><a href="#13-批量处理命令输出" class="headerlink" title="13. 批量处理命令输出"></a>13. <strong>批量处理命令输出</strong></h3><p>通过重定向操作符 <code>&gt;</code> 或 <code>&gt;&gt;</code>，可以将命令的输出重定向到文件中：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World! &gt; output.txt  # 覆盖写入</span><br><span class="line"><span class="built_in">echo</span> Another line &gt;&gt; output.txt  # 追加写入</span><br></pre></td></tr></table></figure>
+
+<h3 id="14-使用命令行参数"><a href="#14-使用命令行参数" class="headerlink" title="14. 使用命令行参数"></a>14. <strong>使用命令行参数</strong></h3><p>Batch 文件支持命令行参数，通过 <code>%1</code>, <code>%2</code>, <code>%3</code> 等可以访问传递给脚本的参数。例如，<code>script.bat Hello World</code> 中，<code>%1</code> 会是 <code>Hello</code>，<code>%2</code> 会是 <code>World</code>：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> %<span class="number">1</span></span><br><span class="line"><span class="built_in">echo</span> %<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="15-示例：一个简单的-Batch-脚本"><a href="#15-示例：一个简单的-Batch-脚本" class="headerlink" title="15.示例：一个简单的 Batch 脚本"></a>15.示例：一个简单的 Batch 脚本</h3><p>以下是一个示例：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">echo</span> add <span class="built_in">path</span></span><br><span class="line">:: <span class="built_in">set</span> MAYA_UI_LANGUAGE=en_US</span><br><span class="line"><span class="built_in">set</span> CURRENT_PATH=%~dp0</span><br><span class="line"><span class="keyword">for</span> <span class="variable">%%i</span> <span class="keyword">in</span> (&quot;<span class="variable">%CURRENT_PATH%</span>..&quot;) <span class="keyword">do</span> <span class="built_in">set</span> MAYA_LOCATION=<span class="variable">%%~</span>fi</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%MAYA_LOCATION%</span></span><br><span class="line"><span class="built_in">echo</span> launcher maya2024</span><br><span class="line"><span class="built_in">start</span> &quot;<span class="variable">%MAYA_LOCATION%</span>\bin\maya.exe&quot;</span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
+
+<p>首先我们关闭了所有命令行的回显，然后输出”add path“，设置maya的ui语言但是对该行代码进行了注释（将不会生效），将当前bat文件的位置路径存储到变量<code>CURRENT_PATH</code>中，然后获取 <code>CURRENT_PATH</code> 上一级目录的完整路径，并将该路径赋值给 <code>MAYA_LOCATION</code>，随后对 <code>MAYA_LOCATION</code>的值进行输出，输出”launcher maya2024“提示，最后启动maya并保留命令行输出窗口。</p>
+<h2 id="执行-Batch-文件"><a href="#执行-Batch-文件" class="headerlink" title="执行 Batch 文件"></a>执行 Batch 文件</h2><ol>
+<li>将代码保存为 <code>.bat</code> 或 <code>.cmd</code> 文件。</li>
+<li>双击文件，或者在cmd命令行中执行该文件。</li>
+</ol>
+<img src="/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/image-20241227125834799.png" class="" title="image-20241227125834799">
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1654,233 +1794,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/" class="post-title-link" itemprop="url">24-立方体贴图</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-03-14 17:33:43" itemprop="dateCreated datePublished" datetime="2024-03-14T17:33:43+08:00">2024-03-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-13 17:55:56" itemprop="dateModified" datetime="2024-09-13T17:55:56+08:00">2024-09-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="天空盒"><a href="#天空盒" class="headerlink" title="天空盒"></a>天空盒</h2><p>将多个纹理组合起来映射到一张纹理上的一种纹理类型叫做立方体贴图(Cube Map)。简单来说，立方体贴图就是一个包含了6个2D纹理的纹理，每个2D纹理都组成了立方体的一个面：一个有纹理的立方体。立方体贴图可以通过一个方向向量来进行索引/采样。假设有一个1x1x1的单位立方体，方向向量的原点位于它的中心。使用一个橘黄色的方向向量（方向向量的大小并不重要，只要提供了方向，OpenGL就会获取方向向量所击中的纹素，并返回对应的采样纹理值）来从立方体贴图上采样一个纹理值会像是这样：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_sampling.png" class="" title="img">
-
-<p>假设将这样的立方体贴图应用到一个立方体上，采样立方体贴图所使用的方向向量将和立方体（插值的）顶点位置非常相像。这样子，只要立方体的中心位于原点，我们就能使用立方体的实际位置向量来对立方体贴图进行采样了。可以将所有顶点的纹理坐标当做是立方体的顶点位置，最终得到的结果就是可以访问立方体贴图上正确面(Face)纹理的一个纹理坐标。</p>
-<p>立方体贴图是和其它纹理一样的，所以如果想创建一个立方体贴图的话，需要生成一个纹理，并将其绑定到纹理目标上，之后再做其它的纹理操作：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> textureID;</span><br><span class="line"><span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;textureID);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, textureID);</span><br></pre></td></tr></table></figure>
-
-<p>因为立方体贴图包含有6个纹理，这就意味着我们需要对立方体贴图的每一个面都调用一次glTexImage2D。由于有6个面，OpenGL给我们提供了6个特殊的纹理目标，专门对应立方体贴图的一个面。</p>
-<table>
-<thead>
-<tr>
-<th align="left">纹理目标</th>
-<th align="left">方位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_POSITIVE_X</code></td>
-<td align="left">右</td>
-</tr>
-<tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_NEGATIVE_X</code></td>
-<td align="left">左</td>
-</tr>
-<tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_POSITIVE_Y</code></td>
-<td align="left">上</td>
-</tr>
-<tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_NEGATIVE_Y</code></td>
-<td align="left">下</td>
-</tr>
-<tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_POSITIVE_Z</code></td>
-<td align="left">后</td>
-</tr>
-<tr>
-<td align="left"><code>GL_TEXTURE_CUBE_MAP_NEGATIVE_Z</code></td>
-<td align="left">前</td>
-</tr>
-</tbody></table>
-<p>和OpenGL的很多枚举(Enum)一样，背后的int值是线性递增的，所以如果有一个纹理位置的数组或者vector，就可以从GL_TEXTURE_CUBE_MAP_POSITIVE_X开始遍历它们，在每个迭代中对枚举值加1，遍历了整个纹理目标：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> width, height, nrChannels;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> *data;  </span><br><span class="line"><span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; textures_faces.<span class="built_in">size</span>(); i++)</span><br><span class="line">&#123;</span><br><span class="line">    data = <span class="built_in">stbi_load</span>(textures_faces[i].<span class="built_in">c_str</span>(), &amp;width, &amp;height, &amp;nrChannels, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">glTexImage2D</span>(</span><br><span class="line">        GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, </span><br><span class="line">        <span class="number">0</span>, GL_RGB, width, height, <span class="number">0</span>, GL_RGB, GL_UNSIGNED_BYTE, data</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里有一个叫做textures_faces的vector，它包含了立方体贴图所需的所有纹理路径，并以表中的顺序排列，为当前绑定的立方体贴图中的每个面生成一个纹理。因为立方体贴图和其它纹理没什么不同，也需要设定它的环绕和过滤方式：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);</span><br><span class="line"><span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);</span><br></pre></td></tr></table></figure>
-
-<p>不要被GL_TEXTURE_WRAP_R吓到，它仅仅是为纹理的R坐标设置了环绕方式，它对应的是纹理的第三个维度（和位置的z一样）。将环绕方式设置为GL_CLAMP_TO_EDGE，这是因为正好处于两个面之间的纹理坐标可能不能击中一个面（由于一些硬件限制），所以通过使用GL_CLAMP_TO_EDGE，OpenGL将在对两个面之间采样的时候，永远返回它们的边界值。</p>
-<p>在绘制使用立方体贴图的物体之前，要先激活对应的纹理单元，并绑定立方体贴图，这和普通的2D纹理没什么区别。在片段着色器中，使用了一个不同类型的采样器<code>samplerCube</code>，将使用texture函数使用它进行采样，但这次将使用一个<code>vec3</code>的方向向量而不是<code>vec2</code>。现在的片段着色器会如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">in vec3 textureDir; <span class="comment">// 代表3D纹理坐标的方向向量</span></span><br><span class="line">uniform samplerCube cubemap; <span class="comment">// 立方体贴图的纹理采样器</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    FragColor = <span class="built_in">texture</span>(cubemap, textureDir);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>天空盒是一个包含了整个场景的（大）立方体，它包含周围环境的6个图像，让玩家以为他处在一个比实际大得多的环境当中。游戏中使用天空盒的例子有群山、白云或星空。你可能现在已经猜到了，立方体贴图能完美满足天空盒的需求：我们有一个6面的立方体，每个面都需要一个纹理。</p>
-<p>天空盒纹理通常有以下的形式：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_skybox.png" class="" title="cubemaps_skybox">
-
-<p>如果将这六个面折成一个立方体，就会得到一个完全贴图的立方体，模拟一个巨大的场景。一些资源可能会提供了这样格式的天空盒，必须手动提取六个面的图像，但在大部分情况下它们都是6张单独的纹理图像。</p>
-<p>为了加载天空盒，将使用下面的函数：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">unsigned</span> <span class="type">int</span> <span class="title">loadCubemap</span><span class="params">(vector&lt;std::string&gt; faces)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> textureID;</span><br><span class="line">    <span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;textureID);</span><br><span class="line">    <span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, textureID);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> width, height, nrChannels;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; faces.<span class="built_in">size</span>(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">char</span> *data = <span class="built_in">stbi_load</span>(faces[i].<span class="built_in">c_str</span>(), &amp;width, &amp;height, &amp;nrChannels, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (data)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">glTexImage2D</span>(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, </span><br><span class="line">                         <span class="number">0</span>, GL_RGB, width, height, <span class="number">0</span>, GL_RGB, GL_UNSIGNED_BYTE, data</span><br><span class="line">            );</span><br><span class="line">            <span class="built_in">stbi_image_free</span>(data);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Cubemap texture failed to load at path: &quot;</span> &lt;&lt; faces[i] &lt;&lt; std::endl;</span><br><span class="line">            <span class="built_in">stbi_image_free</span>(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> textureID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在调用这个函数之前，需要将合适的纹理路径按照立方体贴图枚举指定的顺序加载到一个vector中。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;std::string&gt; faces</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;right.jpg&quot;</span>,</span><br><span class="line">    <span class="string">&quot;left.jpg&quot;</span>,</span><br><span class="line">    <span class="string">&quot;top.jpg&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bottom.jpg&quot;</span>,</span><br><span class="line">    <span class="string">&quot;front.jpg&quot;</span>,</span><br><span class="line">    <span class="string">&quot;back.jpg&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> cubemapTexture = <span class="built_in">loadCubemap</span>(faces);</span><br></pre></td></tr></table></figure>
-
-<p>现在就将这个天空盒加载为一个立方体贴图了，它的id是cubemapTexture。可以将它绑定到一个立方体中，替换纯色背景。由于天空盒是绘制在一个立方体上的，和其它物体一样，需要另一个VAO、VBO以及新的一组顶点。使用新的顶点数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">float skyboxVertices[] = &#123;</span><br><span class="line">    // positions          </span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line">    -1.0f, -1.0f, -1.0f,</span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line">     1.0f,  1.0f, -1.0f,</span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line"></span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line">    -1.0f, -1.0f, -1.0f,</span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line">    -1.0f,  1.0f,  1.0f,</span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line"></span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line">     1.0f, -1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f, -1.0f,</span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line"></span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line">    -1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f, -1.0f,  1.0f,</span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line"></span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line">     1.0f,  1.0f, -1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">     1.0f,  1.0f,  1.0f,</span><br><span class="line">    -1.0f,  1.0f,  1.0f,</span><br><span class="line">    -1.0f,  1.0f, -1.0f,</span><br><span class="line"></span><br><span class="line">    -1.0f, -1.0f, -1.0f,</span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line">     1.0f, -1.0f, -1.0f,</span><br><span class="line">    -1.0f, -1.0f,  1.0f,</span><br><span class="line">     1.0f, -1.0f,  1.0f</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>当立方体处于原点(0, 0, 0)时，它的每一个位置向量都是从原点出发的方向向量。这个方向向量正是获取立方体上特定位置的纹理值所需要的。正是因为这个，我们只需要提供位置向量而不用纹理坐标了。</p>
-<p>要渲染天空盒的话，需要一组新的着色器，顶点着色器如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">0</span>) in vec3 aPos;</span><br><span class="line"></span><br><span class="line">out vec3 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform mat4 projection;</span><br><span class="line">uniform mat4 view;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TexCoords = aPos;</span><br><span class="line">    gl_Position = projection * view * <span class="built_in">vec4</span>(aPos, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，顶点着色器中很有意思的部分是，将输入的位置向量作为输出给片段着色器的纹理坐标。片段着色器会将它作为输入来采样<code>samplerCube</code>：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec3 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform samplerCube skybox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">    FragColor = <span class="built_in">texture</span>(skybox, TexCoords);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>片段着色器非常直观，将顶点属性的位置向量作为纹理的方向向量，并使用它从立方体贴图中采样纹理值。</p>
-<p>有了立方体贴图纹理，渲染天空盒现在就非常简单了，只需要绑定立方体贴图纹理，skybox采样器就会自动填充上天空盒立方体贴图了。绘制天空盒时，需要将它变为场景中的第一个渲染的物体，并且禁用深度写入。这样天空盒就会永远被绘制在其它物体的背后了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthMask</span>(GL_FALSE);</span><br><span class="line">skyboxShader.<span class="built_in">use</span>();</span><br><span class="line"><span class="comment">// ... 设置观察和投影矩阵</span></span><br><span class="line"><span class="built_in">glBindVertexArray</span>(skyboxVAO);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, cubemapTexture);</span><br><span class="line"><span class="built_in">glDrawArrays</span>(GL_TRIANGLES, <span class="number">0</span>, <span class="number">36</span>);</span><br><span class="line"><span class="built_in">glDepthMask</span>(GL_TRUE);</span><br><span class="line"><span class="comment">// ... 绘制剩下的场景</span></span><br></pre></td></tr></table></figure>
-
-<p>我们希望天空盒是以玩家为中心的，这样不论玩家移动了多远，天空盒都不会变近，让玩家产生周围环境非常大的印象。然而，当前的观察矩阵会旋转、缩放和位移来变换天空盒的所有位置，所以当玩家移动的时候，立方体贴图也会移动！我们希望移除观察矩阵中的位移部分，让移动不会影响天空盒的位置向量。可以将观察矩阵转换为3x3矩阵（移除位移），再将其转换回4x4矩阵，来达到类似的效果：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glm::mat4 view = glm::<span class="built_in">mat4</span>(glm::<span class="built_in">mat3</span>(glm::<span class="built_in">lookAt</span>(cameraPos, cameraPos + cameraFront, cameraUp)));</span><br></pre></td></tr></table></figure>
-
-<p>这将移除任何的位移，但保留旋转变换，让玩家仍然能够环顾场景。有了天空盒，最终的效果就是一个看起来巨大的场景了。如果在箱子周围转一转，你就能立刻感受到距离感，极大地提升了场景的真实度。最终的结果看起来是这样的：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327144127538.png" class="" title="image-20240327144127538">
-
-<p>目前我们是先渲染天空盒，再渲染场景中的其它物体，这样子不是很高效。如果先渲染天空盒，就会对屏幕上的每一个像素运行一遍片段着色器，即便只有一小部分的天空盒最终是可见的。使用提前深度测试(Early Depth Testing)丢弃掉的片段能够节省很多带宽。</p>
-<p>所以，现在要最后渲染天空盒，以获得轻微的性能提升。这样子的话，深度缓冲就会填充满所有物体的深度值了，只需要在提前深度测试通过的地方渲染天空盒的片段就可以了，很大程度上减少了片段着色器的调用。问题是，天空盒很可能会渲染在所有其他对象之上，因为它只是一个1x1x1的立方体（译注：意味着距离摄像机的距离也只有1），会通过大部分的深度测试。不用深度测试来进行渲染不是解决方案，因为天空盒将会复写场景中的其它物体。所以需要设置深度缓冲，让天空盒有着最大的深度值1.0，只要它前面有一个物体，深度测试就会失败。</p>
-<p>透视除法是在顶点着色器运行之后执行的，将gl_Position的<code>xyz</code>坐标除以w分量。相除结果的z分量等于顶点的深度值。可以将输出位置的z分量等于它的w分量，让z分量永远等于1.0，这样子的话，当透视除法执行之后，z分量会变为<code>w / w = 1.0</code>。修改天空球的顶点着色器：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">0</span>) in vec3 aPos;</span><br><span class="line"></span><br><span class="line">out vec3 TexCoords;</span><br><span class="line"></span><br><span class="line">uniform mat4 projection;</span><br><span class="line">uniform mat4 view;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TexCoords = aPos;</span><br><span class="line">    vec4 pos = projection * view * <span class="built_in">vec4</span>(aPos, <span class="number">1.0</span>);</span><br><span class="line">    gl_Position = pos.xyww;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最终的标准化设备坐标将永远会有一个等于1.0的z值：最大的深度值。结果就是天空盒只会在没有可见物体的地方渲染了（只有这样才能通过深度测试，其它所有的东西都在天空盒前面）。</p>
-<p>我们还要改变一下深度函数，将它从默认的GL_LESS改为GL_LEQUAL。深度缓冲会填充上天空盒的1.0值，所以需要保证天空盒在值小于或等于深度缓冲而不是小于时通过深度测试。</p>
-<p>在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/a5fb81d89bb2f0cf2ebd50f228424ba8bb394028/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_code.rar">这里</a>可以获得完整的代码</p>
-<h1 id="环境映射"><a href="#环境映射" class="headerlink" title="环境映射"></a>环境映射</h1><p>现在将整个环境映射到了一个纹理对象上了，能利用这个的不仅仅只有天空盒。通过使用环境的立方体贴图给物体反射和折射的属性。这样使用环境立方体贴图的技术叫做环境映射(Environment Mapping)，反射(Reflection)和折射(Refraction)就需要用到这种技术。</p>
-<h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>反射这个属性表现为物体（或物体的一部分）反射它周围环境，即根据观察者的视角，物体的颜色或多或少等于它的环境。镜子就是一个具有反射特性的物体：它会根据观察者的视角反射它周围的环境。</p>
-<p>下面这张图展示了我们如何计算反射向量，并如何使用这个向量来从立方体贴图中采样：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_reflection_theory.png" class="" title="img">
-
-<p>根据观察方向向量𝐼¯和物体的法向量𝑁¯，来计算反射向量𝑅¯。可以使用GLSL内建的reflect函数来计算这个反射向量。最终的𝑅¯向量将会作为索引/采样立方体贴图的方向向量，返回环境的颜色值。最终的结果是物体看起来反射了天空盒。</p>
-<p>因为已经在场景中配置好天空盒了，创建反射效果并不会很难。改变箱子的片段着色器，让箱子有反射性：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec3 Normal;</span><br><span class="line">in vec3 Position;</span><br><span class="line"></span><br><span class="line">uniform vec3 cameraPos;</span><br><span class="line">uniform samplerCube skybox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    vec3 I = <span class="built_in">normalize</span>(Position - cameraPos);</span><br><span class="line">    vec3 R = <span class="built_in">reflect</span>(I, <span class="built_in">normalize</span>(Normal));</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">texture</span>(skybox, R).rgb, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>先计算了观察/摄像机方向向量<code>I</code>，并使用它来计算反射向量<code>R</code>，之后使用<code>R</code>来从天空盒立方体贴图中采样。注意，现在又有了片段的插值Normal和Position变量，所以需要更修改顶点着色器：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">0</span>) in vec3 aPos;</span><br><span class="line"><span class="built_in">layout</span> (location = <span class="number">1</span>) in vec3 aNormal;</span><br><span class="line"></span><br><span class="line">out vec3 Normal;</span><br><span class="line">out vec3 Position;</span><br><span class="line"></span><br><span class="line">uniform mat4 model;</span><br><span class="line">uniform mat4 view;</span><br><span class="line">uniform mat4 projection;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Normal = <span class="built_in">mat3</span>(<span class="built_in">transpose</span>(<span class="built_in">inverse</span>(model))) * aNormal;</span><br><span class="line">    Position = <span class="built_in">vec3</span>(model * <span class="built_in">vec4</span>(aPos, <span class="number">1.0</span>));</span><br><span class="line">    gl_Position = projection * view * model * <span class="built_in">vec4</span>(aPos, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>现在使用了一个法向量，所以再次使用法线矩阵来变换它们。Position输出向量是一个世界空间的位置向量。顶点着色器的这个Position输出将用来在片段着色器内计算观察方向向量。</p>
-<p>因为使用了法线，还需要更新一下顶点数据，并更新属性指针:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> vertices[] = &#123;</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>, </span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>, </span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>, </span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>, </span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>, </span><br><span class="line"></span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line"></span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">-1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">     <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span>,</span><br><span class="line">    <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>,  <span class="number">1.0f</span>,  <span class="number">0.0f</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还要记得去设置cameraPos这个uniform：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myShader.<span class="built_in">setVec3</span>(<span class="string">&quot;cameraPos&quot;</span>, cameraPos);</span><br></pre></td></tr></table></figure>
-
-<p>接下来在渲染箱子之前先绑定立方体贴图纹理：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindVertexArray</span>(cubeVAO);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_CUBE_MAP, skyboxTexture);          </span><br><span class="line"><span class="built_in">glDrawArrays</span>(GL_TRIANGLES, <span class="number">0</span>, <span class="number">36</span>);</span><br></pre></td></tr></table></figure>
-
-<p>编译并运行代码，将会得到像是镜子一样的箱子，周围的天空盒被完美地反射在箱子上:</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327153815735.png" class="" title="image-20240327153815735">
-
-<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/f68ddea25a23719339d770122bcd57fa4924351d/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/environmentmapping_cube.rar">这里</a>可以获取完整的代码</p>
-<p>同样的，我们可以将立方体替换为模型，运行效果如下：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327171248065.png" class="" title="image-20240327171248065">
-
-<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/f68ddea25a23719339d770122bcd57fa4924351d/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/environmentmapping_model.rar">这里</a>获取完整代码</p>
-<h3 id="折射"><a href="#折射" class="headerlink" title="折射"></a>折射</h3><p>环境映射的另一种形式是折射，它和反射很相似。折射是光线由于传播介质的改变而产生的方向变化。在常见的类水表面上所产生的现象就是折射，光线不是直直地传播，而是弯曲了一点。</p>
-<p>折射是通过<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Snell's_law">斯涅尔定律</a>(Snell’s Law)来描述的，使用环境贴图的话看起来像是这样：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/cubemaps_refraction_theory.png" class="" title="img">
-
-<p>同样，有一个观察向量𝐼¯，一个法向量𝑁¯，而这次是折射向量𝑅¯。可以看到，观察向量的方向轻微弯曲了。弯折后的向量𝑅¯将会用来从立方体贴图中采样。</p>
-<p>折射可以使用GLSL的内建refract函数来轻松实现，它需要一个法向量、一个观察方向和两个材质之间的折射率(Refractive Index)。折射率决定了材质中光线弯曲的程度，每个材质都有自己的折射率。一些最常见的折射率可以在下表中找到：</p>
-<table>
-<thead>
-<tr>
-<th align="left">材质</th>
-<th align="left">折射率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">空气</td>
-<td align="left">1.00</td>
-</tr>
-<tr>
-<td align="left">水</td>
-<td align="left">1.33</td>
-</tr>
-<tr>
-<td align="left">冰</td>
-<td align="left">1.309</td>
-</tr>
-<tr>
-<td align="left">玻璃</td>
-<td align="left">1.52</td>
-</tr>
-<tr>
-<td align="left">钻石</td>
-<td align="left">2.42</td>
-</tr>
-</tbody></table>
-<p>使用这些折射率来计算光传播的两种材质间的比值。在目前的例子中，光线/视线从<strong>空气</strong>进入<strong>玻璃</strong>（，所以比值为1.001.52=0.6581.001.52=0.658。使用反射的代码，修改片段着色器：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line">in vec3 Normal;</span><br><span class="line">in vec3 Position;</span><br><span class="line"></span><br><span class="line">uniform vec3 cameraPos;</span><br><span class="line">uniform samplerCube skybox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="type">float</span> ratio = <span class="number">1.00</span> / <span class="number">1.52</span>;</span><br><span class="line">    vec3 I = <span class="built_in">normalize</span>(Position - cameraPos);</span><br><span class="line">    vec3 R = <span class="built_in">refract</span>(I, <span class="built_in">normalize</span>(Normal), ratio);</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">texture</span>(skybox, R).rgb, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过改变折射率，可以创建完全不同的视觉效果。编译程序并运行，结果如下：</p>
-<img src="/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/image-20240327172003633.png" class="" title="image-20240327172003633">
-
-<p>获取[完整代码](<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/f68ddea25a23719339d770122bcd57fa4924351d/2024/03/14/24-%E7%AB%8B%E6%96%B9%E4%BD%93%E8%B4%B4%E5%9B%BE/environmentmapping_refractive">https://github.com/OSkirito/OSkirito.github.io/blob/f68ddea25a23719339d770122bcd57fa4924351d/2024/03/14/24-立方体贴图/environmentmapping_refractive</a> .rar)</p>
-<p>有了光照、反射、折射和顶点移动的组合，可以创建出非常漂亮的水。注意，如果要想获得物理上精确的结果，还需要在光线离开物体的时候再次折射，现在使用的只是单面折射(Single-side Refraction)，但它对大部分场合都是没问题的。</p>
-<h2 id="动态环境贴图"><a href="#动态环境贴图" class="headerlink" title="动态环境贴图"></a>动态环境贴图</h2><p>现在使用的都是静态图像的组合来作为天空盒，看起来很不错，但它没有在场景中包括可移动的物体。通过使用帧缓冲，能够为物体的6个不同角度创建出场景的纹理，并在每个渲染迭代中将它们储存到一个立方体贴图中。之后就可以使用这个（动态生成的）立方体贴图来创建出更真实的，包含其它物体的，反射和折射表面了。这就叫做动态环境映射(Dynamic Environment Mapping)，因为动态创建了物体周围的立方体贴图，并将其用作环境贴图。</p>
-<p>虽然它看起来很棒，但它有一个很大的缺点：需要为使用环境贴图的物体渲染场景6次，这是对程序是非常大的性能开销。现代的程序通常会尽可能使用天空盒，并在可能的时候使用预编译的立方体贴图，只要它们能产生一点动态环境贴图的效果。虽然动态环境贴图是一个很棒的技术，但是要想在不降低性能的情况下让它工作还是需要非常多的技巧的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1952,14 +1865,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

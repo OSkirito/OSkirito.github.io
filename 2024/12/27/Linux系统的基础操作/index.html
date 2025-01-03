@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Linux （ Linux is not Unix）是一种自由和开放源码的类 UNIX 操作系统，在很多影视公司会使用Linux系统进行工作，所以掌握一些基本的Linux操作是很有必要的。 在Linux的桌面或者任何资源管理器空白处点击鼠标右键，选择”打开终端“。   会出现类似Windows的cmd界面的窗口，同样的，我们可以在这里输入Linux命令对系统进行操作。   常用命令1. 文件和目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统的基础操作">
+<meta property="og:url" content="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="Linux （ Linux is not Unix）是一种自由和开放源码的类 UNIX 操作系统，在很多影视公司会使用Linux系统进行工作，所以掌握一些基本的Linux操作是很有必要的。 在Linux的桌面或者任何资源管理器空白处点击鼠标右键，选择”打开终端“。   会出现类似Windows的cmd界面的窗口，同样的，我们可以在这里输入Linux命令对系统进行操作。   常用命令1. 文件和目录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_15-29-21.png">
+<meta property="og:image" content="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_15-30-09.png">
+<meta property="og:image" content="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_16-16-15.png">
+<meta property="article:published_time" content="2024-12-27T06:51:38.000Z">
+<meta property="article:modified_time" content="2025-01-03T04:57:31.484Z">
+<meta property="article:author" content="OSkirito">
+<meta property="article:tag" content="TD&#x2F;TA">
+<meta property="article:tag" content="计算机基本技能">
+<meta property="article:tag" content="命令行">
+<meta property="article:tag" content="Shell">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_15-29-21.png">
+
+<link rel="canonical" href="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux系统的基础操作 | OS's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">51</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统的基础操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-27 14:51:38" itemprop="dateCreated datePublished" datetime="2024-12-27T14:51:38+08:00">2024-12-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-01-03 12:57:31" itemprop="dateModified" datetime="2025-01-03T12:57:31+08:00">2025-01-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Linux （ Linux is not Unix）是一种自由和开放源码的类 UNIX 操作系统，在很多影视公司会使用Linux系统进行工作，所以掌握一些基本的Linux操作是很有必要的。</p>
+<p>在Linux的桌面或者任何资源管理器空白处点击鼠标右键，选择”打开终端“。</p>
+<img src="/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_15-29-21.png" class="" title="Snipaste_2024-12-27_15-29-21">
+
+<p>会出现类似Windows的cmd界面的窗口，同样的，我们可以在这里输入Linux命令对系统进行操作。</p>
+<img src="/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_15-30-09.png" class="" title="Snipaste_2024-12-27_15-30-09">
+
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="1-文件和目录操作"><a href="#1-文件和目录操作" class="headerlink" title="1. 文件和目录操作"></a>1. 文件和目录操作</h3><ul>
+<li><p><code>ls</code>：列出当前目录中的文件和文件夹。</p>
+<p><code>ls -l</code>：显示详细信息（包括权限、所有者、文件大小等）。</p>
+<p><code>ls -a</code>：显示所有文件，包括隐藏文件（以点 <code>.</code> 开头的文件）。</p>
+</li>
+<li><p><code>cd</code>：改变目录。</p>
+<p><code>cd /path/to/directory</code>：进入指定目录。</p>
+<p><code>cd ..</code>：返回上一级目录。</p>
+<p><code>cd ~</code>：返回用户的主目录。</p>
+</li>
+<li><p><code>pwd</code>：显示当前工作目录。</p>
+</li>
+<li><p><code>mkdir</code>：创建新目录。</p>
+<p><code>mkdir new_directory</code>：创建名为 <code>new_directory</code> 的目录。</p>
+</li>
+<li><p><code>rmdir</code>：删除空目录。</p>
+<p><code>rmdir directory</code>：删除名为 <code>directory</code> 的空目录。</p>
+</li>
+<li><p><code>rm</code>：删除文件或目录。</p>
+<p><code>rm file_name</code>：删除文件。</p>
+<p><code>rm -r directory_name</code>：递归删除目录及其内容。</p>
+</li>
+<li><p><code>cp</code>：复制文件或目录。</p>
+<p><code>cp source_file destination_file</code>：复制文件。</p>
+<p><code>cp -r source_directory destination_directory</code>：复制目录及其内容。</p>
+</li>
+<li><p><code>mv</code>：移动文件或目录，或重命名文件。</p>
+<p><code>mv old_name new_name</code>：重命名文件。</p>
+<p><code>mv file_name destination_directory</code>：将文件移动到指定目录。</p>
+</li>
+</ul>
+<h3 id="2-文件内容查看和编辑"><a href="#2-文件内容查看和编辑" class="headerlink" title="2. 文件内容查看和编辑"></a>2. 文件内容查看和编辑</h3><ul>
+<li><p><code>cat</code>：查看文件内容。</p>
+<p><code>cat file_name</code>：显示文件内容。</p>
+</li>
+<li><p><code>more</code>：逐屏查看文件内容。</p>
+<p><code>more file_name</code>：显示文件内容，每次显示一页。</p>
+</li>
+<li><p><code>less</code>：逐屏查看文件内容，支持向前和向后滚动。</p>
+<p><code>less file_name</code>：查看文件内容。</p>
+</li>
+<li><p><code>head</code>：查看文件的前几行。</p>
+<p><code>head -n 10 file_name</code>：显示文件的前 10 行。</p>
+</li>
+<li><p><code>tail</code>：查看文件的最后几行。</p>
+<p><code>tail -n 10 file_name</code>：显示文件的最后 10 行。</p>
+<p><code>tail -f file_name</code>：实时查看文件更新（如日志文件）。</p>
+</li>
+<li><p><code>nano</code>、<code>vim</code>、<code>vi</code>：编辑文件。</p>
+<p><code>nano file_name</code>：使用 nano 编辑器打开文件。</p>
+<p><code>vim file_name</code> 或 <code>vi file_name</code>：使用 Vim 或 Vi 编辑器打开文件。</p>
+</li>
+</ul>
+<h3 id="3-系统信息和资源"><a href="#3-系统信息和资源" class="headerlink" title="3. 系统信息和资源"></a>3. 系统信息和资源</h3><ul>
+<li><p><code>top</code>：查看系统的实时资源使用情况。</p>
+</li>
+<li><p><code>htop</code>：一个更为友好的 <code>top</code> 命令版本（需要安装）。</p>
+</li>
+<li><p><code>df</code>：显示磁盘空间使用情况。</p>
+<p><code>df -h</code>：以可读性更强的方式显示磁盘空间（GB、MB等）。</p>
+</li>
+<li><p><code>du</code>：显示目录或文件的磁盘使用情况。</p>
+<p><code>du -sh directory_name</code>：显示目录总的磁盘使用情况。</p>
+</li>
+<li><p><code>free</code>：查看系统内存使用情况。</p>
+<p><code>free -h</code>：以易于理解的格式显示内存使用情况。</p>
+</li>
+<li><p><code>ps</code>：查看当前进程。</p>
+<p><code>ps aux</code>：列出所有进程。</p>
+</li>
+<li><p><code>kill</code>：终止进程。</p>
+<p><code>kill process_id</code>：终止指定进程。</p>
+<p><code>kill -9 process_id</code>：强制终止进程。</p>
+</li>
+<li><p><code>uptime</code>：查看系统的运行时间和负载。</p>
+</li>
+<li><p><code>whoami</code>：显示当前用户。</p>
+</li>
+</ul>
+<h3 id="4-网络管理"><a href="#4-网络管理" class="headerlink" title="4. 网络管理"></a>4. 网络管理</h3><ul>
+<li><p><code>ping</code>：测试与目标主机的网络连接。</p>
+<p><code>ping host_name_or_ip</code>：ping 一个主机或 IP 地址。</p>
+</li>
+<li><p><code>ifconfig</code>：查看或配置网络接口（较老的命令，现代 Linux 系统可能使用 <code>ip</code>）。</p>
+<p><code>ifconfig</code>：查看网络接口信息。</p>
+</li>
+<li><p><code>ip</code>：更现代的网络管理命令，替代 <code>ifconfig</code>。</p>
+<p><code>ip a</code>：查看网络接口的 IP 地址信息。</p>
+</li>
+<li><p><code>ssh</code>：远程连接到另一台 Linux 主机。</p>
+<p><code>ssh user@hostname_or_ip</code>：通过 SSH 登录远程主机。</p>
+</li>
+<li><p><code>scp</code>：安全地复制文件到远程主机。</p>
+<p><code>scp file_name user@hostname_or_ip:/path/to/destination</code>：将文件复制到远程主机。</p>
+</li>
+</ul>
+<h3 id="5-用户和权限管理"><a href="#5-用户和权限管理" class="headerlink" title="5. 用户和权限管理"></a>5. 用户和权限管理</h3><ul>
+<li><p><code>useradd</code>：创建新用户。</p>
+<p><code>useradd username</code>：创建一个名为 <code>username</code> 的新用户。</p>
+</li>
+<li><p><code>passwd</code>：设置或更改密码。</p>
+<p><code>passwd username</code>：更改指定用户的密码。</p>
+</li>
+<li><p><code>chown</code>：改变文件或目录的所有者。</p>
+<p><code>chown user:group file_name</code>：将文件的所有者更改为指定用户和组。</p>
+</li>
+<li><p><code>chmod</code>：改变文件或目录的权限。</p>
+<p><code>chmod 755 file_name</code>：为文件设置权限。</p>
+<p><code>chmod 777 file_name</code>：为用户设置所有权限。</p>
+<p><code>chmod -R 755 directory_name</code>：递归更改目录的权限。</p>
+<ul>
+<li><p><code>chmod</code> 是用来修改文件权限的命令。</p>
+</li>
+<li><p>```<br>777</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">     是一个权限值，表示：</span><br><span class="line">  </span><br><span class="line">    - 第一个数字 `7`：文件所有者（用户）拥有读、写、执行的权限。</span><br><span class="line">    - 第二个数字 `7`：文件所属的组拥有读、写、执行的权限。</span><br><span class="line">    - 第三个数字 `7`：其他用户也拥有读、写、执行的权限。</span><br><span class="line">  </span><br><span class="line">  权限值是由三个数字组成，每个数字代表不同权限的组合：</span><br><span class="line">  </span><br><span class="line">  - `r`（读） = 4</span><br><span class="line">  - `w`（写） = 2</span><br><span class="line">  - `x`（执行） = 1</span><br><span class="line">  </span><br><span class="line">  将这些数字相加来设置权限：</span><br><span class="line">  </span><br><span class="line">  - `7` = `4 (r)` + `2 (w)` + `1 (x)`。</span><br><span class="line"></span><br><span class="line">### 6. 文件查找和搜索</span><br><span class="line"></span><br><span class="line">- `find`：查找文件或目录。</span><br><span class="line"></span><br><span class="line">  `find /path/to/directory -name &quot;file_name&quot;`：在指定目录下查找文件。</span><br><span class="line"></span><br><span class="line">- `grep`：在文件中搜索文本。</span><br><span class="line"></span><br><span class="line">  `grep &quot;search_text&quot; file_name`：查找文件中包含指定文本的行。</span><br><span class="line"></span><br><span class="line">- `locate`：查找文件（依赖于文件数据库，需要先执行 `updatedb`）。</span><br><span class="line"></span><br><span class="line">  `locate file_name`：查找文件。</span><br><span class="line"></span><br><span class="line">### 7. 压缩与解压</span><br><span class="line"></span><br><span class="line">- `tar`：打包和解压文件。</span><br><span class="line"></span><br><span class="line">  `tar -czvf archive.tar.gz directory_name`：将目录压缩为 `.tar.gz` 格式。</span><br><span class="line"></span><br><span class="line">  `tar -xzvf archive.tar.gz`：解压 `.tar.gz` 文件。</span><br><span class="line"></span><br><span class="line">- `zip` 和 `unzip`：压缩和解压 `.zip` 文件。</span><br><span class="line"></span><br><span class="line">  `zip archive.zip file_name`：压缩文件。</span><br><span class="line"></span><br><span class="line">  `unzip archive.zip`：解压 `.zip` 文件。</span><br><span class="line"></span><br><span class="line">### 9.切换root用户：</span><br><span class="line"></span><br><span class="line">在 Linux 中，`su` 命令用于切换用户身份。要以 root 用户身份登录，可以执行以下命令：</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">su root</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p>这将提示你输入 root 用户的密码。如果密码正确，成功登录后，你将以 root 用户身份操作。需要注意的是，<code>su</code> 命令通常需要 root 用户的密码，而不是当前用户的密码。</p>
+<ol>
+<li><strong>输入密码</strong>：系统会提示你输入 root 用户的密码。</li>
+<li><strong>切换到 root 用户</strong>：输入密码后，你将切换到 root 用户，终端提示符通常会变为 <code>#</code>，表示你以 root 用户身份操作。</li>
+</ol>
+<img src="/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/Snipaste_2024-12-27_16-16-15.png" class="" title="Snipaste_2024-12-27_16-16-15">
+
+<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p>要在Linux上进行开发工作，Shell脚本是无法绕开的。Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。</p>
+<p>打开文本编辑器(可以使用 vi/vim 命令来创建文件)，新建一个文件 test.sh，扩展名为 sh（sh代表shell），扩展名并不影响脚本执行，见名知意就好，如果你用 php 写 shell 脚本，扩展名就用 php 好了。</p>
+<h3 id="1-一个基本-Shell-脚本示例"><a href="#1-一个基本-Shell-脚本示例" class="headerlink" title="1. 一个基本 Shell 脚本示例"></a>1. 一个基本 Shell 脚本示例</h3><h4 id="脚本结构："><a href="#脚本结构：" class="headerlink" title="脚本结构："></a>脚本结构：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这是一个简单的 Shell 脚本</span></span><br><span class="line"></span><br><span class="line">echo &quot;Hello, World!&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>#!/bin/bash</code> 是脚本的 shebang（约定的标记），告诉系统使用哪个解释器来执行脚本（在这个例子中是 <code>/bin/bash</code>）。</li>
+<li><code>echo</code> 命令用于打印输出。</li>
+</ul>
+<h4 id="运行脚本："><a href="#运行脚本：" class="headerlink" title="运行脚本："></a>运行脚本：</h4><p>假设我们现在有一个叫做script.sh的脚本，我们想要运行他，只需要在Linux的终端中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./script.sh</span><br></pre></td></tr></table></figure>
+
+<p>或输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh ./script.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-注释"><a href="#2-注释" class="headerlink" title="2. 注释"></a>2. <strong>注释</strong></h3><p>在 Shell 脚本中，注释是用 <code>#</code> 来表示的：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这是一个注释</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Shell-脚本中的变量和输入"><a href="#3-Shell-脚本中的变量和输入" class="headerlink" title="3. Shell 脚本中的变量和输入"></a>3. Shell 脚本中的变量和输入</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">读取用户输入并打印</span></span><br><span class="line"></span><br><span class="line">echo &quot;请输入你的名字:&quot;</span><br><span class="line">read name</span><br><span class="line">echo &quot;你好, $name!&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>read</code> 用来获取用户输入，并将输入值保存在变量中。</li>
+<li>变量 <code>$name</code> 用来引用输入的值。</li>
+</ul>
+<h3 id="4-条件语句（if-else）"><a href="#4-条件语句（if-else）" class="headerlink" title="4. 条件语句（if-else）"></a>4. 条件语句（if-else）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">判断一个数字是否为正数、负数或零</span></span><br><span class="line"></span><br><span class="line">echo &quot;请输入一个数字:&quot;</span><br><span class="line">read number</span><br><span class="line"></span><br><span class="line">if [ $number -gt 0 ]; then</span><br><span class="line">  echo &quot;这是一个正数&quot;</span><br><span class="line">elif [ $number -lt 0 ]; then</span><br><span class="line">  echo &quot;这是一个负数&quot;</span><br><span class="line">else</span><br><span class="line">  echo &quot;这是零&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-gt</code> 表示“大于”，<code>-lt</code> 表示“小于”，<code>-eq</code> 表示“等于”。</li>
+<li><code>if</code>、<code>elif</code> 和 <code>else</code> 语句用于条件判断。</li>
+</ul>
+<h3 id="5-循环语句（for-while）"><a href="#5-循环语句（for-while）" class="headerlink" title="5. 循环语句（for, while）"></a>5. 循环语句（for, while）</h3><h4 id="for-循环："><a href="#for-循环：" class="headerlink" title="for 循环："></a><code>for</code> 循环：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用 <span class="keyword">for</span> 循环打印 1 到 5</span></span><br><span class="line"></span><br><span class="line">for i in &#123;1..5&#125;</span><br><span class="line">do</span><br><span class="line">  echo &quot;数字是: $i&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h4 id="while-循环："><a href="#while-循环：" class="headerlink" title="while 循环："></a><code>while</code> 循环：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用 <span class="keyword">while</span> 循环打印 1 到 5</span></span><br><span class="line"></span><br><span class="line">i=1</span><br><span class="line">while [ $i -le 5 ]</span><br><span class="line">do</span><br><span class="line">  echo &quot;数字是: $i&quot;</span><br><span class="line">  ((i++))</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-函数定义"><a href="#6-函数定义" class="headerlink" title="6. 函数定义"></a>6. 函数定义</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">定义一个函数并调用它</span></span><br><span class="line"></span><br><span class="line">greet() &#123;</span><br><span class="line">  echo &quot;你好, $1!&quot;  # $1 是传递给函数的第一个参数</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo &quot;请输入你的名字:&quot;</span><br><span class="line">read name</span><br><span class="line">greet $name</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>greet</code> 函数接受一个参数 <code>$1</code>，并打印消息。</li>
+</ul>
+<h3 id="7-文件操作"><a href="#7-文件操作" class="headerlink" title="7. 文件操作"></a>7. 文件操作</h3><h4 id="创建文件并写入内容："><a href="#创建文件并写入内容：" class="headerlink" title="创建文件并写入内容："></a>创建文件并写入内容：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建文件并写入内容</span></span><br><span class="line"></span><br><span class="line">echo &quot;Hello, World!&quot; &gt; hello.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&gt;</code> 用于将内容写入文件，如果文件已存在则覆盖。</li>
+<li><code>&gt;&gt;</code> 用于将内容追加到文件。</li>
+</ul>
+<h4 id="读取文件内容："><a href="#读取文件内容：" class="headerlink" title="读取文件内容："></a>读取文件内容：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">读取文件内容并打印</span></span><br><span class="line"></span><br><span class="line">while IFS= read -r line</span><br><span class="line">do</span><br><span class="line">  echo &quot;$line&quot;</span><br><span class="line">done &lt; hello.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>IFS</code> 用来指定分隔符，<code>read -r</code> 用于读取文件的每一行。</li>
+</ul>
+<h3 id="8-查找文件"><a href="#8-查找文件" class="headerlink" title="8. 查找文件"></a>8. 查找文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找当前目录下所有的 .txt 文件</span></span><br><span class="line"></span><br><span class="line">find . -name &quot;*.txt&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>find</code> 命令用于递归查找文件。<code>-name &quot;*.txt&quot;</code> 查找所有扩展名为 <code>.txt</code> 的文件。</li>
+</ul>
+<h3 id="9-执行系统命令"><a href="#9-执行系统命令" class="headerlink" title="9. 执行系统命令"></a>9. 执行系统命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示当前系统时间</span></span><br><span class="line"></span><br><span class="line">current_time=$(date)</span><br><span class="line">echo &quot;当前时间: $current_time&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>$(command)</code> 用来执行命令并将结果存储到变量中。</li>
+</ul>
+<h3 id="10-错误处理"><a href="#10-错误处理" class="headerlink" title="10. 错误处理"></a>10. 错误处理</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果某个命令失败，则打印错误信息</span></span><br><span class="line"></span><br><span class="line">echo &quot;请输入一个文件名:&quot;</span><br><span class="line">read filename</span><br><span class="line"></span><br><span class="line">if [ ! -f &quot;$filename&quot; ]; then</span><br><span class="line">  echo &quot;错误: 文件 &#x27;$filename&#x27; 不存在!&quot;</span><br><span class="line">else</span><br><span class="line">  echo &quot;文件 &#x27;$filename&#x27; 存在!&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>[ ! -f &quot;$filename&quot; ]</code> 用于检查文件是否存在。</li>
+</ul>
+<h3 id="11-示例：一个简单的shell脚本"><a href="#11-示例：一个简单的shell脚本" class="headerlink" title="11.示例：一个简单的shell脚本"></a>11.示例：一个简单的shell脚本</h3><p>以下是一个shell脚本示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">export APP_NAME=houdini_20.0.653</span><br><span class="line">export HOUDINI_VERSION=20.0.653</span><br><span class="line"></span><br><span class="line">exec /opt/hfs20.0.653/bin/houdini $@</span><br></pre></td></tr></table></figure>
+
+<p>我们设置了两个环境变量，并启动了houdini。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>OSkirito
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/12/27/Linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" title="Linux系统的基础操作">http://example.com/2024/12/27/Linux系统的基础操作/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TD-TA/" rel="tag"># TD/TA</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%8A%80%E8%83%BD/" rel="tag"># 计算机基本技能</a>
+              <a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" rel="tag"># 命令行</a>
+              <a href="/tags/Shell/" rel="tag"># Shell</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/" rel="prev" title="如何使用批处理脚本（bat）">
+      <i class="fa fa-chevron-left"></i> 如何使用批处理脚本（bat）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">1. 文件和目录操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E6%9F%A5%E7%9C%8B%E5%92%8C%E7%BC%96%E8%BE%91"><span class="nav-number">1.2.</span> <span class="nav-text">2. 文件内容查看和编辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E5%92%8C%E8%B5%84%E6%BA%90"><span class="nav-number">1.3.</span> <span class="nav-text">3. 系统信息和资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text">4. 网络管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%94%A8%E6%88%B7%E5%92%8C%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.5.</span> <span class="nav-text">5. 用户和权限管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell"><span class="nav-number">2.</span> <span class="nav-text">shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%80%E4%B8%AA%E5%9F%BA%E6%9C%AC-Shell-%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">1. 一个基本 Shell 脚本示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">2.1.1.</span> <span class="nav-text">脚本结构：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%EF%BC%9A"><span class="nav-number">2.1.2.</span> <span class="nav-text">运行脚本：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%B3%A8%E9%87%8A"><span class="nav-number">2.2.</span> <span class="nav-text">2. 注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Shell-%E8%84%9A%E6%9C%AC%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%92%8C%E8%BE%93%E5%85%A5"><span class="nav-number">2.3.</span> <span class="nav-text">3. Shell 脚本中的变量和输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%EF%BC%88if-else%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">4. 条件语句（if-else）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%EF%BC%88for-while%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">5. 循环语句（for, while）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#for-%E5%BE%AA%E7%8E%AF%EF%BC%9A"><span class="nav-number">2.5.1.</span> <span class="nav-text">for 循环：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#while-%E5%BE%AA%E7%8E%AF%EF%BC%9A"><span class="nav-number">2.5.2.</span> <span class="nav-text">while 循环：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">2.6.</span> <span class="nav-text">6. 函数定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">2.7.</span> <span class="nav-text">7. 文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%B9%B6%E5%86%99%E5%85%A5%E5%86%85%E5%AE%B9%EF%BC%9A"><span class="nav-number">2.7.1.</span> <span class="nav-text">创建文件并写入内容：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%EF%BC%9A"><span class="nav-number">2.7.2.</span> <span class="nav-text">读取文件内容：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6"><span class="nav-number">2.8.</span> <span class="nav-text">8. 查找文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4"><span class="nav-number">2.9.</span> <span class="nav-text">9. 执行系统命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-number">2.10.</span> <span class="nav-text">10. 错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84shell%E8%84%9A%E6%9C%AC"><span class="nav-number">2.11.</span> <span class="nav-text">11.示例：一个简单的shell脚本</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

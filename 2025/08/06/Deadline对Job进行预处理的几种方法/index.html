@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="对deadline的Job进行预设置的几种思路：1.使用Event注册回调函数这是官方推荐的方法，具体的可以查看官方文档：[事件插件 — Deadline 10.4.2.2 文档](https:&#x2F;&#x2F;docs.thinkboxsoftware.com&#x2F;products&#x2F;deadline&#x2F;10.4&#x2F;1_User Manual&#x2F;manual&#x2F;event-plugins.html?highlight&#x3D;ca">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deadline对Job进行预处理的几种方法">
+<meta property="og:url" content="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="OS&#39;s Blog">
+<meta property="og:description" content="对deadline的Job进行预设置的几种思路：1.使用Event注册回调函数这是官方推荐的方法，具体的可以查看官方文档：[事件插件 — Deadline 10.4.2.2 文档](https:&#x2F;&#x2F;docs.thinkboxsoftware.com&#x2F;products&#x2F;deadline&#x2F;10.4&#x2F;1_User Manual&#x2F;manual&#x2F;event-plugins.html?highlight&#x3D;ca">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/image-20250806165524596.png">
+<meta property="article:published_time" content="2025-08-06T09:28:21.000Z">
+<meta property="article:modified_time" content="2025-08-06T09:29:16.240Z">
+<meta property="article:author" content="OSkirito">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="技术分享">
+<meta property="article:tag" content="Deadline">
+<meta property="article:tag" content="渲染农场">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/image-20250806165524596.png">
+
+<link rel="canonical" href="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deadline对Job进行预处理的几种方法 | OS's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">OS's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">55</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deadline对Job进行预处理的几种方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-08-06 17:28:21 / 修改时间：17:29:16" itemprop="dateCreated datePublished" datetime="2025-08-06T17:28:21+08:00">2025-08-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="对deadline的Job进行预设置的几种思路："><a href="#对deadline的Job进行预设置的几种思路：" class="headerlink" title="对deadline的Job进行预设置的几种思路："></a>对deadline的Job进行预设置的几种思路：</h1><h2 id="1-使用Event注册回调函数"><a href="#1-使用Event注册回调函数" class="headerlink" title="1.使用Event注册回调函数"></a>1.使用Event注册回调函数</h2><p>这是官方推荐的方法，具体的可以查看官方文档：[事件插件 — Deadline 10.4.2.2 文档](<a target="_blank" rel="noopener" href="https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User">https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User</a> Manual/manual/event-plugins.html?highlight=callback)</p>
+<p>这种方法可以在Job进入渲染之前就进行设置，不过存在很大的局限性，只有通过UI进行前台提交的Job会触发OnJobSubmittedCallback回调。</p>
+<p>只需要在[DeadlineRepository]/custom/events文件夹下创建你的自定义事件，创建自定义事件时需要注意以下几点：</p>
+<ul>
+<li><p>文件夹名称与.param、.py文件名必须一致，如下图所示</p>
+<img src="/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/image-20250806165524596.png" class="" title="image-20250806165524596"></li>
+<li><p>代码报错时会导致deadline报错，引发一系列问题，需要通过重启deadline服务和数据库进行更新</p>
+</li>
+<li><p>调试时应该确保事件启用</p>
+<p>例如，我们注册一个OnJobSubmittedCallback回调，打印一些东西</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> DeadlineEventListener</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GetDeadlineEventListener</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls to get an instance of the</span></span><br><span class="line"><span class="string">    main DeadlineEventListener class.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> JobInitEvent()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CleanupDeadlineEventListener</span>(<span class="params">deadlinePlugin</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls when the event plugin is</span></span><br><span class="line"><span class="string">    no longer in use so that it can get cleaned up.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    deadlinePlugin.Cleanup()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">JobInitEvent</span>(<span class="title class_ inherited__">DeadlineEventListener</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the main DeadlineEventListener class for JobInitEvent&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># Set up the event callbacks here</span></span><br><span class="line">        self.OnJobSubmittedCallback += self.OnJobSubmitted</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Cleanup</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">del</span> self.OnJobSubmittedCallback</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">OnJobSubmitted</span>(<span class="params">self, job</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmitted!!!&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmittedCallback is ran!!!&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="2-修改GlobalJobPreLoad脚本"><a href="#2-修改GlobalJobPreLoad脚本" class="headerlink" title="2.修改GlobalJobPreLoad脚本"></a>2.修改GlobalJobPreLoad脚本</h2><p>在deadline安装路径下，有一个脚本<code>GlobalJobPreLoad.py</code> ，他是在每一个 任务（task）启动时被调用的一个全局预加载（Pre-Load）脚本。它的主要作用是允许你在任务开始运行之前，对任务做一些全局性的设置，比如：</p>
+<ul>
+<li>环境变量设置</li>
+<li>日志记录</li>
+<li>插件参数调整</li>
+<li>条件拦截任务运行</li>
+<li>输出调试信息</li>
+</ul>
+<p>通常他的位置在”[DeadlineRepository]/custom/plugins/GlobalJobPreLoad.py”。</p>
+<p>这个脚本中有一个<code>__main__</code>函数，这个脚本只会执行其中的这个函数中的内容。其他函数不会自动被执行，除非你从 <code>__main__()</code> 里调用它们。</p>
+<p>例如，我们想在任务运行前对任务的优先级等做一个重设：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import  <span class="comment"># Import system&#x27;s os, not backports.os.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> FranticX.Diagnostics <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> Deadline.Jobs <span class="keyword">as</span> Job</span><br><span class="line"><span class="keyword">import</span> Deadline.Plugins <span class="keyword">as</span> pg</span><br><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">job = <span class="literal">None</span>  <span class="comment"># type: Job.Job</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">job_pre_settings</span>(<span class="params">job</span>):</span><br><span class="line">    plugin = job.get_JobPlugin()</span><br><span class="line">    <span class="built_in">id</span> = job.get_ID()</span><br><span class="line">    group = job.get_Group()</span><br><span class="line">    pool = job.get_Pool()</span><br><span class="line">    batchname = job.get_BatchName()</span><br><span class="line">    comment = job.get_Comment()</span><br><span class="line">    priority = job.get_Priority()</span><br><span class="line">    comment_config = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;JobPlugin:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(plugin))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;ID:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">id</span>))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Priority:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Group:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Pool:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;BatchName:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(batchname))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Comment:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(comment))</span><br><span class="line"></span><br><span class="line">    comment_config = &#123;</span><br><span class="line">        <span class="string">&#x27;nuke&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">80</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;nuke&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;katana&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;katana&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;houdini&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;maya&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    config = comment_config.get(comment, &#123;</span><br><span class="line">        <span class="string">&#x27;priority&#x27;</span>: job.get_Priority(),</span><br><span class="line">        <span class="string">&#x27;group&#x27;</span>: job.get_Group(),</span><br><span class="line">        <span class="string">&#x27;pool&#x27;</span>: job.get_Pool()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    priority = config[<span class="string">&#x27;priority&#x27;</span>]</span><br><span class="line">    group = config[<span class="string">&#x27;group&#x27;</span>]</span><br><span class="line">    pool = config[<span class="string">&#x27;pool&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    job.set_Priority(priority)</span><br><span class="line">    job.set_Group(group)</span><br><span class="line">    job.set_Pool(pool)</span><br><span class="line">    <span class="comment"># job.set_SecondaryPool()</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line">        RepositoryUtils.SaveJob(job)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Saved......&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;save error......&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;job pre set up over.......&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set priority to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set group to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set pool to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__main__</span>(<span class="params"> deadlinePlugin:pg.DeadlinePlugin =<span class="literal">None</span> </span>):</span><br><span class="line">    <span class="keyword">global</span> job</span><br><span class="line">    job = deadlinePlugin.GetJob()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        job_pre_settings(job)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-定制化开发"><a href="#3-定制化开发" class="headerlink" title="3.定制化开发"></a>3.定制化开发</h2><p>有些时候可能是没有UI的后台提交Job，那么就需要在具体的任务提交前提前编写一个预设置的代码，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Deadline.DeadlineConnect <span class="keyword">as</span> Connect</span><br><span class="line"></span><br><span class="line">CONN = Connect.DeadlineCon(PRL_DEADLINE_URL, PRL_DEADLINE_PORT)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DeadlineJob</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.connection = CONN</span><br><span class="line">        self.job_info = &#123;&#125;</span><br><span class="line">        self.plugin_info = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit_pre_setting</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit</span>(<span class="params">self, aux_files=[]</span>):</span><br><span class="line">        self.submit_pre_setting()</span><br><span class="line">		CONN.Jobs.SubmitJob(self.job_info, self.plugin_info, aux=aux_files)</span><br><span class="line">        </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Job = DeadlineJob()</span><br><span class="line">Job.submit()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>OSkirito
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" title="Deadline对Job进行预处理的几种方法">http://example.com/2025/08/06/Deadline对Job进行预处理的几种方法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag"># 技术分享</a>
+              <a href="/tags/Deadline/" rel="tag"># Deadline</a>
+              <a href="/tags/%E6%B8%B2%E6%9F%93%E5%86%9C%E5%9C%BA/" rel="tag"># 渲染农场</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/" rel="prev" title="在Katana中渲染AOV并输出">
+      <i class="fa fa-chevron-left"></i> 在Katana中渲染AOV并输出
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9deadline%E7%9A%84Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E8%AE%BE%E7%BD%AE%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">对deadline的Job进行预设置的几种思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8Event%E6%B3%A8%E5%86%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">1.使用Event注册回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BF%AE%E6%94%B9GlobalJobPreLoad%E8%84%9A%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">2.修改GlobalJobPreLoad脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9A%E5%88%B6%E5%8C%96%E5%BC%80%E5%8F%91"><span class="nav-number">1.3.</span> <span class="nav-text">3.定制化开发</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="OSkirito"
+      src="/images/head_image.png">
+  <p class="site-author-name" itemprop="name">OSkirito</p>
+  <div class="site-description" itemprop="description">CG技术的记录与分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/oskirito" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;oskirito" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OSkirito</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

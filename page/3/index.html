@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">27</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">54</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">55</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,184 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">19-深度测试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-25 18:23:35" itemprop="dateCreated datePublished" datetime="2024-01-25T18:23:35+08:00">2024-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-13 15:39:22" itemprop="dateModified" datetime="2024-09-13T15:39:22+08:00">2024-09-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="深度测试"><a href="#深度测试" class="headerlink" title="深度测试"></a>深度测试</h2><p>深度缓冲就像颜色缓冲一样，在每个片段中储存了信息，并且和颜色缓冲有着一样的宽度和高度。深度缓冲是由窗口系统自动创建的，它会以16、24或32位float的形式储存它的深度值。在大部分的系统中，深度缓冲的精度都是24位。</p>
+<p>当深度测试(Depth Testing)被启用的时候，OpenGL会将一个片段的深度值与深度缓冲的内容进行对比。OpenGL会执行一个深度测试，如果这个测试通过了的话，深度缓冲将会更新为新的深度值。如果深度测试失败了，片段将会被丢弃。</p>
+<p>深度缓冲在片段着色器之后运行，并且在屏幕空间中运行。屏幕空间坐标与glViewport所定义的视口密切相关，而且可以直接使用gl_FragCoord从片段着色器中直接访问。gl_FragCoord的x和y分量代表了片段的屏幕空间坐标（(0, 0)位于左下角）。gl_FragCoord中包含了一个z分量，它包含了片段真正的深度值。z值就是与深度缓冲内容所对比的值。</p>
+<p>深度测试默认是禁用的，如果要启用深度测试，需要用GL_DEPTH_TEST：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br></pre></td></tr></table></figure>
+
+<p>当启用的时候，如果一个片段通过了深度测试的话，OpenGL会在深度缓冲中储存该片段的z值；如果没有通过深度缓冲，则会丢弃该片段。如果启用了深度缓冲，还应该在每个渲染迭代之前使用GL_DEPTH_BUFFER_BIT来清除深度缓冲，否则仍会在使用上一次渲染迭代中的写入的深度值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br></pre></td></tr></table></figure>
+
+<p>在某些情况下需要对所有片段都执行深度测试并丢弃相应的片段，但不希望更新深度缓冲。OpenGL允许禁用深度缓冲的写入，只需要设置它的深度掩码(Depth Mask)设置为GL_FALSE就可以了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthMask</span>(GL_FALSE);</span><br></pre></td></tr></table></figure>
+
+<p>这只在深度测试被启用的时候才有效果。</p>
+<h2 id="深度测试函数"><a href="#深度测试函数" class="headerlink" title="深度测试函数"></a>深度测试函数</h2><p>OpenGL允许修改深度测试中使用的比较运算符。这允许控制OpenGL什么时候该通过或丢弃一个片段，什么时候去更新深度缓冲。可以调用glDepthFunc函数来设置比较运算符（或者说深度函数(Depth Function)）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glDepthFunc</span>(GL_LESS);</span><br></pre></td></tr></table></figure>
+
+<p>接受的比较运算符如下面表格中所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GL_ALWAYS</td>
+<td align="left">永远通过深度测试</td>
+</tr>
+<tr>
+<td align="left">GL_NEVER</td>
+<td align="left">永远不通过深度测试</td>
+</tr>
+<tr>
+<td align="left">GL_LESS</td>
+<td align="left">在片段深度值小于缓冲的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_EQUAL</td>
+<td align="left">在片段深度值等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_LEQUAL</td>
+<td align="left">在片段深度值小于等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_GREATER</td>
+<td align="left">在片段深度值大于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_NOTEQUAL</td>
+<td align="left">在片段深度值不等于缓冲区的深度值时通过测试</td>
+</tr>
+<tr>
+<td align="left">GL_GEQUAL</td>
+<td align="left">在片段深度值大于等于缓冲区的深度值时通过测试</td>
+</tr>
+</tbody></table>
+<p>默认情况下使用的深度函数是GL_LESS，它将会丢弃深度值大于等于当前深度缓冲值的所有片段。</p>
+<p>我们将使用一个新的示例代码，它会显示一个没有光照的基本场景，里面有两个有纹理的立方体，放置在一个有纹理的地板上。可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/3c03ce1661a77f3d4988a2ccf2a840987a70565b/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depthtesting_code.rar">这里</a>获取源代码。</p>
+<p>在源代码中，将深度函数改为GL_ALWAYS：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br><span class="line"><span class="built_in">glDepthFunc</span>(GL_ALWAYS);</span><br></pre></td></tr></table></figure>
+
+<p>这将会模拟没有启用深度测试时所得到的结果。深度测试将会永远通过，所以最后绘制的片段将会总是会渲染在之前绘制片段的上面。因为是最后渲染的地板，它会覆盖所有箱子的片段：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222155306409.png" class="" title="image-20240222155306409">
+
+<p>深度函数重新设置为GL_LESS，这会将场景还原为正常的样子：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222160132912.png" class="" title="image-20240222160132912">
+
+<h2 id="深度值精度"><a href="#深度值精度" class="headerlink" title="深度值精度"></a>深度值精度</h2><p>深度缓冲包含了一个介于0.0和1.0之间的深度值，它将会与观察者视角所看见的场景中所有物体的z值进行比较。观察空间的z值可能是投影平截头体的近平面(Near)和远平面(Far)之间的任何值。我们需要一种方式来将这些观察空间的z值变换到[0, 1]范围之间，其中的一种方式就是将它们线性变换到[0, 1]范围之间。下面这个（线性）方程将z值变换到了0.0到1.0之间的深度值：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222160544575.png" class="" title="image-20240222160544575">
+
+<p>这里的near和far值是我们之前提供给投影矩阵设置可视平截头体的near 和far值。这个方程需要平截头体中的一个z值，并将它变换到了[0, 1]的范围中。z值和对应的深度值之间的关系如下图所示：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depth_linear_graph.png" class="" title="img">
+
+<p>注意，所有的方程都会将非常近的物体的深度值设置为接近0.0的值，而当物体非常接近远平面的时候，它的深度值会非常接近1.0。</p>
+<p>然而，在实践中是几乎不会使用线性深度缓冲(Linear Depth Buffer)的。要想有正确的投影性质，需要使用一个非线性的深度方程，它是与 1/z 成正比的。它做的就是在z值很小的时候提供非常高的精度，而在z值很远的时候提供更少的精度。方程是这样的：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161043829.png" class="" title="image-20240222161043829">
+
+<p>深度缓冲中0.5的值并不代表着物体的z值是位于平截头体的中间了，这个顶点的z值实际上非常接近近平面。可以在下图中看到z值和最终的深度缓冲值之间的非线性关系：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/depth_non_linear_graph.png" class="" title="img">
+
+<p>可以看到，深度值很大一部分是由很小的z值所决定的，这给了近处的物体很大的深度精度。这个（从观察者的视角）变换z值的方程是嵌入在投影矩阵中的，这个非线性方程就被用于将一个顶点坐标从观察空间至裁剪空间。</p>
+<h2 id="深度缓冲的可视化"><a href="#深度缓冲的可视化" class="headerlink" title="深度缓冲的可视化"></a>深度缓冲的可视化</h2><p>如果我们想要可视化深度缓冲的话，非线性方程的效果很快就会变得很清楚。</p>
+<p>我们知道片段着色器中，内建gl_FragCoord向量的z值包含了那个特定片段的深度值。如果我们将这个深度值输出为颜色，我们可以显示场景中所有片段的深度值。修改片段着色器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(gl_FragCoord.z), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果再次运行程序的话，结果如下所示：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161914264.png" class="" title="image-20240222161914264">
+
+<p>你可能会注意到所有东西都是白色的，看起来就想我们所有的深度值都是最大的1.0。在上面说到，屏幕空间中的深度值是非线性的，即它在z值很小的时候有很高的精度，而z值很大的时候有较低的精度。片段的深度值会随着距离迅速增加，所以几乎所有的顶点的深度值都是接近于1.0的。如果慢慢靠近物体，可能会注意到颜色会渐渐变暗，显示它们的z值在逐渐变小：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222161838373.png" class="" title="image-20240222161838373">
+
+<p>也可以让片段非线性的深度值变换为线性的。要实现这个，我们仅需要反转深度值的投影变换。这也就意味着我们需要首先将深度值从[0, 1]范围重新变换到[-1, 1]范围的标准化设备坐标（裁剪空间）。接下来需要像投影矩阵那样反转这个非线性方程，并将这个反转的方程应用到最终的深度值上。</p>
+<p>修改片段着色器如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out vec4 FragColor;</span><br><span class="line"></span><br><span class="line"><span class="type">float</span> near = <span class="number">0.1</span>; </span><br><span class="line"><span class="type">float</span> far  = <span class="number">100.0</span>; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">LinearizeDepth</span><span class="params">(<span class="type">float</span> depth)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">float</span> z = depth * <span class="number">2.0</span> - <span class="number">1.0</span>; <span class="comment">// back to NDC </span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">2.0</span> * near * far) / (far + near - z * (far - near));    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;             </span><br><span class="line">    <span class="type">float</span> depth = <span class="built_in">LinearizeDepth</span>(gl_FragCoord.z) / far; <span class="comment">// 为了演示除以 far</span></span><br><span class="line">    FragColor = <span class="built_in">vec4</span>(<span class="built_in">vec3</span>(depth), <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222162151787.png" class="" title="image-20240222162151787">
+
+<p>颜色大部分都是黑色，因为深度值的范围是0.1的<strong>近</strong>平面到100的<strong>远</strong>平面，它离我们还是非常远的。如果相对靠近近平面，所以会得到更低的（更暗的）深度值。</p>
+<h2 id="深度冲突"><a href="#深度冲突" class="headerlink" title="深度冲突"></a>深度冲突</h2><p>在两个平面或者三角形非常紧密地平行排列在一起时，会发生一个很常见的视觉错误，深度缓冲没有足够的精度来决定两个形状哪个在前面。结果就是这两个形状不断地在切换前后顺序，这会导致很奇怪的花纹。这个现象叫做深度冲突(Z-fighting)，因为它看起来像是这两个形状在争夺(Fight)谁该处于顶端。</p>
+<p>在场景中，有几个地方的深度冲突还是非常明显的。箱子被放置在地板的同一高度上，这也就意味着箱子的底面和地板是共面的(Coplanar)。这两个面的深度值都是一样的，所以深度测试没有办法决定应该显示哪一个。</p>
+<p>如果将摄像机移动到其中一个箱子的内部，你就能清楚地看到这个效果的，箱子的底部不断地在箱子底面与地板之间切换，形成一个锯齿状的花纹：</p>
+<img src="/2024/01/25/19-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/image-20240222163116475.png" class="" title="image-20240222163116475">
+
+<p>深度冲突是深度缓冲的一个常见问题，当物体在远处时效果会更明显（因为深度缓冲在z值比较大的时候有着更小的精度）。深度冲突不能够被完全避免，但一般会有一些技巧有助于在场景中减轻或者完全避免深度冲突。</p>
+<ul>
+<li><p>第一个也是最重要的技巧是永远不要把多个物体摆得太靠近，以至于它们的一些三角形会重叠。在两个物体之间设置一个用户无法察觉的偏移值，可以完全避免这两个物体之间的深度冲突。在箱子和地板的例子中，可以将箱子沿着正y轴稍微移动一点。箱子位置的这点微小改变将不太可能被注意到，但它能够完全减少深度冲突的发生。然而，这需要对每个物体都手动调整，并且进行彻底的测试来保证场景中没有物体会产生深度冲突。</p>
+</li>
+<li><p>第二个技巧是尽可能将近平面设置远一些。在前面提到了精度在靠近近平面时是非常高的，所以如果我们将近平面远离观察者，将会对整个平截头体有着更大的精度。然而，将近平面设置太远将会导致近处的物体被裁剪掉，所以这通常需要实验和微调来决定最适合你的场景的近平面距离。</p>
+</li>
+<li><p>另外一个技巧是牺牲一些性能，使用更高精度的深度缓冲。大部分深度缓冲的精度都是24位的，但现在大部分的显卡都支持32位的深度缓冲，这将会极大地提高精度。所以，牺牲掉一些性能，就能获得更高精度的深度测试，减少深度冲突。</p>
+</li>
+</ul>
+<p>上面的三个技术是最普遍也是很容易实现的抗深度冲突的技术了。还有一些更复杂的技术，但它们依然不能完全消除深度冲突。深度冲突是一个常见的问题，有时候甚至需要组合使用了上面的技术。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1460,103 +1638,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/" class="post-title-link" itemprop="url">09-在OpenGL中使用imgui调整参数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-12-28 17:55:41" itemprop="dateCreated datePublished" datetime="2023-12-28T17:55:41+08:00">2023-12-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-12-29 12:27:57" itemprop="dateModified" datetime="2023-12-29T12:27:57+08:00">2023-12-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>下载<a target="_blank" rel="noopener" href="https://github.com/ocornut/imgui">imgui</a>或直接导入代码包<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/imgui.rar">imgui.rar</a></p>
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/image-20231228193828588.png" class="" title="image-20231228193828588">
-
-<p>解压文件拷贝相应代码到项目中</p>
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/image-20231228195620153.png" class="" title="image-20231228195620153">
-
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/image-20231228195530944.png" class="" title="image-20231228195530944">
-
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/image-20231229112651109.png" class="" title="image-20231229112651109">
-
-<p>在Makefile中增加配置：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SOURCES	+= include/imgui/imgui_impl_glfw.cpp include/imgui/imgui_impl_opengl3.cpp</span><br><span class="line">SOURCES	+= include/imgui/imgui.cpp include/imgui/imgui_draw.cpp include/imgui/imgui_widgets.cpp</span><br></pre></td></tr></table></figure>
-
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/image-20231228201500289.png" class="" title="image-20231228201500289">
-
-<p>在运行主程序中引入库：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui_impl_glfw.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui_impl_opengl3.h&quot;</span></span></span><br></pre></td></tr></table></figure>
-
-<p>设置OpenGL主要和次要版本，创建imgui初始化：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">char</span> *glsl_version = <span class="string">&quot;#version 330&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建imgui上下文</span></span><br><span class="line">ImGui::<span class="built_in">CreateContext</span>();</span><br><span class="line">ImGuiIO &amp;io = ImGui::<span class="built_in">GetIO</span>();</span><br><span class="line">(<span class="type">void</span>)io;</span><br><span class="line"><span class="comment">// 设置样式</span></span><br><span class="line">ImGui::<span class="built_in">StyleColorsDark</span>();</span><br><span class="line"><span class="comment">// 设置平台和渲染器</span></span><br><span class="line"><span class="built_in">ImGui_ImplGlfw_InitForOpenGL</span>(window, <span class="literal">true</span>);</span><br><span class="line"><span class="built_in">ImGui_ImplOpenGL3_Init</span>(glsl_version);</span><br></pre></td></tr></table></figure>
-
-<p>在绘制最后对ui进行渲染：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ImGui::<span class="built_in">Render</span>();</span><br><span class="line"><span class="built_in">ImGui_ImplOpenGL3_RenderDrawData</span>(ImGui::<span class="built_in">GetDrawData</span>());</span><br></pre></td></tr></table></figure>
-
-<p>在绘制开始输入下列代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ImGui_ImplOpenGL3_NewFrame</span>();</span><br><span class="line"><span class="built_in">ImGui_ImplGlfw_NewFrame</span>();</span><br><span class="line">ImGui::<span class="built_in">NewFrame</span>();</span><br><span class="line"><span class="comment">// ui标题</span></span><br><span class="line">ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;imgui&quot;</span>);</span><br><span class="line"><span class="comment">// 显示fps</span></span><br><span class="line">ImGui::<span class="built_in">Text</span>(<span class="string">&quot;%.3f ms/frame (%.1f FPS)&quot;</span>, <span class="number">1000.0f</span> / ImGui::<span class="built_in">GetIO</span>().Framerate, ImGui::<span class="built_in">GetIO</span>().Framerate);</span><br><span class="line"><span class="comment">// 显示渲染时间</span></span><br><span class="line">ImGui::<span class="built_in">Text</span>(<span class="string">&quot;render time: %.3f s&quot;</span>, <span class="built_in">glfwGetTime</span>());</span><br><span class="line"><span class="comment">// 一个float滑块</span></span><br><span class="line">ImGui::<span class="built_in">SliderFloat</span>(<span class="string">&quot;float&quot;</span>, &amp;f, <span class="number">0.0f</span>, <span class="number">1.0f</span>);</span><br><span class="line"><span class="comment">// 颜色控件</span></span><br><span class="line">ImGui::<span class="built_in">ColorEdit3</span>(<span class="string">&quot;clear color&quot;</span>, (<span class="type">float</span> *)&amp;clear_color);</span><br><span class="line">ImGui::<span class="built_in">End</span>();</span><br><span class="line"><span class="comment">// 使用颜色控件的颜色设置背景颜色</span></span><br><span class="line"><span class="built_in">glClearColor</span>(clear_color.x, clear_color.y, clear_color.z, clear_color.w);</span><br></pre></td></tr></table></figure>
-
-<p>最终效果如下：</p>
-<img src="/2023/12/28/09-%E5%9C%A8OpenGL%E4%B8%AD%E4%BD%BF%E7%94%A8imgui%E8%B0%83%E6%95%B4%E5%8F%82%E6%95%B0/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.gif" class="" title="运行结果">
-
-<p>完整代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;glad/glad.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;GLFW/glfw3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tool/shader.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STB_IMAGE_IMPLEMENTATION</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tool/stb_image.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;glm/glm.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;glm/gtc/matrix_transform.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;glm/gtc/type_ptr.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui_impl_glfw.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui/imgui_impl_opengl3.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> SCREEN_WIDTH = <span class="number">800</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> SCREEN_HEIGHT = <span class="number">600</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">framebuffer_size_callback</span><span class="params">(GLFWwindow* window, <span class="type">int</span> width, <span class="type">int</span> height)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">processInput</span><span class="params">(GLFWwindow *window)</span></span>;</span><br><span class="line">std::string Shader::dirName;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Shader::dirName = argv[<span class="number">1</span>];</span><br><span class="line">    <span class="built_in">glfwInit</span>();</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *glsl_version = <span class="string">&quot;#version 330&quot;</span>;</span><br><span class="line">    <span class="built_in">glfwWindowHint</span>(GLFW_CONTEXT_VERSION_MAJOR, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">glfwWindowHint</span>(GLFW_CONTEXT_VERSION_MINOR, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">glfwWindowHint</span>(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);</span><br><span class="line"></span><br><span class="line">    GLFWwindow* window = <span class="built_in">glfwCreateWindow</span>(SCREEN_WIDTH, SCREEN_HEIGHT, <span class="string">&quot;MyWindow&quot;</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span>(window == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Failed to create GLFW window&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="built_in">glfwTerminate</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">glfwMakeContextCurrent</span>(window);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">gladLoadGLLoader</span>((GLADloadproc)glfwGetProcAddress))</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Failed to initialize GLAD&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建imgui上下文</span></span><br><span class="line">    ImGui::<span class="built_in">CreateContext</span>();</span><br><span class="line">    ImGuiIO &amp;io = ImGui::<span class="built_in">GetIO</span>();</span><br><span class="line">    (<span class="type">void</span>)io;</span><br><span class="line">    <span class="comment">// 设置样式</span></span><br><span class="line">    ImGui::<span class="built_in">StyleColorsDark</span>();</span><br><span class="line">    <span class="comment">// 设置平台和渲染器</span></span><br><span class="line">    <span class="built_in">ImGui_ImplGlfw_InitForOpenGL</span>(window, <span class="literal">true</span>);</span><br><span class="line">    <span class="built_in">ImGui_ImplOpenGL3_Init</span>(glsl_version);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glViewport</span>(<span class="number">0</span>, <span class="number">0</span>, SCREEN_WIDTH, SCREEN_HEIGHT);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glfwSetFramebufferSizeCallback</span>(window, framebuffer_size_callback);</span><br><span class="line"></span><br><span class="line">    <span class="function">Shader <span class="title">myShader</span><span class="params">(<span class="string">&quot;./shader/vertex.glsl&quot;</span>, <span class="string">&quot;./shader/fragment.glsl&quot;</span>)</span></span>;</span><br><span class="line">    <span class="type">float</span> vertices[] = &#123;</span><br><span class="line">    <span class="comment">//     ---- 位置 ----      - 纹理坐标 -</span></span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line"></span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line"></span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">1.0f</span>, <span class="number">1.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">1.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.5f</span>,  <span class="number">0.0f</span>, <span class="number">0.0f</span>,</span><br><span class="line">        <span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">-0.5f</span>,  <span class="number">0.0f</span>, <span class="number">1.0f</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    glm::vec3 cubePositions[] = &#123;</span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">0.0f</span>,  <span class="number">0.0f</span>,  <span class="number">0.0f</span>), </span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">2.0f</span>,  <span class="number">5.0f</span>, <span class="number">-15.0f</span>), </span><br><span class="line">        glm::<span class="built_in">vec3</span>(<span class="number">-1.5f</span>, <span class="number">-2.2f</span>, <span class="number">-2.5f</span>),  </span><br><span class="line">        glm::<span class="built_in">vec3</span>(<span class="number">-3.8f</span>, <span class="number">-2.0f</span>, <span class="number">-12.3f</span>),  </span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">2.4f</span>, <span class="number">-0.4f</span>, <span class="number">-3.5f</span>),  </span><br><span class="line">        glm::<span class="built_in">vec3</span>(<span class="number">-1.7f</span>,  <span class="number">3.0f</span>, <span class="number">-7.5f</span>),  </span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">1.3f</span>, <span class="number">-2.0f</span>, <span class="number">-2.5f</span>),  </span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">1.5f</span>,  <span class="number">2.0f</span>, <span class="number">-2.5f</span>), </span><br><span class="line">        glm::<span class="built_in">vec3</span>( <span class="number">1.5f</span>,  <span class="number">0.2f</span>, <span class="number">-1.5f</span>), </span><br><span class="line">        glm::<span class="built_in">vec3</span>(<span class="number">-1.3f</span>,  <span class="number">1.0f</span>, <span class="number">-1.5f</span>)  </span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> VBO, VAO;</span><br><span class="line">    <span class="built_in">glGenVertexArrays</span>(<span class="number">1</span>, &amp;VAO);</span><br><span class="line">    <span class="built_in">glGenBuffers</span>(<span class="number">1</span>, &amp;VBO);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glBindVertexArray</span>(VAO);</span><br><span class="line">    <span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, VBO);</span><br><span class="line">    <span class="built_in">glBufferData</span>(GL_ARRAY_BUFFER, <span class="built_in">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">glVertexAttribPointer</span>(<span class="number">0</span>, <span class="number">3</span>, GL_FLOAT, GL_FALSE, <span class="number">5</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>), (<span class="type">void</span>*)<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">glEnableVertexAttribArray</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">glVertexAttribPointer</span>(<span class="number">1</span>, <span class="number">2</span>, GL_FLOAT, GL_FALSE, <span class="number">5</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>), (<span class="type">void</span>*)(<span class="number">3</span> * <span class="built_in">sizeof</span>(<span class="type">float</span>)));</span><br><span class="line">    <span class="built_in">glEnableVertexAttribArray</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> texture1, texture2;</span><br><span class="line">    <span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;texture1);</span><br><span class="line">    <span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, texture1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   </span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">stbi_set_flip_vertically_on_load</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> width, height, nrChannels;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> *data = <span class="built_in">stbi_load</span>(<span class="string">&quot;./static/texture/container.jpg&quot;</span>, &amp;width, &amp;height, &amp;nrChannels, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (data)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">glTexImage2D</span>(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGB, width, height, <span class="number">0</span>, GL_RGB, GL_UNSIGNED_BYTE, data);</span><br><span class="line">        <span class="built_in">glGenerateMipmap</span>(GL_TEXTURE_2D);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">stbi_image_free</span>(data);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;texture2);</span><br><span class="line">    <span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, texture2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   </span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);</span><br><span class="line">    <span class="built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);</span><br><span class="line"></span><br><span class="line">    data = <span class="built_in">stbi_load</span>(<span class="string">&quot;./static/texture/awesomeface.png&quot;</span>, &amp;width, &amp;height, &amp;nrChannels, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (data)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">glTexImage2D</span>(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, width, height, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, data);</span><br><span class="line">        <span class="built_in">glGenerateMipmap</span>(GL_TEXTURE_2D);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">stbi_image_free</span>(data);</span><br><span class="line"></span><br><span class="line">    myShader.<span class="built_in">use</span>();</span><br><span class="line">    myShader.<span class="built_in">setInt</span>(<span class="string">&quot;texture1&quot;</span>, <span class="number">0</span>);</span><br><span class="line">    myShader.<span class="built_in">setInt</span>(<span class="string">&quot;texture2&quot;</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glEnable</span>(GL_DEPTH_TEST);</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> f = <span class="number">0.0f</span>;</span><br><span class="line">    ImVec4 clear_color = <span class="built_in">ImVec4</span>(<span class="number">0.21</span>, <span class="number">0.3</span>, <span class="number">0.21</span>, <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!<span class="built_in">glfwWindowShouldClose</span>(window))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">processInput</span>(window);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">ImGui_ImplOpenGL3_NewFrame</span>();</span><br><span class="line">        <span class="built_in">ImGui_ImplGlfw_NewFrame</span>();</span><br><span class="line">        ImGui::<span class="built_in">NewFrame</span>();</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;imgui&quot;</span>);</span><br><span class="line">        ImGui::<span class="built_in">Text</span>(<span class="string">&quot;%.3f ms/frame (%.1f FPS)&quot;</span>, <span class="number">1000.0f</span> / ImGui::<span class="built_in">GetIO</span>().Framerate, ImGui::<span class="built_in">GetIO</span>().Framerate);</span><br><span class="line">        ImGui::<span class="built_in">Text</span>(<span class="string">&quot;render time: %.3f s&quot;</span>, <span class="built_in">glfwGetTime</span>());</span><br><span class="line">        ImGui::<span class="built_in">SliderFloat</span>(<span class="string">&quot;float&quot;</span>, &amp;f, <span class="number">0.0f</span>, <span class="number">1.0f</span>);</span><br><span class="line">        ImGui::<span class="built_in">ColorEdit3</span>(<span class="string">&quot;clear color&quot;</span>, (<span class="type">float</span> *)&amp;clear_color);</span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line"></span><br><span class="line">        <span class="built_in">glClearColor</span>(clear_color.x, clear_color.y, clear_color.z, clear_color.w);</span><br><span class="line">        <span class="built_in">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">glActiveTexture</span>(GL_TEXTURE0);</span><br><span class="line">        <span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, texture1);</span><br><span class="line">        <span class="built_in">glActiveTexture</span>(GL_TEXTURE1);</span><br><span class="line">        <span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, texture2);</span><br><span class="line"></span><br><span class="line">        myShader.<span class="built_in">use</span>();</span><br><span class="line"></span><br><span class="line">        glm::mat4 view          = glm::<span class="built_in">mat4</span>(<span class="number">1.0f</span>);</span><br><span class="line">        glm::mat4 projection    = glm::<span class="built_in">mat4</span>(<span class="number">1.0f</span>);</span><br><span class="line"></span><br><span class="line">        view = glm::<span class="built_in">translate</span>(view, glm::<span class="built_in">vec3</span>(<span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">-3.0f</span>));</span><br><span class="line"></span><br><span class="line">        projection = glm::<span class="built_in">perspective</span>(glm::<span class="built_in">radians</span>(<span class="number">45.0f</span>), (<span class="type">float</span>)SCREEN_WIDTH / (<span class="type">float</span>)SCREEN_HEIGHT, <span class="number">0.1f</span>, <span class="number">100.0f</span>);</span><br><span class="line"></span><br><span class="line">        myShader.<span class="built_in">setMat4</span>(<span class="string">&quot;projection&quot;</span>, projection);</span><br><span class="line">        myShader.<span class="built_in">setMat4</span>(<span class="string">&quot;view&quot;</span>, view);</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">glBindVertexArray</span>(VAO);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            glm::mat4 model = glm::<span class="built_in">mat4</span>(<span class="number">1.0f</span>);</span><br><span class="line">            model = glm::<span class="built_in">translate</span>(model, cubePositions[i]);</span><br><span class="line">            <span class="type">float</span> angle = <span class="number">30.0f</span> * (i + <span class="number">1</span>); </span><br><span class="line">            model = glm::<span class="built_in">rotate</span>(model, (<span class="type">float</span>)<span class="built_in">glfwGetTime</span>() * glm::<span class="built_in">radians</span>(angle), glm::<span class="built_in">vec3</span>(<span class="number">1.0f</span>, <span class="number">0.3f</span>, <span class="number">0.5f</span>));</span><br><span class="line">            myShader.<span class="built_in">setMat4</span>(<span class="string">&quot;model&quot;</span>, model);</span><br><span class="line"></span><br><span class="line">            <span class="built_in">glDrawArrays</span>(GL_TRIANGLES, <span class="number">0</span>, <span class="number">36</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">Render</span>();</span><br><span class="line">        <span class="built_in">ImGui_ImplOpenGL3_RenderDrawData</span>(ImGui::<span class="built_in">GetDrawData</span>());</span><br><span class="line"></span><br><span class="line">        <span class="built_in">glfwSwapBuffers</span>(window);</span><br><span class="line">        <span class="built_in">glfwPollEvents</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">glDeleteVertexArrays</span>(<span class="number">1</span>, &amp;VAO);</span><br><span class="line">    <span class="built_in">glDeleteBuffers</span>(<span class="number">1</span>, &amp;VBO);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">glfwTerminate</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">framebuffer_size_callback</span><span class="params">(GLFWwindow* window, <span class="type">int</span> width, <span class="type">int</span> height)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">glViewport</span>(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">processInput</span><span class="params">(GLFWwindow *window)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">glfwGetKey</span>(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">glfwSetWindowShouldClose</span>(window, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1628,14 +1709,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

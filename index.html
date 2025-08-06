@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">27</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">54</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">55</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,91 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Deadline对Job进行预处理的几种方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-08-06 17:28:21 / 修改时间：17:29:16" itemprop="dateCreated datePublished" datetime="2025-08-06T17:28:21+08:00">2025-08-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="对deadline的Job进行预设置的几种思路："><a href="#对deadline的Job进行预设置的几种思路：" class="headerlink" title="对deadline的Job进行预设置的几种思路："></a>对deadline的Job进行预设置的几种思路：</h1><h2 id="1-使用Event注册回调函数"><a href="#1-使用Event注册回调函数" class="headerlink" title="1.使用Event注册回调函数"></a>1.使用Event注册回调函数</h2><p>这是官方推荐的方法，具体的可以查看官方文档：[事件插件 — Deadline 10.4.2.2 文档](<a target="_blank" rel="noopener" href="https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User">https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User</a> Manual/manual/event-plugins.html?highlight=callback)</p>
+<p>这种方法可以在Job进入渲染之前就进行设置，不过存在很大的局限性，只有通过UI进行前台提交的Job会触发OnJobSubmittedCallback回调。</p>
+<p>只需要在[DeadlineRepository]/custom/events文件夹下创建你的自定义事件，创建自定义事件时需要注意以下几点：</p>
+<ul>
+<li><p>文件夹名称与.param、.py文件名必须一致，如下图所示</p>
+<img src="/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/image-20250806165524596.png" class="" title="image-20250806165524596"></li>
+<li><p>代码报错时会导致deadline报错，引发一系列问题，需要通过重启deadline服务和数据库进行更新</p>
+</li>
+<li><p>调试时应该确保事件启用</p>
+<p>例如，我们注册一个OnJobSubmittedCallback回调，打印一些东西</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> DeadlineEventListener</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GetDeadlineEventListener</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls to get an instance of the</span></span><br><span class="line"><span class="string">    main DeadlineEventListener class.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> JobInitEvent()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CleanupDeadlineEventListener</span>(<span class="params">deadlinePlugin</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls when the event plugin is</span></span><br><span class="line"><span class="string">    no longer in use so that it can get cleaned up.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    deadlinePlugin.Cleanup()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">JobInitEvent</span>(<span class="title class_ inherited__">DeadlineEventListener</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the main DeadlineEventListener class for JobInitEvent&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># Set up the event callbacks here</span></span><br><span class="line">        self.OnJobSubmittedCallback += self.OnJobSubmitted</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Cleanup</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">del</span> self.OnJobSubmittedCallback</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">OnJobSubmitted</span>(<span class="params">self, job</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmitted!!!&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmittedCallback is ran!!!&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="2-修改GlobalJobPreLoad脚本"><a href="#2-修改GlobalJobPreLoad脚本" class="headerlink" title="2.修改GlobalJobPreLoad脚本"></a>2.修改GlobalJobPreLoad脚本</h2><p>在deadline安装路径下，有一个脚本<code>GlobalJobPreLoad.py</code> ，他是在每一个 任务（task）启动时被调用的一个全局预加载（Pre-Load）脚本。它的主要作用是允许你在任务开始运行之前，对任务做一些全局性的设置，比如：</p>
+<ul>
+<li>环境变量设置</li>
+<li>日志记录</li>
+<li>插件参数调整</li>
+<li>条件拦截任务运行</li>
+<li>输出调试信息</li>
+</ul>
+<p>通常他的位置在”[DeadlineRepository]/custom/plugins/GlobalJobPreLoad.py”。</p>
+<p>这个脚本中有一个<code>__main__</code>函数，这个脚本只会执行其中的这个函数中的内容。其他函数不会自动被执行，除非你从 <code>__main__()</code> 里调用它们。</p>
+<p>例如，我们想在任务运行前对任务的优先级等做一个重设：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import  <span class="comment"># Import system&#x27;s os, not backports.os.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> FranticX.Diagnostics <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> Deadline.Jobs <span class="keyword">as</span> Job</span><br><span class="line"><span class="keyword">import</span> Deadline.Plugins <span class="keyword">as</span> pg</span><br><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">job = <span class="literal">None</span>  <span class="comment"># type: Job.Job</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">job_pre_settings</span>(<span class="params">job</span>):</span><br><span class="line">    plugin = job.get_JobPlugin()</span><br><span class="line">    <span class="built_in">id</span> = job.get_ID()</span><br><span class="line">    group = job.get_Group()</span><br><span class="line">    pool = job.get_Pool()</span><br><span class="line">    batchname = job.get_BatchName()</span><br><span class="line">    comment = job.get_Comment()</span><br><span class="line">    priority = job.get_Priority()</span><br><span class="line">    comment_config = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;JobPlugin:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(plugin))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;ID:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">id</span>))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Priority:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Group:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Pool:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;BatchName:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(batchname))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Comment:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(comment))</span><br><span class="line"></span><br><span class="line">    comment_config = &#123;</span><br><span class="line">        <span class="string">&#x27;nuke&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">80</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;nuke&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;katana&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;katana&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;houdini&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;maya&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    config = comment_config.get(comment, &#123;</span><br><span class="line">        <span class="string">&#x27;priority&#x27;</span>: job.get_Priority(),</span><br><span class="line">        <span class="string">&#x27;group&#x27;</span>: job.get_Group(),</span><br><span class="line">        <span class="string">&#x27;pool&#x27;</span>: job.get_Pool()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    priority = config[<span class="string">&#x27;priority&#x27;</span>]</span><br><span class="line">    group = config[<span class="string">&#x27;group&#x27;</span>]</span><br><span class="line">    pool = config[<span class="string">&#x27;pool&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    job.set_Priority(priority)</span><br><span class="line">    job.set_Group(group)</span><br><span class="line">    job.set_Pool(pool)</span><br><span class="line">    <span class="comment"># job.set_SecondaryPool()</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line">        RepositoryUtils.SaveJob(job)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Saved......&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;save error......&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;job pre set up over.......&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set priority to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set group to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set pool to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__main__</span>(<span class="params"> deadlinePlugin:pg.DeadlinePlugin =<span class="literal">None</span> </span>):</span><br><span class="line">    <span class="keyword">global</span> job</span><br><span class="line">    job = deadlinePlugin.GetJob()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        job_pre_settings(job)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-定制化开发"><a href="#3-定制化开发" class="headerlink" title="3.定制化开发"></a>3.定制化开发</h2><p>有些时候可能是没有UI的后台提交Job，那么就需要在具体的任务提交前提前编写一个预设置的代码，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Deadline.DeadlineConnect <span class="keyword">as</span> Connect</span><br><span class="line"></span><br><span class="line">CONN = Connect.DeadlineCon(PRL_DEADLINE_URL, PRL_DEADLINE_PORT)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DeadlineJob</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.connection = CONN</span><br><span class="line">        self.job_info = &#123;&#125;</span><br><span class="line">        self.plugin_info = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit_pre_setting</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit</span>(<span class="params">self, aux_files=[]</span>):</span><br><span class="line">        self.submit_pre_setting()</span><br><span class="line">		CONN.Jobs.SubmitJob(self.job_info, self.plugin_info, aux=aux_files)</span><br><span class="line">        </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Job = DeadlineJob()</span><br><span class="line">Job.submit()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1625,104 +1710,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/" class="post-title-link" itemprop="url">29-高级光照</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-09-29 20:46:52" itemprop="dateCreated datePublished" datetime="2024-09-29T20:46:52+08:00">2024-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-09-30 17:49:13" itemprop="dateModified" datetime="2024-09-30T17:49:13+08:00">2024-09-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Blinn-Phong"><a href="#Blinn-Phong" class="headerlink" title="Blinn-Phong"></a>Blinn-Phong</h2><p>冯氏光照不仅对真实光照有很好的近似，而且性能也很高。但是它的镜面反射会在一些情况下出现问题，特别是物体反光度很低时，会导致大片（粗糙的）高光区域。下面这张图展示了当反光度为1.0时地板会出现的效果：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_phong_limit.png" class="" title="img">
-
-<p>可以看到，在镜面高光区域的边缘出现了一道很明显的断层。出现这个问题的原因是观察向量和反射向量间的夹角不能大于90度。如果点积的结果为负数，镜面光分量会变为0.0。你可能会觉得，当光线与视线夹角大于90度时你应该不会接收到任何光才对，所以这不是什么问题。</p>
-<p>然而，这种想法仅仅只适用于漫反射分量。当考虑漫反射光的时候，如果法线和光源夹角大于90度，光源会处于被照表面的下方，这个时候光照的漫反射分量的确是为0.0。但是，在考虑镜面高光时，我们测量的角度并不是光源与法线的夹角，而是视线与反射光线向量的夹角。看一下下面这两张图：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_over_90.png" class="" title="img">
-
-<p>现在问题就应该很明显了。左图中是我们熟悉的冯氏光照中的反射向量，其中θ角小于90度。而右图中，视线与反射方向之间的夹角明显大于90度，这种情况下镜面光分量会变为0.0。这在大多数情况下都不是什么问题，因为观察方向离反射方向都非常远。然而，当物体的反光度非常小时，它产生的镜面高光半径足以让这些相反方向的光线对亮度产生足够大的影响。在这种情况下就不能忽略它们对镜面光分量的贡献了。</p>
-<p>1977年，James F. Blinn在冯氏着色模型上加以拓展，引入了Blinn-Phong着色模型。Blinn-Phong模型与冯氏模型非常相似，但是它对镜面光模型的处理上有一些不同，让我们能够解决之前提到的问题。Blinn-Phong模型不再依赖于反射向量，而是采用了所谓的半程向量(Halfway Vector)，即光线与视线夹角一半方向上的一个单位向量。当半程向量与法线向量越接近时，镜面光分量就越大。</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_halfway_vector.png" class="" title="img">
-
-<p>当视线正好与（现在不需要的）反射向量对齐时，半程向量就会与法线完美契合。所以当观察者视线越接近于原本反射光线的方向时，镜面高光就会越强。现在，不论观察者向哪个方向看，半程向量与表面法线之间的夹角都不会超过90度（除非光源在表面以下）。它产生的效果会与冯氏光照有些许不同，但是大部分情况下看起来会更自然一点，特别是低高光的区域。Blinn-Phong着色模型正是早期固定渲染管线时代时OpenGL所采用的光照模型。</p>
-<p>获取半程向量的方法很简单，只需要将光线的方向向量和观察向量加到一起，并将结果正规化(Normalize)就可以了：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/image-20240929205225538.png" class="" title="image-20240929205225538">
-
-<p>翻译成GLSL代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vec3 lightDir   = <span class="built_in">normalize</span>(lightPos - FragPos);</span><br><span class="line">vec3 viewDir    = <span class="built_in">normalize</span>(viewPos - FragPos);</span><br><span class="line">vec3 halfwayDir = <span class="built_in">normalize</span>(lightDir + viewDir);</span><br></pre></td></tr></table></figure>
-
-<p>接下来，镜面光分量的实际计算只不过是对表面法线和半程向量进行一次约束点乘(Clamped Dot Product)，让点乘结果不为负，从而获取它们之间夹角的余弦值，之后我们对这个值取反光度次方：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), shininess);</span><br><span class="line">vec3 specular = lightColor * spec;</span><br></pre></td></tr></table></figure>
-
-<p>除此之外Blinn-Phong模型就没什么好说的了，Blinn-Phong与冯氏模型唯一的区别就是，Blinn-Phong测量的是法线与半程向量之间的夹角，而冯氏模型测量的是观察方向与反射向量间的夹角。</p>
-<p>在引入半程向量之后，我们现在应该就不会再看到冯氏光照中高光断层的情况了。下面两个图片展示的是两种方法在镜面光分量为0.5时的对比：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting_comparrison.png" class="" title="img">
-
-<p>除此之外，冯氏模型与Blinn-Phong模型也有一些细微的差别：半程向量与表面法线的夹角通常会小于观察与反射向量的夹角。所以，如果你想获得和冯氏着色类似的效果，就必须在使用Blinn-Phong模型时将镜面反光度设置更高一点。通常我们会选择冯氏着色时反光度分量的2到4倍。</p>
-<p>下面是冯氏着色与Blinn-Phong着色的一个对比（左边为phong，右边为blinn-phong）：</p>
-<img src="/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/image-20240930174245958.png" class="" title="image-20240930174245958">
-
-<p>你可以看到，Blinn-Phong的镜面光分量会比冯氏模型更锐利一些。为了得到与冯氏模型类似的结果，你可能会需要不断进行一些微调，但Blinn-Phong模型通常会产出更真实的结果。</p>
-<p>这里，我们使用了一个简单的片段着色器，让我们能够在冯氏反射与Blinn-Phong反射间进行切换：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    [...]</span><br><span class="line">    <span class="type">float</span> spec = <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">if</span>(blinn)</span><br><span class="line">    &#123;</span><br><span class="line">        vec3 halfwayDir = <span class="built_in">normalize</span>(lightDir + viewDir);  </span><br><span class="line">        spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(normal, halfwayDir), <span class="number">0.0</span>), <span class="number">16.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        vec3 reflectDir = <span class="built_in">reflect</span>(-lightDir, normal);</span><br><span class="line">        spec = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(viewDir, reflectDir), <span class="number">0.0</span>), <span class="number">8.0</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/29/29-%E9%AB%98%E7%BA%A7%E5%85%89%E7%85%A7/advanced_lighting.rar">这里</a>获取完整的代码，可以按下<code>B</code>键来切换冯氏光照与Blinn-Phong光照。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1794,14 +1781,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-08-06 17:28:21 / 修改时间：17:29:16" itemprop="dateCreated datePublished" datetime="2025-08-06T17:28:21+08:00">2025-08-06</time>
+              <time title="创建时间：2025-08-06 17:28:21 / 修改时间：17:56:11" itemprop="dateCreated datePublished" datetime="2025-08-06T17:28:21+08:00">2025-08-06</time>
             </span>
 
           
@@ -201,7 +201,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="对deadline的Job进行预设置的几种思路："><a href="#对deadline的Job进行预设置的几种思路：" class="headerlink" title="对deadline的Job进行预设置的几种思路："></a>对deadline的Job进行预设置的几种思路：</h1><h2 id="1-使用Event注册回调函数"><a href="#1-使用Event注册回调函数" class="headerlink" title="1.使用Event注册回调函数"></a>1.使用Event注册回调函数</h2><p>这是官方推荐的方法，具体的可以查看官方文档：[事件插件 — Deadline 10.4.2.2 文档](<a target="_blank" rel="noopener" href="https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User">https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User</a> Manual/manual/event-plugins.html?highlight=callback)</p>
+          <h1 id="对deadline的Job进行预设置的几种思路："><a href="#对deadline的Job进行预设置的几种思路：" class="headerlink" title="对deadline的Job进行预设置的几种思路："></a>对deadline的Job进行预设置的几种思路：</h1><h2 id="1-使用Event注册回调函数"><a href="#1-使用Event注册回调函数" class="headerlink" title="1.使用Event注册回调函数"></a>1.使用Event注册回调函数</h2><p>这是官方推荐的方法，具体的可以查看官方文档：[Event Plugins — Deadline 10.4.2.2 documentation](<a target="_blank" rel="noopener" href="https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User">https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User</a> Manual/manual/event-plugins.html?highlight=callback)</p>
 <p>这种方法可以在Job进入渲染之前就进行设置，不过存在很大的局限性，只有通过UI进行前台提交的Job会触发OnJobSubmittedCallback回调。</p>
 <p>只需要在[DeadlineRepository]/custom/events文件夹下创建你的自定义事件，创建自定义事件时需要注意以下几点：</p>
 <ul>

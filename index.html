@@ -270,10 +270,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-07-18 17:20:32 / 修改时间：17:22:55" itemprop="dateCreated datePublished" datetime="2025-07-18T17:20:32+08:00">2025-07-18</time>
+              <time title="创建时间：2025-07-18 17:20:32" itemprop="dateCreated datePublished" datetime="2025-07-18T17:20:32+08:00">2025-07-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-14 17:39:24" itemprop="dateModified" datetime="2026-01-14T17:39:24+08:00">2026-01-14</time>
+              </span>
 
           
 
@@ -329,6 +335,14 @@
 <img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718171459066.png" class="" title="image-20250718171459066">
 
 <p><img src="%E5%9C%A8katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718171751520.png" alt="image-20250718171751520"></p>
+<h1 id="渲染灯光组分层"><a href="#渲染灯光组分层" class="headerlink" title="渲染灯光组分层"></a>渲染灯光组分层</h1><p>如果现在有一个灯光组（dome）想要渲染分层diffuse_direct_dome和diffuse_indirect_dome，如何实现？</p>
+<p>首先需要在创建Arnold灯光时指定灯光组，设置灯光的aov属性，aov属性名称一样的灯光将被作为一个灯光组参与该灯光组分层的渲染</p>
+<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20260114173329613.png" class="" title="image-20260114173329613">
+
+<p>接着需要在aod节点中进行设置，Arnold提供了diffuse_direct和diffuse_indirect通道，只需要在节点中指定即可， 在lightGroups中选择custom（默认为all，即所有灯光），下面添加对应的灯光组命名</p>
+<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20260114173654767.png" class="" title="image-20260114173654767">
+
+<p>最后配合对应的rod节点即可输出diffuse_direct_dome和diffuse_indirect_dome的灯光组分层</p>
 
       
     </div>
@@ -1823,7 +1837,7 @@
 <div class="copyright">
   
   &copy; 2023 – 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

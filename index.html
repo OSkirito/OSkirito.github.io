@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">58</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">59</span></a>
 
   </li>
   </ul>
@@ -162,6 +162,64 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/03/19/37-%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/19/37-%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">37-延迟渲染</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-03-19 18:30:49 / 修改时间：18:31:08" itemprop="dateCreated datePublished" datetime="2026-03-19T18:30:49+08:00">2026-03-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/03/19/36-%E6%B3%9B%E5%85%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -187,7 +245,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2026-03-19 16:17:21 / 修改时间：18:11:49" itemprop="dateCreated datePublished" datetime="2026-03-19T16:17:21+08:00">2026-03-19</time>
+              <time title="创建时间：2026-03-19 16:17:21 / 修改时间：18:30:16" itemprop="dateCreated datePublished" datetime="2026-03-19T16:17:21+08:00">2026-03-19</time>
             </span>
 
           
@@ -259,7 +317,7 @@
 <p>把两个纹理结合以后，场景亮区便有了合适的光晕特效：</p>
 <img src="/2026/03/19/36-%E6%B3%9B%E5%85%89/image-20260319180819271.png" class="" title="image-20260319180819271">
 
-<p>有颜色的立方体看起来仿佛更亮，它向外发射光芒，的确是一个更好的视觉效果。这个场景比较简单，所以泛光效果不算十分令人瞩目，但在更充足照明的场景中合理配置之后效果会有明显的不同。你可以在这里找到这个简单示例的源代码。</p>
+<p>有颜色的立方体看起来仿佛更亮，它向外发射光芒，的确是一个更好的视觉效果。这个场景比较简单，所以泛光效果不算十分令人瞩目，但在更充足照明的场景中合理配置之后效果会有明显的不同。你可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2026/03/19/36-%E6%B3%9B%E5%85%89/bloom.rar">这里</a>找到这个简单示例的源代码。</p>
 <p>这个教程我们只是用了一个相对简单的高斯模糊过滤器，它在每个方向上只有5个样本。通过沿着更大的半径或重复更多次数的模糊，进行采样我们就可以提升模糊的效果。因为模糊的质量与泛光效果的质量正相关，提升模糊效果就能够提升泛光效果。有些提升将模糊过滤器与不同大小的模糊kernel或采用多个高斯曲线来选择性地结合权重结合起来使用。来自Kalogirou和EpicGames的附加资源讨论了如何通过提升高斯模糊来显著提升泛光效果。</p>
 <h2 id="附加资源"><a href="#附加资源" class="headerlink" title="附加资源"></a>附加资源</h2><ul>
 <li><a target="_blank" rel="noopener" href="http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/">Efficient Gaussian Blur with linear sampling</a>：非常详细地描述了高斯模糊，以及如何使用OpenGL的双线性纹理采样提升性能。</li>
@@ -1541,147 +1599,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/" class="post-title-link" itemprop="url">如何使用批处理脚本（bat）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-12-27 11:36:48 / 修改时间：14:32:28" itemprop="dateCreated datePublished" datetime="2024-12-27T11:36:48+08:00">2024-12-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>bat（批处理文件），在DOS和Windows（任意版本）系统中，bat文件是可执行文件，由一系列命令构成，其中可以包含对其他程序的调用。这个文件的每一行都是一条DOS命令（大部分时候就好像我们在DOS提示符下执行的命令行一样），你可以使用DOS下的Edit或者Windows的记事本等任何文本文件编辑工具创建和修改批处理该类型的文件。</p>
-<p>批处理(Batch)，也称为批处理脚本。顾名思义，批处理就是对某对象进行批量的处理，是一种简化的脚本语言，它的扩展名为bat 或cmd。比较常见的批处理包含两类：DOS批处理和PS批处理。PS批处理是基于强大的图片编辑软件Photoshop的，用来批量处理图片的脚本；而DOS批处理则是基于DOS命令的，用来自动地批量地执行DOS命令以实现特定操作的脚本。更复杂的情况，需要使用if、for、goto等命令控制程序的运行过程，如同C、Basic等高级语言一样。如果需要实现更复杂的应用，利用外部程序是必要的，这包括系统本身提供的外部命令和第三方提供的工具或者软件。批处理程序虽然是在命令行环境中运行，但不仅仅能使用命令行软件，任何当前系统下可运行的程序都可以放在批处理文件中运行。</p>
-<p>对于TD/TA工作者来说，bat的编写是一项基本技能，工作中需要经常使用到bat来配置环境并且对DCC软件进行启动，下面对bat脚本进行介绍。</p>
-<h2 id="基本语法和常用命令"><a href="#基本语法和常用命令" class="headerlink" title="基本语法和常用命令"></a>基本语法和常用命令</h2><h3 id="1-常用命令汇总"><a href="#1-常用命令汇总" class="headerlink" title="1.常用命令汇总"></a>1.常用命令汇总</h3><ul>
-<li><code>echo</code>: 显示消息</li>
-<li><code>dir</code>: 列出目录内容</li>
-<li><code>cd</code>: 更改目录</li>
-<li><code>del</code>: 删除文件</li>
-<li><code>copy</code>: 复制文件</li>
-<li><code>move</code>: 移动文件</li>
-<li><code>set</code>: 设置环境变量</li>
-<li><code>start</code>: 启动程序</li>
-<li><code>pause</code>: 暂停</li>
-<li><code>exit</code>: 退出脚本</li>
-</ul>
-<h3 id="2-回显"><a href="#2-回显" class="headerlink" title="2.回显"></a>2.回显</h3><p>在 Batch 文件中，<code>@</code> 符号用于禁止命令回显。通常，Batch 文件中的每一行命令执行时，命令本身都会被显示在命令行窗口中，除非你使用 <code>@echo off</code> 来禁止回显。具体来说：</p>
-<h4 id="1-echo-off"><a href="#1-echo-off" class="headerlink" title="1.@echo off"></a>1.<code>@echo off</code></h4><p><code>@echo off</code> 是 Batch 文件中的常见用法。它用于禁用所有命令本身的回显，也就是不显示脚本执行的命令，在此后的所有命令都不会进行回显。通常放在 Batch 文件的开头，目的是让整个脚本在执行时不会显示命令</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br></pre></td></tr></table></figure>
-
-<p>这条命令会让 Batch 文件在执行时不显示任何命令，只显示输出结果。</p>
-<h4 id="2"><a href="#2" class="headerlink" title="2.@"></a>2.<code>@</code></h4><p>在 <code>@echo off</code> 之外，<code>@</code> 可以加在任何命令的前面，来阻止该条命令的回显。例如：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> Hello, World!</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中，<code>@</code> 确保 <code>echo Hello, World!</code> 这一行命令不会被回显，只有它的输出会被显示。</p>
-<h3 id="3-注释"><a href="#3-注释" class="headerlink" title="3. 注释"></a>3. <strong>注释</strong></h3><p>在 Batch 文件中，注释是用 <code>REM</code> 或 <code>::</code> 来表示的：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM 这是一个注释</span></span><br><span class="line">:: 这也是注释</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-命令"><a href="#4-命令" class="headerlink" title="4. 命令"></a>4. <strong>命令</strong></h3><p>Batch 文件的命令通常是 Windows 命令行命令（如 <code>echo</code>、<code>dir</code>、<code>del</code> 等）。每行一个命令：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World!</span><br><span class="line"><span class="built_in">dir</span> C:\Users</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-变量"><a href="#5-变量" class="headerlink" title="5. 变量"></a>5. <strong>变量</strong></h3><p>Batch 文件支持通过 <code>%</code> 访问变量。可以用 <code>set</code> 命令来定义变量：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> MY_VAR=Hello</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%MY_VAR%</span></span><br></pre></td></tr></table></figure>
-
-<p>也可以使用 <code>set</code> 读取和修改环境变量：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> <span class="built_in">PATH</span>=<span class="variable">%PATH%</span>;C:\MyProgram</span><br></pre></td></tr></table></figure>
-
-<p><strong>特别注意，在设置变量时，<code>set</code> 命令中的等号两边不能有空格，空格会导致变量设置失败。</strong></p>
-<h3 id="6-控制流"><a href="#6-控制流" class="headerlink" title="6. 控制流"></a>6. <strong>控制流</strong></h3><p>Batch 文件支持基本的控制流结构，如条件语句和循环。</p>
-<ul>
-<li><p><strong>条件判断（if）</strong>:</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">EXIST</span> &quot;file.txt&quot; (</span><br><span class="line">    <span class="built_in">echo</span> 文件存在</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">    <span class="built_in">echo</span> 文件不存在</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>跳转（goto）</strong>: <code>goto</code> 用于跳转到文件中的指定标签（label）处：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">goto</span> MyLabel</span><br><span class="line">:MyLabel</span><br><span class="line"><span class="built_in">echo</span> 这是标签后的代码</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>循环（for）</strong>: <code>for</code> 循环可以遍历文件、目录、数字等：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="variable">%%i</span> <span class="keyword">in</span> (<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">%%i</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="7-错误处理"><a href="#7-错误处理" class="headerlink" title="7. 错误处理"></a>7. <strong>错误处理</strong></h3><p>Batch 文件支持基本的错误处理，可以使用 <code>if errorlevel</code> 来检查上一条命令的返回值：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">command</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">errorlevel</span> <span class="number">1</span> (</span><br><span class="line">    <span class="built_in">echo</span> 发生错误</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p><code>errorlevel</code> 返回值通常是 0 表示成功，非零值表示失败。</p>
-<h3 id="8-输入和输出"><a href="#8-输入和输出" class="headerlink" title="8. 输入和输出"></a>8. <strong>输入和输出</strong></h3><ul>
-<li><p><strong>输出（echo）</strong>: <code>echo</code> 用于输出信息到控制台：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World!</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>输入（set /p）</strong>: <code>set /p</code> 用于从用户获取输入：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> /p USER_INPUT=请输入你的名字: </span><br><span class="line"><span class="built_in">echo</span> 你好, <span class="variable">%USER_INPUT%</span>！</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="9-文件操作"><a href="#9-文件操作" class="headerlink" title="9. 文件操作"></a>9. <strong>文件操作</strong></h3><p>Batch 文件可以进行常见的文件操作，如删除、复制、移动等：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">del</span> file.txt           # 删除文件</span><br><span class="line"><span class="built_in">copy</span> file.txt D:\backup\ # 复制文件</span><br><span class="line"><span class="built_in">move</span> file.txt D:\backup\ # 移动文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="10-暂停"><a href="#10-暂停" class="headerlink" title="10. 暂停"></a>10. <strong>暂停</strong></h3><p>使用 <code>pause</code> 命令来暂停脚本的执行，直到用户按下任意键：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="11-启动外部程序"><a href="#11-启动外部程序" class="headerlink" title="11. 启动外部程序"></a>11. <strong>启动外部程序</strong></h3><p>Batch 文件可以启动外部程序或命令：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">start</span> &quot;notepad.exe&quot;</span><br><span class="line">：：或者</span><br><span class="line">&quot;notepad.exe&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-退出脚本"><a href="#12-退出脚本" class="headerlink" title="12. 退出脚本"></a>12. <strong>退出脚本</strong></h3><p><code>exit</code> 命令用于退出脚本：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="13-批量处理命令输出"><a href="#13-批量处理命令输出" class="headerlink" title="13. 批量处理命令输出"></a>13. <strong>批量处理命令输出</strong></h3><p>通过重定向操作符 <code>&gt;</code> 或 <code>&gt;&gt;</code>，可以将命令的输出重定向到文件中：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, World! &gt; output.txt  # 覆盖写入</span><br><span class="line"><span class="built_in">echo</span> Another line &gt;&gt; output.txt  # 追加写入</span><br></pre></td></tr></table></figure>
-
-<h3 id="14-使用命令行参数"><a href="#14-使用命令行参数" class="headerlink" title="14. 使用命令行参数"></a>14. <strong>使用命令行参数</strong></h3><p>Batch 文件支持命令行参数，通过 <code>%1</code>, <code>%2</code>, <code>%3</code> 等可以访问传递给脚本的参数。例如，<code>script.bat Hello World</code> 中，<code>%1</code> 会是 <code>Hello</code>，<code>%2</code> 会是 <code>World</code>：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> %<span class="number">1</span></span><br><span class="line"><span class="built_in">echo</span> %<span class="number">2</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="15-示例：一个简单的-Batch-脚本"><a href="#15-示例：一个简单的-Batch-脚本" class="headerlink" title="15.示例：一个简单的 Batch 脚本"></a>15.示例：一个简单的 Batch 脚本</h3><p>以下是一个示例：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">echo</span> add <span class="built_in">path</span></span><br><span class="line">:: <span class="built_in">set</span> MAYA_UI_LANGUAGE=en_US</span><br><span class="line"><span class="built_in">set</span> CURRENT_PATH=%~dp0</span><br><span class="line"><span class="keyword">for</span> <span class="variable">%%i</span> <span class="keyword">in</span> (&quot;<span class="variable">%CURRENT_PATH%</span>..&quot;) <span class="keyword">do</span> <span class="built_in">set</span> MAYA_LOCATION=<span class="variable">%%~</span>fi</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%MAYA_LOCATION%</span></span><br><span class="line"><span class="built_in">echo</span> launcher maya2024</span><br><span class="line"><span class="built_in">start</span> &quot;<span class="variable">%MAYA_LOCATION%</span>\bin\maya.exe&quot;</span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
-
-<p>首先我们关闭了所有命令行的回显，然后输出”add path“，设置maya的ui语言但是对该行代码进行了注释（将不会生效），将当前bat文件的位置路径存储到变量<code>CURRENT_PATH</code>中，然后获取 <code>CURRENT_PATH</code> 上一级目录的完整路径，并将该路径赋值给 <code>MAYA_LOCATION</code>，随后对 <code>MAYA_LOCATION</code>的值进行输出，输出”launcher maya2024“提示，最后启动maya并保留命令行输出窗口。</p>
-<h2 id="执行-Batch-文件"><a href="#执行-Batch-文件" class="headerlink" title="执行 Batch 文件"></a>执行 Batch 文件</h2><ol>
-<li>将代码保存为 <code>.bat</code> 或 <code>.cmd</code> 文件。</li>
-<li>双击文件，或者在cmd命令行中执行该文件。</li>
-</ol>
-<img src="/2024/12/27/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC%EF%BC%88bat%EF%BC%89/image-20241227125834799.png" class="" title="image-20241227125834799">
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1753,7 +1670,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

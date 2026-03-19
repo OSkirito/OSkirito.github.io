@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2026-03-19 16:17:21 / 修改时间：18:08:25" itemprop="dateCreated datePublished" datetime="2026-03-19T16:17:21+08:00">2026-03-19</time>
+              <time title="创建时间：2026-03-19 16:17:21 / 修改时间：18:11:49" itemprop="dateCreated datePublished" datetime="2026-03-19T16:17:21+08:00">2026-03-19</time>
             </span>
 
           
@@ -258,6 +258,14 @@
 <p>要注意的是我们要在应用色调映射之前添加泛光效果。这样添加的亮区的泛光，也会柔和转换为LDR，光照效果相对会更好。</p>
 <p>把两个纹理结合以后，场景亮区便有了合适的光晕特效：</p>
 <img src="/2026/03/19/36-%E6%B3%9B%E5%85%89/image-20260319180819271.png" class="" title="image-20260319180819271">
+
+<p>有颜色的立方体看起来仿佛更亮，它向外发射光芒，的确是一个更好的视觉效果。这个场景比较简单，所以泛光效果不算十分令人瞩目，但在更充足照明的场景中合理配置之后效果会有明显的不同。你可以在这里找到这个简单示例的源代码。</p>
+<p>这个教程我们只是用了一个相对简单的高斯模糊过滤器，它在每个方向上只有5个样本。通过沿着更大的半径或重复更多次数的模糊，进行采样我们就可以提升模糊的效果。因为模糊的质量与泛光效果的质量正相关，提升模糊效果就能够提升泛光效果。有些提升将模糊过滤器与不同大小的模糊kernel或采用多个高斯曲线来选择性地结合权重结合起来使用。来自Kalogirou和EpicGames的附加资源讨论了如何通过提升高斯模糊来显著提升泛光效果。</p>
+<h2 id="附加资源"><a href="#附加资源" class="headerlink" title="附加资源"></a>附加资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/">Efficient Gaussian Blur with linear sampling</a>：非常详细地描述了高斯模糊，以及如何使用OpenGL的双线性纹理采样提升性能。</li>
+<li><a target="_blank" rel="noopener" href="https://udn.epicgames.com/Three/Bloom.html">Bloom Post Process Effect</a>：来自Epic Games关于通过对权重的多个高斯曲线结合来提升泛光效果的文章。</li>
+<li><a target="_blank" rel="noopener" href="http://kalogirou.net/2006/05/20/how-to-do-good-bloom-for-hdr-rendering/">How to do good bloom for HDR rendering</a>：Kalogirou的文章描述了如何使用更好的高斯模糊算法来提升泛光效果。</li>
+</ul>
 
       
     </div>

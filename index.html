@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">60</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,354 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/09/40-PBR%E5%85%89%E7%85%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/07/09/40-PBR%E5%85%89%E7%85%A7/" class="post-title-link" itemprop="url">40-PBR光照</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-07-09 15:38:26 / 修改时间：15:39:24" itemprop="dateCreated datePublished" datetime="2026-07-09T15:38:26+08:00">2026-07-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在上一个教程中，我们讨论了一些PBR的基础知识。在本章节中，我们把重点放在将之前讨论的理论转化为实际的渲染器，这个渲染器将使用直接的（或解析的）光源：比如点光源，定向灯或聚光灯。</p>
+<p>我们先来看看上一个章提到的反射方程的最终版：</p>
+<img src="/2026/07/09/40-PBR%E5%85%89%E7%85%A7/image-20260709153923131.png" class="" title="image-20260709153923131">
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/" class="post-title-link" itemprop="url">39-PBR理论</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-07-09 10:32:33 / 修改时间：15:36:48" itemprop="dateCreated datePublished" datetime="2026-07-09T10:32:33+08:00">2026-07-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>PBR，用更通俗一些的称呼是指基于物理的渲染(Physically Based Rendering)，它指的是一些在不同程度上都基于与现实世界的物理原理更相符的基本理论所构成的渲染技术的集合。正因为基于物理的渲染目的便是为了使用一种更符合物理学规律的方式来模拟光线，因此这种渲染方式与我们原来的Phong或者Blinn-Phong光照算法相比总体上看起来要更真实一些。除了看起来更好些以外，由于它与物理性质非常接近，因此我们可以直接以物理参数为依据来编写表面材质，而不必依靠粗劣的修改与调整来让光照效果看上去正常。使用基于物理参数的方法来编写材质还有一个更大的好处，就是不论光照条件如何，这些材质看上去都会是正确的，而在非PBR的渲染管线当中有些东西就不会那么真实了。</p>
+<p>虽然如此，基于物理的渲染仍然只是对基于物理原理的现实世界的一种近似，这也就是为什么它被称为基于物理的着色(Physically based Shading) 而非物理着色(Physical Shading)的原因。判断一种PBR光照模型是否是基于物理的，必须满足以下三个条件：</p>
+<ol>
+<li>基于微平面(Microfacet)的表面模型。</li>
+<li>能量守恒。</li>
+<li>应用基于物理的BRDF。</li>
+</ol>
+<p>在这次的PBR系列教程之中，我们将会把重点放在最先由迪士尼(Disney)提出探讨并被Epic Games首先应用于实时渲染的PBR方案。他们基于金属质地工作流(Metallic Workflow)的方案有非常完备的文献记录，广泛应用于各种流行的引擎之中并且有着非常逼真的视觉效果。完成这次的教程之后我们将会制作出类似于这样的一些东西：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/ibl_specular_result_textured.png" class="" title="img">
+
+<p>请注意这个系列的教程所探讨的内容属于相当高端的领域，因此要求读者对OpenGL和着色器光照有较好的理解。读者将会需要这些相关的知识：帧缓冲，立方体贴图，Gamma校正，HDR和法线贴图。还会深入探讨一些高等数学的内容，我会尽我所能将相关的概念阐述清楚。</p>
+<h2 id="微平面模型"><a href="#微平面模型" class="headerlink" title="微平面模型"></a>微平面模型</h2><p>所有的PBR技术都基于微平面理论。这项理论认为，达到微观尺度之后任何平面都可以用被称为微平面(Microfacets)的细小镜面来进行描绘。根据平面粗糙程度的不同，这些细小镜面的取向排列可以相当不一致：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/microfacets.png" class="" title="img">
+
+<p>产生的效果就是：一个平面越是粗糙，这个平面上的微平面的排列就越混乱。这些微小镜面这样无序取向排列的影响就是，当我们特指镜面光/镜面反射时，入射光线更趋向于向完全不同的方向发散(Scatter)开来，进而产生出分布范围更广泛的镜面反射。而与之相反的是，对于一个光滑的平面，光线大体上会更趋向于向同一个方向反射，造成更小更锐利的反射：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/microfacets_light_rays.png" class="" title="img">
+
+<p>在微观尺度下，没有任何平面是完全光滑的。然而由于这些微平面已经微小到无法逐像素地继续对其进行区分，因此我们假设一个粗糙度(Roughness)参数，然后用统计学的方法来估计微平面的粗糙程度。我们可以基于一个平面的粗糙度来计算出众多微平面中，朝向方向沿着某个向量h方向的比例。这个向量h便是位于光线向量l和视线向量v之间的半程向量(Halfway Vector)。我们曾经在之前的高级光照教程中谈到过中间向量，它的计算方法如下：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709111756515.png" class="" title="image-20260709111756515">
+
+<p>微平面的朝向方向与半程向量的方向越是一致，镜面反射的效果就越是强烈越是锐利。通过使用一个介于0到1之间的粗糙度参数，我们就能概略地估算微平面的取向情况了：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/ndf.png" class="" title="img">
+
+<p>我们可以看到，较高的粗糙度显示出来的镜面反射的轮廓要更大一些。与之相反，较小的粗糙度显示出的镜面反射轮廓则更小更锐利。</p>
+<h2 id="能量守恒"><a href="#能量守恒" class="headerlink" title="能量守恒"></a>能量守恒</h2><p>微平面近似法使用了这样一种形式的能量守恒(Energy Conservation)：出射光线的能量永远不能超过入射光线的能量（发光面除外）。如上图我们可以看到，随着粗糙度的上升，镜面反射区域会增加，但是镜面反射的亮度却会下降。如果每个像素的镜面反射强度都一样（不管反射轮廓的大小），那么粗糙的平面就会放射出过多的能量，而这样就违背了能量守恒定律。这也就是为什么正如我们看到的一样，光滑平面的镜面反射更强烈而粗糙平面的反射更昏暗。</p>
+<p>为了遵守能量守恒定律，我们需要对漫反射光和镜面反射光做出明确的区分。当一束光线碰撞到一个表面的时候，它就会分离成一个折射部分和一个反射部分。反射部分就是会直接反射开而不进入平面的那部分光线，也就是我们所说的镜面光照。而折射部分就是余下的会进入表面并被吸收的那部分光线，也就是我们所说的漫反射光照。</p>
+<p>这里还有一些细节需要处理，因为当光线接触到一个表面的时候折射光是不会立即就被吸收的。通过物理学我们可以得知，光线实际上可以被认为是一束没有耗尽就不停向前运动的能量，而光束是通过碰撞的方式来消耗能量。每一种材料都是由无数微小的粒子所组成，这些粒子都能如下图所示一样与光线发生碰撞。这些粒子在每次的碰撞中都可以吸收光线所携带的一部分或者是全部的能量而后转变成为热量。</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/surface_reaction.png" class="" title="img">
+
+<p>一般来说，并非全部能量都会被吸收，而光线也会继续沿着（基本上）随机的方向发散，然后再和其他的粒子碰撞直至能量完全耗尽或者再次离开这个表面。而光线脱离物体表面后将会协同构成该表面的（漫反射）颜色。不过在基于物理的渲染之中我们进行了简化，假设对平面上的每一点所有的折射光都会被完全吸收而不会散开。而有一些被称为次表面散射(Subsurface Scattering)技术的着色器技术将这个问题考虑了进去，它们显著地提升了一些诸如皮肤，大理石或者蜡质这样材质的视觉效果，不过伴随而来的代价是性能的下降。</p>
+<p>对于金属(Metallic)表面，当讨论到反射与折射的时候还有一个细节需要注意。金属表面对光的反应与非金属（也被称为介电质(Dielectrics)）表面相比是不同的。它们遵从的反射与折射原理是相同的，但是<strong>所有的</strong>折射光都会被直接吸收而不会散开，只留下反射光或者说镜面反射光。亦即是说，金属表面只会显示镜面反射颜色，而不会显示出漫反射颜色。由于金属与电介质之间存在这样明显的区别，因此它们两者在PBR渲染管线中被区别处理，而我们将在文章的后面进一步详细探讨这个问题。</p>
+<p>反射光与折射光之间的这个区别使我们得到了另一条关于能量守恒的经验结论：反射光与折射光它们二者之间是<strong>互斥</strong>的关系。无论何种光线，其被材质表面所反射的能量将无法再被材质吸收。因此，诸如折射光这样的余下的进入表面之中的能量正好就是我们计算完反射之后余下的能量。</p>
+<p>我们按照能量守恒的关系，首先计算镜面反射部分，它的值等于入射光线被反射的能量所占的百分比。然后折射光部分就可以直接由镜面反射部分计算得出：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> kS = <span class="built_in">calculateSpecularComponent</span>(...); <span class="comment">// 反射/镜面 部分</span></span><br><span class="line"><span class="type">float</span> kD = <span class="number">1.0</span> - ks;                        <span class="comment">// 折射/漫反射 部分</span></span><br></pre></td></tr></table></figure>
+
+<p>这样我们就能在遵守能量守恒定律的前提下知道入射光线的反射部分与折射部分所占的总量了。按照这种方法折射/漫反射与反射/镜面反射所占的份额都不会超过1.0，如此就能保证它们的能量总和永远不会超过入射光线的能量。而这些都是我们在前面的光照教程中没有考虑的问题。</p>
+<h2 id="反射率方程"><a href="#反射率方程" class="headerlink" title="反射率方程"></a>反射率方程</h2><p>在这里我们引入了一种被称为渲染方程(Render Equation)的东西。它是某些聪明绝顶的人所构想出来的一个精妙的方程式，是如今我们所拥有的用来模拟光的视觉效果最好的模型。基于物理的渲染所坚定遵循的是一种被称为反射率方程(The Reflectance Equation)的渲染方程的特化版本。要正确地理解PBR，很重要的一点就是要首先透彻地理解反射率方程：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709114704610.png" class="" title="image-20260709114704610">
+
+<p>反射率方程一开始可能会显得有些吓人，不过随着我们慢慢对其进行剖析，最终会逐渐理解它的。要正确地理解这个方程式，我们必须要稍微涉足一些辐射度量学(Radiometry)的内容。辐射度量学是一种用来度量电磁场辐射（包括可见光）的手段。有很多种辐射度量(radiometric quantities)可以用来测量曲面或者某个方向上的光，但是我们将只会讨论其中和反射率方程有关的一种。它被称为辐射率(Radiance)，在这里用L来表示。辐射率被用来量化来自单一方向上的光线的大小或者强度。由于辐射率是由许多物理变量集合而成的，一开始理解起来可能有些困难，因此我们首先关注一下这些物理量：</p>
+<p><strong>辐射通量</strong>：辐射通量Φ表示的是一个光源所输出的能量，以瓦特为单位。光是由多种不同波长的能量所集合而成的，而每种波长则与一种特定的（可见的）颜色相关。因此一个光源所放射出来的能量可以被视作这个光源包含的所有各种波长的一个函数。波长介于390nm到700nm（纳米）的光被认为是处于可见光光谱中，也就是说它们是人眼可见的波长。在下面你可以看到一幅图片，里面展示了日光中不同波长的光所具有的能量：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/daylight_spectral_distribution.png" class="" title="img">
+
+<p>辐射通量将会计算这个由不同波长构成的函数的总面积。直接将这种对不同波长的计量作为参数输入计算机图形有一些不切实际，因此我们通常不直接使用波长的强度而是使用三原色编码，也就是<strong>RGB</strong>（或者按通常的称呼：光色）来作为辐射通量表示的简化。这套编码确实会带来一些信息上的损失，但是这对于视觉效果上的影响基本可以忽略。</p>
+<p><strong>立体角</strong>：立体角用ω表示，它可以为我们描述投射到单位球体上的一个截面的大小或者面积。投射到这个单位球体上的截面的面积就被称为立体角(Solid Angle)，你可以把立体角想象成为一个带有体积的方向：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/solid_angle.png" class="" title="img">
+
+<p>可以把自己想象成为一个站在单位球面的中心的观察者，向着投影的方向看。这个投影轮廓的大小就是立体角。</p>
+<p><strong>辐射强度</strong>：辐射强度(Radiant Intensity)表示的是在单位球面上，一个光源向每单位立体角所投送的辐射通量。举例来说，假设一个全向光源向所有方向均匀的辐射能量，辐射强度就能帮我们计算出它在一个单位面积（立体角）内的能量大小：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/radiant_intensity.png" class="" title="img">
+
+<p>计算辐射强度的公式如下所示：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709142228075.png" class="" title="image-20260709142228075">
+
+<p>其中I表示辐射通量Φ除以立体角ω。</p>
+<p>在理解了辐射通量，辐射强度与立体角的概念之后，我们终于可以开始讨论<strong>辐射率</strong>的方程式了。这个方程表示的是，一个拥有辐射强度Φ的光源在单位面积A，单位立体角ω上的辐射出的总能量：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709142312653.png" class="" title="image-20260709142312653">
+
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/radiance.png" class="" title="img">
+
+<p>辐射率是辐射度量学上表示一个区域平面上光线总量的物理量，它受到入射(Incident)光线与平面法线间的夹角θ的余弦值cosθ的影响：当直接辐射到平面上的程度越低时，光线就越弱，而当光线完全垂直于平面时强度最高。这和我们在前面的基础光照教程中对于漫反射光照的概念相似，其中cosθ就直接对应于光线的方向向量和平面法向量的点积：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> cosTheta = <span class="built_in">dot</span>(lightDir, N);</span><br></pre></td></tr></table></figure>
+
+<p>辐射率方程很有用，因为它把大部分我们感兴趣的物理量都包含了进去。如果我们把立体角ω和面积A看作是无穷小的，那么我们就能用辐射率来表示单束光线穿过空间中的一个点的通量。这就使我们可以计算得出作用于单个（片段）点上的单束光线的辐射率，我们实际上把立体角ω转变为方向向量ω然后把面A转换为点p。这样我们就能直接在我们的着色器中使用辐射率来计算单束光线对每个片段的作用了。</p>
+<p>事实上，当涉及到辐射率时，我们通常关心的是所有投射到点p上的光线的总和，而这个和就称为辐射照度或者辐照度(Irradiance)。在理解了辐射率和辐照度的概念之后，让我们再回过头来看看反射率方程：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709142635920.png" class="" title="image-20260709142635920">
+
+<p>我们知道在渲染方程中L代表通过某个无限小的立体角ωi在某个点上的辐射率，而立体角可以视作是入射方向向量ωi。注意我们利用光线和平面间的入射角的余弦值cosθ来计算能量，亦即从辐射率公式L转化至反射率公式时的n⋅ωi。用ωo表示观察方向，也就是出射方向，反射率公式计算了点p在ωo方向上被反射出来的辐射率Lo(p,ωo)的总和。或者换句话说：Lo表示了从ωo方向上观察，光线投射到点p上反射出来的辐照度。</p>
+<p>基于反射率公式是围绕所有入射辐射率的总和，也就是辐照度来计算的，所以我们需要计算的就不只是是单一的一个方向上的入射光，而是一个以点p为球心的半球领域Ω内所有方向上的入射光。一个半球领域(Hemisphere)可以描述为以平面法线n为轴所环绕的半个球体：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/hemisphere.png" class="" title="img">
+
+<p>为了计算某些面积的值，或者像是在半球领域的问题中计算某一个体积的时候我们会需要用到一种称为积分(Integral)的数学手段，也就是反射率公式中的符号∫，它的运算包含了半球领域Ω内所有入射方向上的dωi 。积分运算的值等于一个函数曲线的面积，它的计算结果要么是解析解要么就是数值解。由于渲染方程和反射率方程都没有解析解，我们将会用离散的方法来求得这个积分的数值解。这个问题就转化为，在半球领域Ω中按一定的步长将反射率方程分散求解，然后再按照步长大小将所得到的结果平均化。这种方法被称为黎曼和(Riemann sum) ，我们可以用下面的代码粗略的演示一下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> steps = <span class="number">100</span>;</span><br><span class="line"><span class="type">float</span> sum = <span class="number">0.0f</span>;</span><br><span class="line">vec3 P    = ...;</span><br><span class="line">vec3 Wo   = ...;</span><br><span class="line">vec3 N    = ...;</span><br><span class="line"><span class="type">float</span> dW  = <span class="number">1.0f</span> / steps;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; steps; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    vec3 Wi = <span class="built_in">getNextIncomingLightDir</span>(i);</span><br><span class="line">    sum += <span class="built_in">Fr</span>(p, Wi, Wo) * <span class="built_in">L</span>(p, Wi) * <span class="built_in">dot</span>(N, Wi) * dW;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过利用<code>dW</code>来对所有离散部分进行缩放，其和最后就等于积分函数的总面积或者总体积。这个用来对每个离散步长进行缩放的<code>dW</code>可以认为就是反射率方程中的dωi 。在数学上，用来计算积分的dωi 表示的是一个连续的符号，而我们使用的<code>dW</code>在代码中和它并没有直接的联系（因为它代表的是黎曼和中的离散步长），这样说是为了可以帮助你理解。请牢记，使用离散步长得到的是函数总面积的一个近似值。细心的读者可能已经注意到了，我们可以通过增加离散部分的数量来提高黎曼和的准确度。</p>
+<p>反射率方程概括了在半球领域Ω内，碰撞到了点p上的所有入射方向ωi 上的光线的辐射率，并受到fr的约束，然后返回观察方向上反射光的Lo。正如我们所熟悉的那样，入射光辐射率可以由光源处获得，此外还可以利用一个环境贴图来测算所有入射方向上的辐射率，我们将在后续的教程中讨论这个方法。</p>
+<p>现在唯一剩下的未知符号就是fr了，它被称为BRDF，或者双向反射分布函数(Bidirectional Reflective Distribution Function) ，它的作用是基于表面材质属性来对入射辐射率进行缩放或者加权。</p>
+<h2 id="BRDF"><a href="#BRDF" class="headerlink" title="BRDF"></a>BRDF</h2><p>BRDF，或者说双向反射分布函数，它接受入射（光）方向ωi，出射（观察）方向ωo，平面法线n以及一个用来表示微平面粗糙程度的参数a作为函数的输入参数。BRDF可以近似的求出每束光线对一个给定了材质属性的平面上最终反射出来的光线所作出的贡献程度。举例来说，如果一个平面拥有完全光滑的表面（比如镜面），那么对于所有的入射光线ωi（除了一束以外）而言BRDF函数都会返回0.0 ，只有一束与出射光线ωo拥有相同（被反射）角度的光线会得到1.0这个返回值。</p>
+<p>BRDF基于我们之前所探讨过的微平面理论来近似的求得材质的反射与折射属性。对于一个BRDF，为了实现物理学上的可信度，它必须遵守能量守恒定律，也就是说反射光线的总和永远不能超过入射光线的总量。严格上来说，同样采用ωi和ωo作为输入参数的 Blinn-Phong光照模型也被认为是一个BRDF。然而由于Blinn-Phong模型并没有遵循能量守恒定律，因此它不被认为是基于物理的渲染。现在已经有很好几种BRDF都能近似的得出物体表面对于光的反应，但是几乎所有实时渲染管线使用的都是一种被称为Cook-Torrance BRDF模型。</p>
+<p>Cook-Torrance BRDF兼有漫反射和镜面反射两个部分：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709151553127.png" class="" title="image-20260709151553127">
+
+<p>这里的kd是早先提到过的入射光线中被折射部分的能量所占的比率，而ks是被反射部分的比率。BRDF的左侧表示的是漫反射部分，这里用flambert来表示。它被称为Lambertian漫反射，这和我们之前在漫反射着色中使用的常数因子类似，用如下的公式来表示：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709151632141.png" class="" title="image-20260709151632141">
+
+<p>c表示表面颜色（回想一下漫反射表面纹理）。除以π是为了对漫反射光进行标准化，因为前面含有BRDF的积分方程是受π影响的。</p>
+<p>目前存在着许多不同类型的模型来实现BRDF的漫反射部分，大多看上去都相当真实，但是相应的运算开销也非常的昂贵。不过按照Epic公司给出的结论，Lambertian漫反射模型已经足够应付大多数实时渲染的用途了。</p>
+<p>BRDF的镜面反射部分要稍微更高级一些，它的形式如下所示：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709151737142.png" class="" title="image-20260709151737142">
+
+<p>Cook-Torrance BRDF的镜面反射部分包含三个函数，此外分母部分还有一个标准化因子 。字母D，F与G分别代表着一种类型的函数，各个函数分别用来近似的计算出表面反射特性的一个特定部分。三个函数分别为法线分布函数(Normal <strong>D</strong>istribution Function)，菲涅尔方程(<strong>F</strong>resnel Rquation)和几何函数(<strong>G</strong>eometry Function)：</p>
+<ul>
+<li><strong>法线分布函数</strong>：估算在受到表面粗糙度的影响下，朝向方向与半程向量一致的微平面的数量。这是用来估算微平面的主要函数。</li>
+<li><strong>几何函数</strong>：描述了微平面自成阴影的属性。当一个平面相对比较粗糙的时候，平面表面上的微平面有可能挡住其他的微平面从而减少表面所反射的光线。</li>
+<li><strong>菲涅尔方程</strong>：菲涅尔方程描述的是在不同的表面角下表面所反射的光线所占的比率。</li>
+</ul>
+<p>以上的每一种函数都是用来估算相应的物理参数的，而且你会发现用来实现相应物理机制的每种函数都有不止一种形式。它们有的非常真实，有的则性能高效。你可以按照自己的需求任意选择自己想要的函数的实现方法。英佩游戏公司的Brian Karis对于这些函数的多种近似实现方式进行了大量的<a target="_blank" rel="noopener" href="http://graphicrants.blogspot.nl/2013/08/specular-brdf-reference.html">研究</a>。我们将会采用Epic Games在Unreal Engine 4中所使用的函数，其中D使用Trowbridge-Reitz GGX，F使用Fresnel-Schlick近似(Fresnel-Schlick Approximation)，而G使用Smith’s Schlick-GGX。</p>
+<h3 id="法线分布函数"><a href="#法线分布函数" class="headerlink" title="法线分布函数"></a>法线分布函数</h3><p>法线分布函数D，从统计学上近似地表示了与某些（半程）向量h取向一致的微平面的比率。举例来说，假设给定向量h，如果我们的微平面中有35%与向量h取向一致，则法线分布函数或者说NDF将会返回0.35。目前有很多种NDF都可以从统计学上来估算微平面的总体取向度，只要给定一些粗糙度的参数。我们马上将要用到的是Trowbridge-Reitz GGX：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709152800233.png" class="" title="image-20260709152800233">
+
+<p>在这里h表示用来与平面上微平面做比较用的半程向量，而a表示表面粗糙度。</p>
+<p>如果我们把h当成是不同粗糙度参数下，平面法向量和光线方向向量之间的中间向量的话，我们可以得到如下图示的效果：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/ndf-178358209639611.png" class="" title="img">
+
+<p>当粗糙度很低（也就是说表面很光滑）的时候，与半程向量取向一致的微平面会高度集中在一个很小的半径范围内。由于这种集中性，NDF最终会生成一个非常明亮的斑点。但是当表面比较粗糙的时候，微平面的取向方向会更加的随机。你将会发现与h向量取向一致的微平面分布在一个大得多的半径范围内，但是同时较低的集中性也会让我们的最终效果显得更加灰暗。</p>
+<p>使用GLSL代码编写的Trowbridge-Reitz GGX法线分布函数是下面这个样子的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">float</span> <span class="title">D_GGX_TR</span><span class="params">(vec3 N, vec3 H, <span class="type">float</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">float</span> a2     = a*a;</span><br><span class="line">    <span class="type">float</span> NdotH  = <span class="built_in">max</span>(<span class="built_in">dot</span>(N, H), <span class="number">0.0</span>);</span><br><span class="line">    <span class="type">float</span> NdotH2 = NdotH*NdotH;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> nom    = a2;</span><br><span class="line">    <span class="type">float</span> denom  = (NdotH2 * (a2 - <span class="number">1.0</span>) + <span class="number">1.0</span>);</span><br><span class="line">    denom        = PI * denom * denom;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> nom / denom;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="几何函数"><a href="#几何函数" class="headerlink" title="几何函数"></a>几何函数</h3><p>几何函数从统计学上近似的求得了微平面间相互遮蔽的比率，这种相互遮蔽会损耗光线的能量。</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/geometry_shadowing.png" class="" title="img">
+
+<p>与NDF类似，几何函数采用一个材料的粗糙度参数作为输入参数，粗糙度较高的表面其微平面间相互遮蔽的概率就越高。我们将要使用的几何函数是GGX与Schlick-Beckmann近似的结合体，因此又称为Schlick-GGX：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709152924439.png" class="" title="image-20260709152924439">
+
+<p>这里的k是α的重映射(Remapping)，取决于我们要用的是针对直接光照还是针对IBL光照的几何函数:</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709152950999.png" class="" title="image-20260709152950999">
+
+<p>注意，根据你的引擎把粗糙度转化为α的方式不同，得到α的值也有可能不同。在接下来的教程中，我们将会广泛的讨论这个重映射是如何起作用的。</p>
+<p>为了有效的估算几何部分，需要将观察方向（几何遮蔽(Geometry Obstruction)）和光线方向向量（几何阴影(Geometry Shadowing)）都考虑进去。我们可以使用史密斯法(Smith’s method)来把两者都纳入其中：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709153024143.png" class="" title="image-20260709153024143">
+
+<p>使用史密斯法与Schlick-GGX作为Gsub可以得到如下所示不同粗糙度的视觉效果：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/geometry.png" class="" title="img">
+
+<p>几何函数是一个值域为[0.0, 1.0]的乘数，其中白色或者说1.0表示没有微平面阴影，而黑色或者说0.0则表示微平面彻底被遮蔽。</p>
+<p>使用GLSL编写的几何函数代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">float</span> <span class="title">GeometrySchlickGGX</span><span class="params">(<span class="type">float</span> NdotV, <span class="type">float</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">float</span> nom   = NdotV;</span><br><span class="line">    <span class="type">float</span> denom = NdotV * (<span class="number">1.0</span> - k) + k;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> nom / denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">GeometrySmith</span><span class="params">(vec3 N, vec3 V, vec3 L, <span class="type">float</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">float</span> NdotV = <span class="built_in">max</span>(<span class="built_in">dot</span>(N, V), <span class="number">0.0</span>);</span><br><span class="line">    <span class="type">float</span> NdotL = <span class="built_in">max</span>(<span class="built_in">dot</span>(N, L), <span class="number">0.0</span>);</span><br><span class="line">    <span class="type">float</span> ggx1 = <span class="built_in">GeometrySchlickGGX</span>(NdotV, k);</span><br><span class="line">    <span class="type">float</span> ggx2 = <span class="built_in">GeometrySchlickGGX</span>(NdotL, k);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ggx1 * ggx2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="菲涅尔方程"><a href="#菲涅尔方程" class="headerlink" title="菲涅尔方程"></a>菲涅尔方程</h3><p>菲涅尔（发音为Freh-nel）方程描述的是被反射的光线对比光线被折射的部分所占的比率，这个比率会随着我们观察的角度不同而不同。当光线碰撞到一个表面的时候，菲涅尔方程会根据观察角度告诉我们被反射的光线所占的百分比。利用这个反射比率和能量守恒原则，我们可以直接得出光线被折射的部分以及光线剩余的能量。</p>
+<p>当垂直观察的时候，任何物体或者材质表面都有一个基础反射率(Base Reflectivity)，但是如果以一定的角度往平面上看的时候<a target="_blank" rel="noopener" href="http://filmicgames.com/archives/557">所有</a>反光都会变得明显起来。你可以自己尝试一下，用垂直的视角观察你自己的木制/金属桌面，此时一定只有最基本的反射性。但是如果你从近乎90度（指和法线的夹角）的角度观察的话反光就会变得明显的多。如果从理想的90度视角观察，所有的平面理论上来说都能完全的反射光线。这种现象因菲涅尔而闻名，并体现在了菲涅尔方程之中。</p>
+<p>菲涅尔方程是一个相当复杂的方程式，不过幸运的是菲涅尔方程可以用Fresnel-Schlick近似法求得近似解：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709153158662.png" class="" title="image-20260709153158662">
+
+<p>F0表示平面的基础反射率，它是利用所谓<strong>折射指数</strong>(Indices of Refraction)或者说IOR计算得出的。然后正如你可以从球体表面看到的那样，我们越是朝球面掠角的方向上看（此时视线和表面法线的夹角接近90度）菲涅尔现象就越明显，反光就越强：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/fresnel.png" class="" title="img">
+
+<p>菲涅尔方程还存在一些细微的问题。其中一个问题是Fresnel-Schlick近似仅仅对电介质或者说非金属表面有定义。对于导体(Conductor)表面（金属），使用它们的折射指数计算基础折射率并不能得出正确的结果，这样我们就需要使用一种不同的菲涅尔方程来对导体表面进行计算。由于这样很不方便，所以我们预计算出平面对于法向入射的结果（F0，处于0度角，好像直接看向表面一样），然后基于相应观察角的Fresnel-Schlick近似对这个值进行插值，用这种方法来进行进一步的估算。这样我们就能对金属和非金属材质使用同一个公式了。</p>
+<p>平面对于法向入射的响应或者说基础反射率可以在一些大型数据库中找到，比如<a target="_blank" rel="noopener" href="http://refractiveindex.info/">这个</a>。下面列举的这一些常见数值就是从Naty Hoffman的课程讲义中所得到的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">材料</th>
+<th align="center">F0 (线性)</th>
+<th align="center">F0 (sRGB)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">水</td>
+<td align="center">(0.02, 0.02, 0.02)</td>
+<td align="center">(0.15, 0.15, 0.15)</td>
+</tr>
+<tr>
+<td align="center">塑料/玻璃（低）</td>
+<td align="center">(0.03, 0.03, 0.03)</td>
+<td align="center">(0.21, 0.21, 0.21)</td>
+</tr>
+<tr>
+<td align="center">塑料（高）</td>
+<td align="center">(0.05, 0.05, 0.05)</td>
+<td align="center">(0.24, 0.24, 0.24)</td>
+</tr>
+<tr>
+<td align="center">玻璃（高）/红宝石</td>
+<td align="center">(0.08, 0.08, 0.08)</td>
+<td align="center">(0.31, 0.31, 0.31)</td>
+</tr>
+<tr>
+<td align="center">钻石</td>
+<td align="center">(0.17, 0.17, 0.17)</td>
+<td align="center">(0.45, 0.45, 0.45)</td>
+</tr>
+<tr>
+<td align="center">铁</td>
+<td align="center">(0.56, 0.57, 0.58)</td>
+<td align="center">(0.77, 0.78, 0.78)</td>
+</tr>
+<tr>
+<td align="center">铜</td>
+<td align="center">(0.95, 0.64, 0.54)</td>
+<td align="center">(0.98, 0.82, 0.76)</td>
+</tr>
+<tr>
+<td align="center">金</td>
+<td align="center">(1.00, 0.71, 0.29)</td>
+<td align="center">(1.00, 0.86, 0.57)</td>
+</tr>
+<tr>
+<td align="center">铝</td>
+<td align="center">(0.91, 0.92, 0.92)</td>
+<td align="center">(0.96, 0.96, 0.97)</td>
+</tr>
+<tr>
+<td align="center">银</td>
+<td align="center">(0.95, 0.93, 0.88)</td>
+<td align="center">(0.98, 0.97, 0.95)</td>
+</tr>
+</tbody></table>
+<p>这里可以观察到的一个有趣的现象，所有电介质材质表面的基础反射率都不会高于0.17，这其实是例外而非普遍情况。导体材质表面的基础反射率起点更高一些并且（大多）在0.5和1.0之间变化。此外，对于导体或者金属表面而言基础反射率一般是带有色彩的，这也是为什么F0要用RGB三原色来表示的原因（法向入射的反射率可随波长不同而不同）。这种现象我们<strong>只能</strong>在金属表面观察的到。</p>
+<p>这些金属表面相比于电介质表面所独有的特性引出了所谓的金属工作流的概念。也就是我们需要额外使用一个被称为金属度(Metalness)的参数来参与编写表面材质。金属度用来描述一个材质表面是金属还是非金属的。</p>
+<p>通过预先计算电介质与导体的F0值，我们可以对两种类型的表面使用相同的Fresnel-Schlick近似，但是如果是金属表面的话就需要对基础反射率添加色彩。我们一般是按下面这样来实现的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vec3 F0 = <span class="built_in">vec3</span>(<span class="number">0.04</span>);</span><br><span class="line">F0      = <span class="built_in">mix</span>(F0, surfaceColor.rgb, metalness);</span><br></pre></td></tr></table></figure>
+
+<p>我们为大多数电介质表面定义了一个近似的基础反射率。F0取最常见的电解质表面的平均值，这又是一个近似值。不过对于大多数电介质表面而言使用0.04作为基础反射率已经足够好了，而且可以在不需要输入额外表面参数的情况下得到物理可信的结果。然后，基于金属表面特性，我们要么使用电介质的基础反射率要么就使用F0来作为表面颜色。因为金属表面会吸收所有折射光线而没有漫反射，所以我们可以直接使用表面颜色纹理来作为它们的基础反射率。</p>
+<p>Fresnel Schlick近似可以用代码表示为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vec3 <span class="title">fresnelSchlick</span><span class="params">(<span class="type">float</span> cosTheta, vec3 F0)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> F0 + (<span class="number">1.0</span> - F0) * <span class="built_in">pow</span>(<span class="number">1.0</span> - cosTheta, <span class="number">5.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>cosTheta</code>是表面法向量n与观察方向v的点乘的结果。</p>
+<h3 id="Cook-Torrance反射率方程"><a href="#Cook-Torrance反射率方程" class="headerlink" title="Cook-Torrance反射率方程"></a>Cook-Torrance反射率方程</h3><p>随着Cook-Torrance BRDF中所有元素都介绍完毕，我们现在可以将基于物理的BRDF纳入到最终的反射率方程当中去了：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/image-20260709153511149.png" class="" title="image-20260709153511149">
+
+<p>这个方程现在完整的描述了一个基于物理的渲染模型，它现在可以认为就是我们一般意义上理解的基于物理的渲染也就是PBR。如果你还没有能完全理解我们将如何把所有这些数学运算结合到一起并融入到代码当中去的话也不必担心。在下一个教程当中，我们将探索如何实现反射率方程来在我们渲染的光照当中获得更加物理可信的结果，而所有这些零零星星的碎片将会慢慢组合到一起来。</p>
+<h2 id="编写PBR材质"><a href="#编写PBR材质" class="headerlink" title="编写PBR材质"></a>编写PBR材质</h2><p>在了解了PBR后面的数学模型之后，最后我们将通过说明美术师一般是如何编写一个我们可以直接输入PBR的平面物理属性的来结束这部分的讨论。PBR渲染管线所需要的每一个表面参数都可以用纹理来定义或者建模。使用纹理可以让我们逐个片段的来控制每个表面上特定的点对于光线是如何响应的：不论那个点是不是金属，粗糙或者平滑，也不论表面对于不同波长的光会有如何的反应。</p>
+<p>在下面你可以看到在一个PBR渲染管线当中经常会碰到的纹理列表，还有将它们输入PBR渲染器所能得到的相应的视觉输出：</p>
+<img src="/2026/07/09/39-PBR%E7%90%86%E8%AE%BA/textures.png" class="" title="img">
+
+<p><strong>反照率</strong>：反照率(Albedo)纹理为每一个金属的纹素(Texel)（纹理像素）指定表面颜色或者基础反射率。这和我们之前使用过的漫反射纹理相当类似，不同的是所有光照信息都是由一个纹理中提取的。漫反射纹理的图像当中常常包含一些细小的阴影或者深色的裂纹，而反照率纹理中是不会有这些东西的。它应该只包含表面的颜色（或者折射吸收系数）。</p>
+<p><strong>法线</strong>：法线贴图纹理和我们之前在法线贴图教程中所使用的贴图是完全一样的。法线贴图使我们可以逐片段的指定独特的法线，来为表面制造出起伏不平的假象。</p>
+<p><strong>金属度</strong>：金属(Metallic)贴图逐个纹素的指定该纹素是不是金属质地的。根据PBR引擎设置的不同，美术师们既可以将金属度编写为灰度值又可以编写为1或0这样的二元值。</p>
+<p><strong>粗糙度</strong>：粗糙度(Roughness)贴图可以以纹素为单位指定某个表面有多粗糙。采样得来的粗糙度数值会影响一个表面的微平面统计学上的取向度。一个比较粗糙的表面会得到更宽阔更模糊的镜面反射（高光），而一个比较光滑的表面则会得到集中而清晰的镜面反射。某些PBR引擎预设采用的是对某些美术师来说更加直观的光滑度(Smoothness)贴图而非粗糙度贴图，不过这些数值在采样之时就马上用（1.0 – 光滑度）转换成了粗糙度。</p>
+<p><strong>AO</strong>：环境光遮蔽(Ambient Occlusion)贴图或者说AO贴图为表面和周围潜在的几何图形指定了一个额外的阴影因子。比如如果我们有一个砖块表面，反照率纹理上的砖块裂缝部分应该没有任何阴影信息。然而AO贴图则会把那些光线较难逃逸出来的暗色边缘指定出来。在光照的结尾阶段引入环境遮蔽可以明显的提升你场景的视觉效果。网格/表面的环境遮蔽贴图要么通过手动生成，要么由3D建模软件自动生成。</p>
+<p>美术师们可以在纹素级别设置或调整这些基于物理的输入值，还可以以现实世界材料的表面物理性质来建立他们的材质数据。这是PBR渲染管线最大的优势之一，因为不论环境或者光照的设置如何改变这些表面的性质是不会改变的，这使得美术师们可以更便捷地获取物理可信的结果。在PBR渲染管线中编写的表面可以非常方便的在不同的PBR渲染引擎间共享使用，不论处于何种环境中它们看上去都会是正确的，因此看上去也会更自然。</p>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://blog.selfshadow.com/publications/s2013-shading-course/hoffman/s2013_pbs_physics_math_notes.pdf">Background: Physics and Math of Shading by Naty Hoffmann</a>：由于在这一篇文章中要谈论的理论点太多，所以这里的理论知识都只是涉及到了皮毛。如果你希望了解更多关于光线背后的物理知识以及它们和PBR理论之间有什么关联的话，这才是你需要阅读的资源。</li>
+<li><a target="_blank" rel="noopener" href="http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf">Real shading in Unreal Engine 4</a>：探讨了Epic Games在他们的Unreal 4引擎中所采用的PBR模型。我们这些教程中主要涉及的PBR系统就是基于他们的PBR模型。</li>
+<li><a target="_blank" rel="noopener" href="https://www.marmoset.co/toolbag/learn/pbr-theory">Marmoset: PBR Theory</a>：主要针对美术师的PBR介绍，不过仍然是很好的读物。</li>
+<li><a target="_blank" rel="noopener" href="http://www.codinglabs.net/article_physically_based_rendering.aspx">Coding Labs: Physically based rendering</a>：介绍渲染方程以及它和PBR直接的关系。</li>
+<li><a target="_blank" rel="noopener" href="http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx">Coding Labs: Physically Based Rendering - Cook–Torrance</a>：介绍了Cook-Torrance BRDF.</li>
+<li><a target="_blank" rel="noopener" href="http://blog.wolfire.com/2015/10/Physically-based-rendering">Wolfire Games - Physically based rendering</a>：介绍了PBR，由Lukas Orsvärn所著。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1350,328 +1698,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/18/Katana%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/18/Katana%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">Katana的常用命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2025-07-18 17:20:01 / 修改时间：17:22:25" itemprop="dateCreated datePublished" datetime="2025-07-18T17:20:01+08:00">2025-07-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python"><a href="#python" class="headerlink" title="python"></a>python</h1><h2 id="1-需要导入的包"><a href="#1-需要导入的包" class="headerlink" title="1.需要导入的包"></a>1.需要导入的包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Katana <span class="keyword">import</span> NodegraphAPI, KatanaFile</span><br><span class="line"><span class="keyword">from</span> fnpxr <span class="keyword">import</span> Usd</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-文件操作相关命令"><a href="#2-文件操作相关命令" class="headerlink" title="2.文件操作相关命令"></a>2.文件操作相关命令</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>KatanaFile.Load(filename)</code></td>
-<td>加载 <code>.katana</code> 文件为当前工程（替换当前内容）</td>
-</tr>
-<tr>
-<td><code>KatanaFile.Save(filename)</code></td>
-<td>将当前工程保存为指定路径</td>
-</tr>
-<tr>
-<td><code>KatanaFile.Save()</code></td>
-<td>保存当前工程（覆盖当前文件）</td>
-</tr>
-<tr>
-<td><code>KatanaFile.Import(filename)</code></td>
-<td>将其他 <code>.katana</code> 文件导入到当前工程中</td>
-</tr>
-<tr>
-<td><code>KatanaFile.IsFileDirty()</code></td>
-<td>当前工程是否修改过未保存</td>
-</tr>
-<tr>
-<td><code>KatanaFile.GetCurrentFilename()</code></td>
-<td>获取当前工程文件名</td>
-</tr>
-<tr>
-<td><code>KatanaFile.New()</code></td>
-<td>新建一个空工程（清空当前）</td>
-</tr>
-<tr>
-<td><code>KatanaFile.SetCurrentFilename(path)</code></td>
-<td>设置当前工程名（注意：不保存，只设置路径）</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetRootNode().getParameter(&#39;inTime&#39;).getValue(0)</code></td>
-<td>获取当前工程project settings中的设置</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetRootNode().getParameter(&#39;currentTime&#39;).setValue(1001， 0)</code></td>
-<td>设置当前工程project settings中的设置</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.SetWorkingInTime(1001)</code></td>
-<td>设置工程起始帧</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.SetTimeIncrement(1)</code></td>
-<td>设置时间增量</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.SetCurrentTime(1001)</code></td>
-<td>设置当前滑块时间</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.SetWorkingOutTime(1200)</code></td>
-<td>设置工程结束帧</td>
-</tr>
-</tbody></table>
-<h2 id="3-节点相关操作"><a href="#3-节点相关操作" class="headerlink" title="3.节点相关操作"></a>3.节点相关操作</h2><h3 id="1-获取节点信息"><a href="#1-获取节点信息" class="headerlink" title="1.获取节点信息"></a>1.获取节点信息</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>NodegraphAPI.CreateNode(nodeType, parent=None)</code></td>
-<td>创建指定类型的节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetNode(nodeName)</code></td>
-<td>获取指定名称的节点对象</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetAllNodes()</code></td>
-<td>获取当前场景中的所有节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetAllNodesByType(nodeType)</code></td>
-<td>获取所有某种类型的节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.DeleteNode(node)</code></td>
-<td>删除节点（或多个）</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetRootNode()</code></td>
-<td>获取整个 NodeGraph 的根节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetGroupNodes(node)</code></td>
-<td>获取组节点中的子节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetGroupParent(node)</code></td>
-<td>获取所属的父组节点</td>
-</tr>
-<tr>
-<td><code>NodegraphAPI.GetSelectedNodes()</code></td>
-<td>获取当前选中的节点</td>
-</tr>
-</tbody></table>
-<h3 id="2-获取节点的属性"><a href="#2-获取节点的属性" class="headerlink" title="2.获取节点的属性"></a>2.获取节点的属性</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>node.getParameter(&quot;paramName&quot;)</code></td>
-<td>获取节点上指定参数对象</td>
-</tr>
-<tr>
-<td><code>node.getParameters()</code></td>
-<td>获取所有参数</td>
-</tr>
-<tr>
-<td><code>node.setName(name)</code></td>
-<td>设置节点名称</td>
-</tr>
-<tr>
-<td><code>node.getName()</code></td>
-<td>获取节点名称</td>
-</tr>
-</tbody></table>
-<h3 id="3-节点连接与位置排版"><a href="#3-节点连接与位置排版" class="headerlink" title="3.节点连接与位置排版"></a>3.节点连接与位置排版</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">input_port = node.getInputPort(<span class="string">&quot;in&quot;</span>)</span><br><span class="line">output_port = otherNode.getOutputPort(<span class="string">&quot;out&quot;</span>)</span><br><span class="line">input_port.connect(output_port)</span><br><span class="line"></span><br><span class="line">NodegraphAPI.SetNodePosition(node, (<span class="number">100</span>, <span class="number">300</span>))</span><br><span class="line">pos = NodegraphAPI.GetNodePosition(node)</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>node.getInputPort(name)</code> / <code>node.getOutputPort(name)</code></td>
-<td>获取输入/输出端口</td>
-</tr>
-<tr>
-<td><code>node.getInputPort(&quot;in&quot;).connect(outputPort)</code></td>
-<td>将端口连接起来</td>
-</tr>
-<tr>
-<td><code>node.getInputPort(&quot;in&quot;).disconnect()</code></td>
-<td>断开端口连接</td>
-</tr>
-<tr>
-<td><code>node.getConnectedPort()</code></td>
-<td>获取已连接端口</td>
-</tr>
-<tr>
-<td><code>node.GetNodePosition(node)</code></td>
-<td>获取节点位置</td>
-</tr>
-<tr>
-<td><code>node.SetNodePosition(node, (x, y))</code></td>
-<td>设置节点在图中的位置</td>
-</tr>
-</tbody></table>
-<h1 id="lua（在katana的OpScript节点中使用）"><a href="#lua（在katana的OpScript节点中使用）" class="headerlink" title="lua（在katana的OpScript节点中使用）"></a>lua（在katana的OpScript节点中使用）</h1><h2 id="1-开启材质中image节点的ignore-missing-textures属性"><a href="#1-开启材质中image节点的ignore-missing-textures属性" class="headerlink" title="1.开启材质中image节点的ignore_missing_textures属性"></a>1.开启材质中image节点的ignore_missing_textures属性</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">This script can set aiImage ignore_missing_textures attribute to True</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment"> /root/world//*&#123;attr(&quot;type&quot;) == &quot;material&quot;&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">script:</span></span><br><span class="line"><span class="comment">local module = require(&#x27;prl_katana.mat.image&#x27;)</span></span><br><span class="line"><span class="comment">module.SetImageAttrs()</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">module.SetImageAttrs</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> nodeListAttr = Interface.GetAttr(<span class="string">&#x27;material.nodes&#x27;</span>)</span><br><span class="line">    <span class="keyword">local</span> childNum = nodeListAttr:getNumberOfChildren()</span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>, childNum <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> nodeAttr = nodeListAttr:getChildByIndex(i<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeName = nodeListAttr:getChildName(i<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeTarget = nodeAttr:getChildByName(<span class="string">&#x27;target&#x27;</span>):getValue()</span><br><span class="line">        <span class="keyword">local</span> nodeType = nodeAttr:getChildByName(<span class="string">&#x27;type&#x27;</span>):getValue()</span><br><span class="line">        <span class="comment">--print(nodeName, nodeTarget, nodeType)</span></span><br><span class="line">        <span class="comment">--print(nodeType)</span></span><br><span class="line">        <span class="keyword">if</span> nodeType == <span class="string">&#x27;image&#x27;</span> <span class="keyword">then</span></span><br><span class="line">            Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.ignore_missing_textures&#x27;</span>, IntAttribute(<span class="number">1</span>))</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">module</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-将USD材质转换为Arnold材质"><a href="#2-将USD材质转换为Arnold材质" class="headerlink" title="2.将USD材质转换为Arnold材质"></a>2.将USD材质转换为Arnold材质</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">This script can convert usd material to arnold material</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment"> /root/world//*&#123;attr(&quot;type&quot;) == &quot;material&quot;&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">script:</span></span><br><span class="line"><span class="comment">local module = require(&#x27;prl_katana.mat.shader&#x27;)</span></span><br><span class="line"><span class="comment">module.ResolveUsdMat()</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">module.ResolveUsdMat</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> nodeListAttr = Interface.GetAttr(<span class="string">&#x27;material.nodes&#x27;</span>)</span><br><span class="line">    <span class="keyword">local</span> childNum = nodeListAttr:getNumberOfChildren()</span><br><span class="line">    <span class="keyword">for</span> i=<span class="number">1</span>, childNum <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> nodeAttr = nodeListAttr:getChildByIndex(i<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeName = nodeListAttr:getChildName(i<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeTarget = nodeAttr:getChildByName(<span class="string">&#x27;target&#x27;</span>):getValue()</span><br><span class="line">        <span class="keyword">local</span> nodeType = nodeAttr:getChildByName(<span class="string">&#x27;type&#x27;</span>):getValue()</span><br><span class="line">        <span class="comment">--print(nodeName, nodeTarget, nodeType)</span></span><br><span class="line">        <span class="keyword">if</span> nodeTarget == <span class="string">&#x27;usd&#x27;</span> <span class="keyword">then</span></span><br><span class="line">            Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.target&#x27;</span>, StringAttribute(<span class="string">&#x27;arnold&#x27;</span>))</span><br><span class="line">            <span class="keyword">if</span> nodeType == <span class="string">&#x27;UsdPreviewSurface&#x27;</span> <span class="keyword">then</span></span><br><span class="line">                Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.type&#x27;</span>, StringAttribute(<span class="string">&#x27;standard_surface&#x27;</span>))</span><br><span class="line"></span><br><span class="line">                <span class="keyword">local</span> diffuseColorParamAttr = nodeAttr:getChildByName(<span class="string">&#x27;parameters.diffuseColor&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> diffuseColorParamAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> diffuseColorValue = diffuseColorParamAttr:getNearestSample(<span class="number">0</span>)</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.base_color&#x27;</span>, FloatAttribute(diffuseColorValue))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">local</span> diffuseColorConnectAttr = nodeAttr:getChildByName(<span class="string">&#x27;connections.diffuseColor&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> diffuseColorConnectAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> diffuseColorConnect = diffuseColorConnectAttr:getValue()</span><br><span class="line">                    <span class="keyword">local</span> baseColorConnect = pystring.replace(diffuseColorConnect, <span class="string">&#x27;rgb&#x27;</span>, <span class="string">&#x27;out&#x27;</span>)</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.connections.base_color&#x27;</span>, StringAttribute(baseColorConnect))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">local</span> specularColorParamAttr = nodeAttr:getChildByName(<span class="string">&#x27;parameters.specularColor&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> specularColorParamAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> specularColorValue = specularColorParamAttr:getNearestSample(<span class="number">0</span>)</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.specular_color&#x27;</span>, FloatAttribute(specularColorValue))</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.specular_color&#x27;</span>, FloatAttribute(&#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;, <span class="number">3</span>))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">local</span> roughnessParamAttr = nodeAttr:getChildByName(<span class="string">&#x27;parameters.roughness&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> roughnessParamAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> roughnessValue = roughnessParamAttr:getValue()</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.specular_roughness&#x27;</span>, FloatAttribute(roughnessValue))</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.specular_roughness&#x27;</span>, FloatAttribute(<span class="number">0.5</span>))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">local</span> opacityParamAttr = nodeAttr:getChildByName(<span class="string">&#x27;parameters.opacity&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> opacityParamAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> opacityValue = opacityParamAttr:getValue()</span><br><span class="line">                    Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.opacity&#x27;</span>, FloatAttribute(&#123;opacityValue, opacityValue, opacityValue&#125;, <span class="number">3</span>))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">if</span> nodeType == <span class="string">&#x27;UsdUVTexture&#x27;</span> <span class="keyword">then</span></span><br><span class="line">                Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.type&#x27;</span>, StringAttribute(<span class="string">&#x27;image&#x27;</span>))</span><br><span class="line">                <span class="keyword">local</span> filestring = nodeAttr:getChildByName(<span class="string">&#x27;parameters.file&#x27;</span>):getValue()</span><br><span class="line">                Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.parameters.filename&#x27;</span>, StringAttribute(filestring))</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">if</span> nodeType == <span class="string">&#x27;UsdPrimvarReader_float2&#x27;</span> <span class="keyword">then</span></span><br><span class="line">                Interface.SetAttr(<span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName .. <span class="string">&#x27;.type&#x27;</span>, StringAttribute(<span class="string">&#x27;user_data_rgba&#x27;</span>))</span><br><span class="line">                <span class="comment">--local filestring = nodeAttr:getChildByName(&#x27;parameters.file&#x27;):getValue()</span></span><br><span class="line">                <span class="comment">--Interface.SetAttr(&#x27;material.nodes.&#x27; .. nodeName .. &#x27;.parameters.filename&#x27;, StringAttribute(filestring))</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">module</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-强行转换Arnold-standard-surface材质为ambient-occlusion，以获取带有颜色的AO材质"><a href="#3-强行转换Arnold-standard-surface材质为ambient-occlusion，以获取带有颜色的AO材质" class="headerlink" title="3.强行转换Arnold standard_surface材质为ambient_occlusion，以获取带有颜色的AO材质"></a>3.强行转换Arnold standard_surface材质为ambient_occlusion，以获取带有颜色的AO材质</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">This script can forced convert standard_surface to ambient_occlusion</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment"> /root/world//*&#123;attr(&quot;type&quot;) == &quot;material&quot;&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">script:</span></span><br><span class="line"><span class="comment">local module = require(&#x27;prl_katana.mat.convertao&#x27;)</span></span><br><span class="line"><span class="comment">module.ConcertAO()</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">module.ConcertAO</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> matNodesAttr = Interface.GetAttr(<span class="string">&#x27;material.nodes&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> matNodesAttr <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> count = matNodesAttr:getNumberOfChildren()</span><br><span class="line">    <span class="keyword">for</span> i = <span class="number">1</span>, count <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> nodeAttr = matNodesAttr:getChildByIndex(i - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeName = matNodesAttr:getChildName(i - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeTypeAttr = nodeAttr:getChildByName(<span class="string">&#x27;type&#x27;</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeTargetAttr = nodeAttr:getChildByName(<span class="string">&#x27;target&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeType = nodeTypeAttr <span class="keyword">and</span> nodeTypeAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">local</span> nodeTarget = nodeTargetAttr <span class="keyword">and</span> nodeTargetAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> nodeTarget == <span class="string">&#x27;arnold&#x27;</span> <span class="keyword">and</span> nodeType == <span class="string">&#x27;standard_surface&#x27;</span> <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">local</span> base = <span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName</span><br><span class="line">            Interface.SetAttr(base .. <span class="string">&#x27;.type&#x27;</span>, StringAttribute(<span class="string">&#x27;ambient_occlusion&#x27;</span>))</span><br><span class="line">            Interface.SetAttr(base .. <span class="string">&#x27;.target&#x27;</span>, StringAttribute(<span class="string">&#x27;arnold&#x27;</span>))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">local</span> baseColorConnAttr = nodeAttr:getChildByName(<span class="string">&#x27;connections.base_color&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> baseColorConnAttr <span class="keyword">then</span></span><br><span class="line">                <span class="keyword">local</span> src = baseColorConnAttr:getValue()</span><br><span class="line">                Interface.SetAttr(base .. <span class="string">&#x27;.connections.white&#x27;</span>, StringAttribute(src))</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">local</span> baseColorAttr = nodeAttr:getChildByName(<span class="string">&#x27;parameters.base_color&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> baseColorAttr <span class="keyword">then</span></span><br><span class="line">                    <span class="keyword">local</span> colorValue = baseColorAttr:getNearestSample(<span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">if</span> colorValue <span class="keyword">and</span> #colorValue &gt;= <span class="number">3</span> <span class="keyword">then</span></span><br><span class="line">                        Interface.SetAttr(base .. <span class="string">&#x27;.parameters.white&#x27;</span>, FloatAttribute(colorValue, <span class="number">3</span>))</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">module</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="4-赋予的材质是否有效并添加标识以清除等操作"><a href="#4-赋予的材质是否有效并添加标识以清除等操作" class="headerlink" title="4.赋予的材质是否有效并添加标识以清除等操作"></a>4.赋予的材质是否有效并添加标识以清除等操作</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;polymesh&quot;&#125;</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;subdmesh&quot;&#125;</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;mesh&quot;&#125;</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> matAttr = Interface.GetAttr(<span class="string">&quot;materialAssign&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> matAttr ~= <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">    matPath = matAttr:getValue()</span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">path</span> = Interface.GetOutputLocationPath()</span><br><span class="line">    <span class="keyword">local</span> type_name = Interface.GetAttr(<span class="string">&quot;type&quot;</span>,matPath)</span><br><span class="line">    <span class="keyword">if</span> type_name == <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;---------------------------&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">path</span>)</span><br><span class="line">        <span class="built_in">print</span>(type_name)</span><br><span class="line">        <span class="built_in">print</span>(matPath)</span><br><span class="line">        Interface.SetAttr(<span class="string">&quot;user.mat_invalid&quot;</span>, StringAttribute(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="5-检查无效的模型层级并添加标识以清除等操作"><a href="#5-检查无效的模型层级并添加标识以清除等操作" class="headerlink" title="5.检查无效的模型层级并添加标识以清除等操作"></a>5.检查无效的模型层级并添加标识以清除等操作</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;polymesh&quot;&#125;</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;subdmesh&quot;&#125;</span></span><br><span class="line"><span class="comment">/root/world//*&#123;attr(&quot;type&quot;) == &quot;mesh&quot;&#125;</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> Interface.GetAttr(<span class="string">&quot;geometry.point&quot;</span>)</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    Interface.SetAttr(<span class="string">&quot;user.to_delete&quot;</span>, StringAttribute(<span class="string">&quot;1&quot;</span>))</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="6-为层级添加cryptomatte相关属性"><a href="#6-为层级添加cryptomatte相关属性" class="headerlink" title="6.为层级添加cryptomatte相关属性"></a>6.为层级添加cryptomatte相关属性</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment">/root/world/geo/World/asset//*&#123;attr(&quot;type&quot;) == &quot;component&quot;&#125;</span></span><br><span class="line"><span class="comment">/root/world//*&#123;hasattr(&quot;materialAssign&quot;)&#125;</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> op_path=Interface.GetRootLocationPath()</span><br><span class="line"><span class="keyword">local</span> asset_name = <span class="built_in">string</span>.<span class="built_in">match</span>(op_path, <span class="string">&quot;([^/]+)$&quot;</span>)</span><br><span class="line">Interface.SetAttr(<span class="string">&quot;geometry.arbitrary.crypto_asset.value&quot;</span>, StringAttribute(asset_name))</span><br><span class="line">Interface.SetAttr(<span class="string">&quot;geometry.arbitrary.crypto_asset.scope&quot;</span>, StringAttribute(<span class="string">&quot;primitive&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> surfShader = Interface.GetAttr(<span class="string">&#x27;materialAssign&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> surfShader <span class="keyword">then</span></span><br><span class="line">    Interface.SetAttr(<span class="string">&quot;geometry.arbitrary.crypto_material.scope&quot;</span>, StringAttribute(<span class="string">&quot;primitive&quot;</span>))</span><br><span class="line">    Interface.SetAttr(<span class="string">&#x27;geometry.arbitrary.crypto_material.value&#x27;</span>, surfShader  )</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="7-重新连接材质中断开的贴图节点"><a href="#7-重新连接材质中断开的贴图节点" class="headerlink" title="7.重新连接材质中断开的贴图节点"></a>7.重新连接材质中断开的贴图节点</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">This script can use the first tex connect shader color</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment"> /root/world//*&#123;@type == &quot;material&quot;&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">script:</span></span><br><span class="line"><span class="comment">local module = require(&#x27;prl_katana.mat.texreconnect&#x27;)</span></span><br><span class="line"><span class="comment">module.Reconnect()</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">module.Reconnect</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> matNodesAttr = Interface.GetAttr(<span class="string">&#x27;material.nodes&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> matNodesAttr <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> count = matNodesAttr:getNumberOfChildren()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> tex_nodeName = <span class="literal">nil</span></span><br><span class="line">    <span class="keyword">local</span> fallback_nodeName = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i = <span class="number">1</span>, count <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> nodeAttr = matNodesAttr:getChildByIndex(i - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeName = matNodesAttr:getChildName(i - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeTypeAttr = nodeAttr:getChildByName(<span class="string">&#x27;type&#x27;</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeTargetAttr = nodeAttr:getChildByName(<span class="string">&#x27;target&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeType = nodeTypeAttr <span class="keyword">and</span> nodeTypeAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">local</span> nodeTarget = nodeTargetAttr <span class="keyword">and</span> nodeTargetAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> nodeTarget == <span class="string">&#x27;usd&#x27;</span> <span class="keyword">and</span> nodeType == <span class="string">&#x27;UsdUVTexture&#x27;</span> <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">string</span>.<span class="built_in">find</span>(nodeName, <span class="string">&#x27;file&#x27;</span>) <span class="keyword">then</span></span><br><span class="line">                tex_nodeName = nodeName</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> fallback_nodeName <span class="keyword">then</span></span><br><span class="line">                fallback_nodeName = nodeName</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> tex_nodeName <span class="keyword">then</span></span><br><span class="line">        tex_nodeName = fallback_nodeName</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> tex_nodeName <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i = <span class="number">1</span>, count <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> nodeAttr = matNodesAttr:getChildByIndex(i - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeName = matNodesAttr:getChildName(i - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeTypeAttr = nodeAttr:getChildByName(<span class="string">&#x27;type&#x27;</span>)</span><br><span class="line">        <span class="keyword">local</span> nodeTargetAttr = nodeAttr:getChildByName(<span class="string">&#x27;target&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> nodeType = nodeTypeAttr <span class="keyword">and</span> nodeTypeAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">local</span> nodeTarget = nodeTargetAttr <span class="keyword">and</span> nodeTargetAttr:getValue() <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> nodeTarget == <span class="string">&#x27;usd&#x27;</span> <span class="keyword">and</span> nodeType == <span class="string">&#x27;UsdPreviewSurface&#x27;</span> <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">local</span> base = <span class="string">&#x27;material.nodes.&#x27;</span> .. nodeName</span><br><span class="line">            <span class="keyword">local</span> destAttrPath = base .. <span class="string">&#x27;.connections.diffuseColor&#x27;</span></span><br><span class="line">            Interface.SetAttr(destAttrPath, StringAttribute(<span class="string">&#x27;rgb@&#x27;</span> .. tex_nodeName))</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">module</span></span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/06/%E4%BD%BF%E7%94%A8%E5%90%AF%E5%8A%A8%E5%99%A8%E5%90%AF%E5%8A%A8maya%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7%E5%88%B0maya%E8%8F%9C%E5%8D%95%E6%A0%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/01/06/%E4%BD%BF%E7%94%A8%E5%90%AF%E5%8A%A8%E5%99%A8%E5%90%AF%E5%8A%A8maya%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7%E5%88%B0maya%E8%8F%9C%E5%8D%95%E6%A0%8F/" class="post-title-link" itemprop="url">使用启动器启动maya并添加自定义工具到maya菜单栏</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-01-06 12:12:06" itemprop="dateCreated datePublished" datetime="2025-01-06T12:12:06+08:00">2025-01-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-02-10 15:37:11" itemprop="dateModified" datetime="2025-02-10T15:37:11+08:00">2025-02-10</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>要在 Maya 启动时加载 XML 文件中的子项到菜单栏，并通过点击这些菜单项来运行特定的代码，你可以通过 Maya 的 Python 脚本来实现。以下是一个基本的步骤指南：</p>
-<h3 id="1-准备-XML-文件"><a href="#1-准备-XML-文件" class="headerlink" title="1. 准备 XML 文件"></a>1. 准备 XML 文件</h3><p>首先，你需要准备一个 XML 文件来存储菜单项和对应的代码。例如，你可以创建一个简单的 XML 文件如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;menu name=&quot;My Maya Tools&quot;&gt;</span><br><span class="line">    &lt;submenu name=&quot;Load Maya Tools&quot; icon=&quot;tool.svg&quot; type=&quot;command&quot;  mode=&quot;python&quot;</span><br><span class="line">             cmd=&quot;print(&#x27;11111111111111111&#x27;)&quot; /&gt;</span><br><span class="line">    &lt;submenu name= &quot;----------&quot; type=&quot;separator&quot;/&gt;</span><br><span class="line">    &lt;submenu name=&quot;Maya Tools Test&quot; icon=&quot;test.svg&quot; type=&quot;command&quot;  mode=&quot;python&quot;</span><br><span class="line">             cmd=&quot;from MAYA_TOOLS import test_tools;test_tools.run()&quot; /&gt;</span><br><span class="line">&lt;/menu&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这个 XML 文件包含三个菜单项，每个菜单项有 <code>name</code> 属性、<code>type</code>属性，分别定义了xml菜单项的名称和类型，对于特别的类型（command），在<code>mode</code>属性中定义使用的语言，<code>cmd</code>中调用代码。</p>
-<h3 id="2-编写-Maya-启动脚本"><a href="#2-编写-Maya-启动脚本" class="headerlink" title="2. 编写 Maya 启动脚本"></a>2. 编写 Maya 启动脚本</h3><p>你需要编写一个 解析xml的脚本，并且在Maya 启动时运行脚本，在maya启动完成后动态地将这些菜单项添加到 Maya 菜单栏。</p>
-<p>创建一个名为 <code>userSetup.py</code>的脚本，maya在启动时会自动运行该脚本。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> maya.cmds <span class="keyword">as</span> cmds</span><br><span class="line"><span class="keyword">import</span> maya.utils <span class="keyword">as</span> utils</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gui_launcher</span>():</span><br><span class="line">    <span class="keyword">import</span> ui_start</span><br><span class="line">    ui_start.MayaStart().start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> cmds.about(batch=<span class="literal">True</span>):</span><br><span class="line">    utils.executeDeferred(gui_launcher)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Maya Startup Script is running...&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-配置-Maya-启动脚本"><a href="#3-配置-Maya-启动脚本" class="headerlink" title="3. 配置 Maya 启动脚本"></a>3. 配置 Maya 启动脚本</h3><p>将 <code>userSetup.py</code>所在的路径添加到 Maya 的启动路径中，确保 Maya 启动时执行该脚本。你可以通过bat配置maya环境并启动：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> MAYA_UI_LANGUAGE=en_US</span><br><span class="line"><span class="built_in">set</span> CURRENT_PATH=%~dp0</span><br><span class="line"><span class="keyword">for</span> %%i <span class="keyword">in</span> (<span class="string">&quot;%CURRENT_PATH%..&quot;</span>) <span class="keyword">do</span> <span class="built_in">set</span> LAUNCHER_LOCATION=%%~<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> MAYA_PIPELINE=%LAUNCHER_LOCATION%</span><br><span class="line"><span class="built_in">set</span> MAYA_STARTUP=%LAUNCHER_LOCATION%/MAYA_STARTUP</span><br><span class="line"><span class="built_in">set</span> MAYA_SCRIPTS=%MAYA_STARTUP%/scripts</span><br><span class="line"><span class="built_in">set</span> MAYA_SCRIPT_PATH=%MAYA_SCRIPTS%;%MAYA_SCRIPT_PATH%</span><br><span class="line"><span class="built_in">set</span> PYTHONPATH=%MAYA_SCRIPTS%;%MAYA_PIPELINE%;%PYTHONPATH%</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> MAYA_VERSION=2024</span><br><span class="line"><span class="built_in">set</span> MAYA_DIR=D:\Autodesk\Maya%MAYA_VERSION%</span><br><span class="line"><span class="string">&quot;%MAYA_DIR%\bin\maya.exe&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-运行效果"><a href="#4-运行效果" class="headerlink" title="4. 运行效果"></a>4. 运行效果</h3><p>当 通过bat启动Maya时，解析函数会读取指定的 XML 文件，并将其中的菜单项添加到 Maya 的菜单栏中。点击菜单项时，会执行对应的 Python 代码。</p>
-<p>通过这种方法，你可以灵活地管理和动态加载菜单项及其对应的功能，而不需要每次修改代码文件。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1739,7 +1769,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

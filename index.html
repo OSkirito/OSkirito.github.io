@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">63</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,64 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/" class="post-title-link" itemprop="url">41-漫反射辐照度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-07-17 18:13:01 / 修改时间：18:13:19" itemprop="dateCreated datePublished" datetime="2026-07-17T18:13:01+08:00">2026-07-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -193,7 +251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-07-17 17:34:13" itemprop="dateModified" datetime="2026-07-17T17:34:13+08:00">2026-07-17</time>
+                <time title="修改时间：2026-07-17 18:11:38" itemprop="dateModified" datetime="2026-07-17T18:11:38+08:00">2026-07-17</time>
               </span>
 
           
@@ -278,7 +336,7 @@
 <img src="/2026/07/09/40-PBR%E5%85%89%E7%85%A7/lighting_result.png" class="" title="img">
 
 <p>(上述图片)从下往上球体的金属性从0.0变到1.0， 从左到右球体的粗糙度从0.0变到1.0。你可以看到仅仅改变这两个值，显示的效果会发生巨大的改变！</p>
-<p>你可以在这里找到整个demo的完整代码。</p>
+<p>你可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2026/07/09/40-PBR%E5%85%89%E7%85%A7/52_PBR_base_01.rar">这里</a>找到整个demo的完整代码。</p>
 <h1 id="带贴图的PBR"><a href="#带贴图的PBR" class="headerlink" title="带贴图的PBR"></a>带贴图的PBR</h1><p>把我们系统扩展成可以接受纹理作为参数可以让我们对物体的材质有更多的自定义空间：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line"><span class="keyword">uniform</span> <span class="type">sampler2D</span> albedoMap;</span><br><span class="line"><span class="keyword">uniform</span> <span class="type">sampler2D</span> normalMap;</span><br><span class="line"><span class="keyword">uniform</span> <span class="type">sampler2D</span> metallicMap;</span><br><span class="line"><span class="keyword">uniform</span> <span class="type">sampler2D</span> roughnessMap;</span><br><span class="line"><span class="keyword">uniform</span> <span class="type">sampler2D</span> aoMap;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> main()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">vec3</span> albedo     = <span class="built_in">pow</span>(<span class="built_in">texture</span>(albedoMap, TexCoords).rgb, <span class="number">2.2</span>);</span><br><span class="line">    <span class="type">vec3</span> normal     = getNormalFromNormalMap();</span><br><span class="line">    <span class="type">float</span> metallic  = <span class="built_in">texture</span>(metallicMap, TexCoords).r;</span><br><span class="line">    <span class="type">float</span> roughness = <span class="built_in">texture</span>(roughnessMap, TexCoords).r;</span><br><span class="line">    <span class="type">float</span> ao        = <span class="built_in">texture</span>(aoMap, TexCoords).r;</span><br><span class="line">    [...]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -286,7 +344,7 @@
 <p>只是把之前的球体的材质性质换成纹理属性，就在视觉上有巨大的提升：</p>
 <img src="/2026/07/09/40-PBR%E5%85%89%E7%85%A7/lighting_textured.png" class="" title="img">
 
-<p>你可以在这里找到纹理贴图示例的全部代码，以及我用的纹理(记得加上一张全白色的环境光遮蔽贴图)。注意金属表面会在场景中看起来有点黑，因为他们没有漫反射。它们会在考虑环境镜面光照的时候看起来更加自然，不过这是我们下一个教程的事情了。</p>
+<p>你可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2026/07/09/40-PBR%E5%85%89%E7%85%A7/52_PBR_base_02.rar">这里</a>找到目前的完整代码，以及我用的纹理(记得加上一张全白色的环境光遮蔽贴图)。注意金属表面会在场景中看起来有点黑，因为他们没有漫反射。它们会在考虑环境镜面光照的时候看起来更加自然，不过这是我们下一个教程的事情了。</p>
 <p>相比起在网上找到的其他PBR渲染结果来说，尽管在视觉上不算是非常震撼，因为我们还没考虑到基于图片的光照(IBL)，但我们现在也算是有了一个基于物理的渲染器了，虽然还没考虑IBL，但你会发现你的光照看起来更加真实了。</p>
 
       
@@ -1667,121 +1725,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/" class="post-title-link" itemprop="url">在Katana中渲染AOV并输出</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-07-18 17:20:32" itemprop="dateCreated datePublished" datetime="2025-07-18T17:20:32+08:00">2025-07-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-01-14 17:39:24" itemprop="dateModified" datetime="2026-01-14T17:39:24+08:00">2026-01-14</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一个katana最基本的渲染结构"><a href="#一个katana最基本的渲染结构" class="headerlink" title="一个katana最基本的渲染结构"></a>一个katana最基本的渲染结构</h1><p>首先，在katana中进行一个渲染的最基本结构（使用Arnold渲染器）如下所示：</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718162415463.png" class="" title="image-20250718162415463">
-
-<p>一个最基本的katana渲染工程应该包括上面这几部分：</p>
-<p>1.数据的入口，包括了模型、摄像机、材质等，这些渲染数据可以是在katana中创建的，也可以是使用节点读入的，总之你要渲染的东西就从这里开始，并且摄像机是必须的（模型和材质可以没有，渲染结果没有东西而已，没有摄像机就不能渲染）。</p>
-<p>2.材质的赋予，这个操作可以是手动的，也可以是节点解析自动赋予的。</p>
-<p>3.灯光节点，灯光师会在这里创建灯光对渲染场景进行照明，大多数渲染分层是必须灯光照明的（部分AOV渲染可能不需要灯光，比如AO、Wireframe等）。</p>
-<p>4.渲染设置相关节点，RenderSettings节点是对渲染的全局进行设置，包括了摄像机的指定、渲染器的指定、渲染分辨率等，ArnoldGlobalSettings节点是对Arnold渲染器的渲染设置。</p>
-<p>5.待前序的所有数据和设置准备完毕，就可以右键Render进行渲染。</p>
-<h1 id="渲染输出AOV相关分层"><a href="#渲染输出AOV相关分层" class="headerlink" title="渲染输出AOV相关分层"></a>渲染输出AOV相关分层</h1><p><strong>AOV</strong> 是 <strong>Arbitrary Output Variables</strong>（任意输出变量）的缩写。</p>
-<p>它是现代渲染管线中非常重要的一个概念，尤其在电影和视觉特效制作中非常常见。</p>
-<p><strong>AOV</strong> 指的是在渲染时，从一个场景或材质里，除了最终合成用的主图（beauty pass）之外，额外输出的各种图层或通道。每个 AOV 通常包含某种特定的图像信息，用于后期合成、调色、特效、调试等。比如：Diffuse、Specular、Object ID、RestP等。</p>
-<p>那么如何在katana中输出AOV层，以AO和CryptoMatte为例，大致需要分为下面的几步：</p>
-<ol>
-<li><p>创建AOV材质</p>
-<p>对于cryptomatte，katana提供了封装好的AOV材质节点，只需要创建Material节点选择cryptomatte类型材质即可</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718164724073.png" class="" title="image-20250718164724073">
-
-<p>对于AO材质就要麻烦一点，首先我们需要创建这个材质，再将这个材质写入到AOV中并且定义写入的AOV名称（一定要记住这个名称后面需要用到）</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718165017275.png" class="" title="image-20250718165017275">
-
-<p>然后再将这个材质添加到katana的层级中</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718165235235.png" class="" title="image-20250718165235235"></li>
-<li><p>设置AOV属性</p>
-<p>对于cryptomatte分层，我们需要对每个对象进行属性的定义，Arnold进行渲染时会为每一个不同的ID的对象分配不同的颜色，从而呈现object分层效果，可以通过OpScript节点创建属性：</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">cel:</span></span><br><span class="line"><span class="comment">/root/world/geo/World/asset//*&#123;attr(&quot;type&quot;) == &quot;component&quot;&#125;</span></span><br><span class="line"><span class="comment">--/root/world//*&#123;hasattr(&quot;materialAssign&quot;)&#125;</span></span><br><span class="line"><span class="comment">]]</span><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> op_path=Interface.GetRootLocationPath()</span><br><span class="line"><span class="keyword">local</span> asset_name = <span class="built_in">string</span>.<span class="built_in">match</span>(op_path, <span class="string">&quot;([^/]+)$&quot;</span>)</span><br><span class="line">Interface.SetAttr(<span class="string">&quot;geometry.arbitrary.crypto_asset.value&quot;</span>, StringAttribute(asset_name))</span><br><span class="line">Interface.SetAttr(<span class="string">&quot;geometry.arbitrary.crypto_asset.scope&quot;</span>, StringAttribute(<span class="string">&quot;primitive&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">--local surfShader = Interface.GetAttr(&#x27;materialAssign&#x27;)</span></span><br><span class="line"><span class="comment">--if surfShader then</span></span><br><span class="line"><span class="comment">--    Interface.SetAttr(&quot;geometry.arbitrary.crypto_material.scope&quot;, StringAttribute(&quot;primitive&quot;))</span></span><br><span class="line"><span class="comment">--    Interface.SetAttr(&#x27;geometry.arbitrary.crypto_material.value&#x27;, surfShader  )</span></span><br><span class="line"><span class="comment">--end</span></span><br></pre></td></tr></table></figure>
-
-<p>而AO分层的所有对象使用的是同一种材质（不需要经过上述的计算），所以不需要进行设置。</p>
-</li>
-<li><p>“赋予材质”</p>
-<p>我们创建了这些材质，那么如何让这个材质起作用呢？直接进行赋予的话那么我们的渲染结果就只有AOV那一层了，我们需要在ArnoldGlobalSettings中将AOV材质添加到AOV Shader中</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718170640684.png" class="" title="image-20250718170640684"></li>
-<li><p>定义输出通道和路径</p>
-<p>接下来我们创建ArnoldOutputChannelDefine节点定义AOV输出的层的名称，通道填写我们创建材质时定义的AOV名称</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718170910425.png" class="" title="image-20250718170910425">
-
-<p>接着创建RenderOutputDefine接收我们的渲染分层并输出，这里的通道是ArnoldOutputChannelDefine中创建的名字</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718171126881.png" class="" title="image-20250718171126881"></li>
-</ol>
-<p>最后我们便可以渲染我们的AOV分层了，同样的可以创建其他的AOV分层，效果如下：</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718171459066.png" class="" title="image-20250718171459066">
-
-<p><img src="%E5%9C%A8katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20250718171751520.png" alt="image-20250718171751520"></p>
-<h1 id="渲染灯光组分层"><a href="#渲染灯光组分层" class="headerlink" title="渲染灯光组分层"></a>渲染灯光组分层</h1><p>如果现在有一个灯光组（dome）想要渲染分层diffuse_direct_dome和diffuse_indirect_dome，如何实现？</p>
-<p>首先需要在创建Arnold灯光时指定灯光组，设置灯光的aov属性，aov属性名称一样的灯光将被作为一个灯光组参与该灯光组分层的渲染</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20260114173329613.png" class="" title="image-20260114173329613">
-
-<p>接着需要在aod节点中进行设置，Arnold提供了diffuse_direct和diffuse_indirect通道，只需要在节点中指定即可， 在lightGroups中选择custom（默认为all，即所有灯光），下面添加对应的灯光组命名</p>
-<img src="/2025/07/18/%E5%9C%A8Katana%E4%B8%AD%E6%B8%B2%E6%9F%93AOV%E5%B9%B6%E8%BE%93%E5%87%BA/image-20260114173654767.png" class="" title="image-20260114173654767">
-
-<p>最后配合对应的rod节点即可输出diffuse_direct_dome和diffuse_indirect_dome的灯光组分层</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1853,7 +1796,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

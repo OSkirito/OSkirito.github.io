@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">63</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">64</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,91 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_image.png">
+      <meta itemprop="name" content="OSkirito">
+      <meta itemprop="description" content="CG技术的记录与分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OS's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Deadline对Job进行预处理的几种方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-08-06 17:28:21 / 修改时间：17:56:11" itemprop="dateCreated datePublished" datetime="2025-08-06T17:28:21+08:00">2025-08-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="对deadline的Job进行预设置的几种思路："><a href="#对deadline的Job进行预设置的几种思路：" class="headerlink" title="对deadline的Job进行预设置的几种思路："></a>对deadline的Job进行预设置的几种思路：</h1><h2 id="1-使用Event注册回调函数"><a href="#1-使用Event注册回调函数" class="headerlink" title="1.使用Event注册回调函数"></a>1.使用Event注册回调函数</h2><p>这是官方推荐的方法，具体的可以查看官方文档：[Event Plugins — Deadline 10.4.2.2 documentation](<a target="_blank" rel="noopener" href="https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User">https://docs.thinkboxsoftware.com/products/deadline/10.4/1_User</a> Manual/manual/event-plugins.html?highlight=callback)</p>
+<p>这种方法可以在Job进入渲染之前就进行设置，不过存在很大的局限性，只有通过UI进行前台提交的Job会触发OnJobSubmittedCallback回调。</p>
+<p>只需要在[DeadlineRepository]/custom/events文件夹下创建你的自定义事件，创建自定义事件时需要注意以下几点：</p>
+<ul>
+<li><p>文件夹名称与.param、.py文件名必须一致，如下图所示</p>
+<img src="/2025/08/06/Deadline%E5%AF%B9Job%E8%BF%9B%E8%A1%8C%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/image-20250806165524596.png" class="" title="image-20250806165524596"></li>
+<li><p>代码报错时会导致deadline报错，引发一系列问题，需要通过重启deadline服务和数据库进行更新</p>
+</li>
+<li><p>调试时应该确保事件启用</p>
+<p>例如，我们注册一个OnJobSubmittedCallback回调，打印一些东西</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> DeadlineEventListener</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GetDeadlineEventListener</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls to get an instance of the</span></span><br><span class="line"><span class="string">    main DeadlineEventListener class.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> JobInitEvent()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CleanupDeadlineEventListener</span>(<span class="params">deadlinePlugin</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the function that Deadline calls when the event plugin is</span></span><br><span class="line"><span class="string">    no longer in use so that it can get cleaned up.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    deadlinePlugin.Cleanup()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">JobInitEvent</span>(<span class="title class_ inherited__">DeadlineEventListener</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This is the main DeadlineEventListener class for JobInitEvent&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># Set up the event callbacks here</span></span><br><span class="line">        self.OnJobSubmittedCallback += self.OnJobSubmitted</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Cleanup</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">del</span> self.OnJobSubmittedCallback</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">OnJobSubmitted</span>(<span class="params">self, job</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmitted!!!&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OnJobSubmittedCallback is ran!!!&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="2-修改GlobalJobPreLoad脚本"><a href="#2-修改GlobalJobPreLoad脚本" class="headerlink" title="2.修改GlobalJobPreLoad脚本"></a>2.修改GlobalJobPreLoad脚本</h2><p>在deadline安装路径下，有一个脚本<code>GlobalJobPreLoad.py</code> ，他是在每一个 任务（task）启动时被调用的一个全局预加载（Pre-Load）脚本。它的主要作用是允许你在任务开始运行之前，对任务做一些全局性的设置，比如：</p>
+<ul>
+<li>环境变量设置</li>
+<li>日志记录</li>
+<li>插件参数调整</li>
+<li>条件拦截任务运行</li>
+<li>输出调试信息</li>
+</ul>
+<p>通常他的位置在”[DeadlineRepository]/custom/plugins/GlobalJobPreLoad.py”。</p>
+<p>这个脚本中有一个<code>__main__</code>函数，这个脚本只会执行其中的这个函数中的内容。其他函数不会自动被执行，除非你从 <code>__main__()</code> 里调用它们。</p>
+<p>例如，我们想在任务运行前对任务的优先级等做一个重设：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import  <span class="comment"># Import system&#x27;s os, not backports.os.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> FranticX.Diagnostics <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> Deadline.Jobs <span class="keyword">as</span> Job</span><br><span class="line"><span class="keyword">import</span> Deadline.Plugins <span class="keyword">as</span> pg</span><br><span class="line"><span class="keyword">from</span> Deadline.Events <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">job = <span class="literal">None</span>  <span class="comment"># type: Job.Job</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">job_pre_settings</span>(<span class="params">job</span>):</span><br><span class="line">    plugin = job.get_JobPlugin()</span><br><span class="line">    <span class="built_in">id</span> = job.get_ID()</span><br><span class="line">    group = job.get_Group()</span><br><span class="line">    pool = job.get_Pool()</span><br><span class="line">    batchname = job.get_BatchName()</span><br><span class="line">    comment = job.get_Comment()</span><br><span class="line">    priority = job.get_Priority()</span><br><span class="line">    comment_config = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;JobPlugin:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(plugin))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;ID:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">id</span>))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Priority:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Group:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Pool:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;BatchName:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(batchname))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Comment:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(comment))</span><br><span class="line"></span><br><span class="line">    comment_config = &#123;</span><br><span class="line">        <span class="string">&#x27;nuke&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">80</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;nuke&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;katana&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;katana&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;houdini&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&#x27;maya&#x27;</span>: &#123;<span class="string">&#x27;priority&#x27;</span>: <span class="number">50</span>, <span class="string">&#x27;group&#x27;</span>: <span class="string">&#x27;render&#x27;</span>, <span class="string">&#x27;pool&#x27;</span>: <span class="string">&#x27;render&#x27;</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    config = comment_config.get(comment, &#123;</span><br><span class="line">        <span class="string">&#x27;priority&#x27;</span>: job.get_Priority(),</span><br><span class="line">        <span class="string">&#x27;group&#x27;</span>: job.get_Group(),</span><br><span class="line">        <span class="string">&#x27;pool&#x27;</span>: job.get_Pool()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    priority = config[<span class="string">&#x27;priority&#x27;</span>]</span><br><span class="line">    group = config[<span class="string">&#x27;group&#x27;</span>]</span><br><span class="line">    pool = config[<span class="string">&#x27;pool&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    job.set_Priority(priority)</span><br><span class="line">    job.set_Group(group)</span><br><span class="line">    job.set_Pool(pool)</span><br><span class="line">    <span class="comment"># job.set_SecondaryPool()</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">from</span> Deadline.Scripting <span class="keyword">import</span> RepositoryUtils</span><br><span class="line">        RepositoryUtils.SaveJob(job)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Saved......&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;save error......&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;job pre set up over.......&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set priority to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(priority))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set group to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(group))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;set pool to &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pool))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__main__</span>(<span class="params"> deadlinePlugin:pg.DeadlinePlugin =<span class="literal">None</span> </span>):</span><br><span class="line">    <span class="keyword">global</span> job</span><br><span class="line">    job = deadlinePlugin.GetJob()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        job_pre_settings(job)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-定制化开发"><a href="#3-定制化开发" class="headerlink" title="3.定制化开发"></a>3.定制化开发</h2><p>有些时候可能是没有UI的后台提交Job，那么就需要在具体的任务提交前提前编写一个预设置的代码，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Deadline.DeadlineConnect <span class="keyword">as</span> Connect</span><br><span class="line"></span><br><span class="line">CONN = Connect.DeadlineCon(PRL_DEADLINE_URL, PRL_DEADLINE_PORT)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DeadlineJob</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.connection = CONN</span><br><span class="line">        self.job_info = &#123;&#125;</span><br><span class="line">        self.plugin_info = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit_pre_setting</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">submit</span>(<span class="params">self, aux_files=[]</span>):</span><br><span class="line">        self.submit_pre_setting()</span><br><span class="line">		CONN.Jobs.SubmitJob(self.job_info, self.plugin_info, aux=aux_files)</span><br><span class="line">        </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Job = DeadlineJob()</span><br><span class="line">Job.submit()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1612,132 +1697,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head_image.png">
-      <meta itemprop="name" content="OSkirito">
-      <meta itemprop="description" content="CG技术的记录与分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="OS's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/" class="post-title-link" itemprop="url">28-抗锯齿</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-09-29 14:46:47 / 修改时间：20:46:03" itemprop="dateCreated datePublished" datetime="2024-09-29T14:46:47+08:00">2024-09-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在学习OpenGL的时候，你可能会时不时遇到模型边缘有锯齿的情况。这些锯齿边缘(Jagged Edges)的产生和光栅器将顶点数据转化为片段的方式有关。能够清楚看见形成边缘的像素，这种现象被称之为走样(Aliasing)。缓解这种现象的技术叫做抗锯齿（Anti-aliasing，也被称为反走样），让我们的渲染产生更平滑的边缘。</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181219864.png" class="" title="image-20240929181219864">
-
-<p>有一种叫做超采样抗锯齿(Super Sample Anti-aliasing, SSAA)的技术，它会使用比正常分辨率更高的分辨率（即超采样）来渲染场景，当图像输出在帧缓冲中更新时，分辨率会被下采样(Downsample)至正常的分辨率。这些额外的分辨率会被用来防止锯齿边缘的产生。虽然它确实能够解决走样的问题，但是由于这样比平时要绘制更多的片段，它也会带来很大的性能开销。所以这项技术只拥有了短暂的辉煌。</p>
-<p>然而，在这项技术的基础上也诞生了更为现代的技术，叫做多重采样抗锯齿(Multisample Anti-aliasing, MSAA)。它借鉴了SSAA背后的理念，但却以更加高效的方式实现了抗锯齿。</p>
-<h2 id="多重采样"><a href="#多重采样" class="headerlink" title="多重采样"></a>多重采样</h2><p>为了理解什么是多重采样(Multisampling)，以及它是如何解决锯齿问题的，我们有必要更加深入地了解OpenGL光栅器的工作方式。</p>
-<p>光栅器是位于最终处理过的顶点之后到片段着色器之前所经过的所有的算法与过程的总和。光栅器会将一个图元的所有顶点作为输入，并将它转换为一系列的片段。顶点坐标理论上可以取任意值，但片段不行，因为它们受限于你窗口的分辨率。顶点坐标与片段之间几乎永远也不会有一对一的映射，所以光栅器必须以某种方式来决定每个顶点最终所在的片段/屏幕坐标。</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization.png" class="" title="img">
-
-<p>这里我们可以看到一个屏幕像素的网格，每个像素的中心包含有一个采样点(Sample Point)，它会被用来决定这个三角形是否遮盖了某个像素。图中红色的采样点被三角形所遮盖，在每一个遮住的像素处都会生成一个片段。虽然三角形边缘的一些部分也遮住了某些屏幕像素，但是这些像素的采样点并没有被三角形内部所遮盖，所以它们不会受到片段着色器的影响。</p>
-<p>现在走样就产生了，完整渲染后的三角形在屏幕上会是这样的：</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_filled.png" class="" title="img">
-
-<p>由于屏幕像素总量的限制，有些边缘的像素能够被渲染出来，而有些则不会。结果就是我们使用了不光滑的边缘来渲染图元，导致了之前讨论到的锯齿边缘。</p>
-<p>多重采样所做的正是将单一的采样点变为多个采样点（这也是它名称的由来）。我们不再使用像素中心的单一采样点，取而代之的是以特定图案排列的4个子采样点(Subsample)。我们将用这些子采样点来决定像素的遮盖度。当然，这也意味着颜色缓冲的大小会随着子采样点的增加而增加。</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_sample_points.png" class="" title="img">
-
-<p>上图的左侧展示了正常情况下判定三角形是否遮盖的方式。在例子中的这个像素上不会运行片段着色器（所以它会保持空白）。因为它的采样点并未被三角形所覆盖。上图的右侧展示的是实施多重采样之后的版本，每个像素包含有4个采样点。这里，只有两个采样点遮盖住了三角形。采样点的数量可以是任意的，更多的采样点能带来更精确的遮盖率。</p>
-<p>我们知道三角形只遮盖了2个子采样点，所以下一步是决定这个像素的颜色。你的猜想可能是，我们对每个被遮盖住的子采样点运行一次片段着色器，最后将每个像素所有子采样点的颜色平均一下。在这个例子中，我们需要在两个子采样点上对被插值的顶点数据运行两次片段着色器，并将结果的颜色储存在这些采样点中。但是这并不是它工作的方式，因为这本质上说还是需要运行更多次的片段着色器，会显著地降低性能。</p>
-<p>MSAA真正的工作方式是，无论三角形遮盖了多少个子采样点，（每个图元中）每个像素只运行一次片段着色器，片段着色器所使用的顶点数据会插值到每个像素的中心，所得到的结果颜色会被储存在每个被遮盖住的子采样点中。当颜色缓冲的子样本被图元的所有颜色填满时，所有的这些颜色将会在每个像素内部平均化。因为上图的4个采样点中只有2个被遮盖住了，这个像素的颜色将会是三角形颜色与其他两个采样点的颜色（在这里是无色）的平均值，最终形成一种淡蓝色。</p>
-<p>这样子做之后，颜色缓冲中所有的图元边缘将会产生一种更平滑的图形：</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples.png" class="" title="img">
-
-<p>这里，每个像素包含4个子采样点（不相关的采样点都没有标注），蓝色的采样点被三角形所遮盖，而灰色的则没有。对于三角形的内部的像素，片段着色器只会运行一次，颜色输出会被存储到全部的4个子样本中。而在三角形的边缘，并不是所有的子采样点都被遮盖，所以片段着色器的结果将只会储存到部分的子样本中。根据被遮盖的子样本的数量，最终的像素颜色将由三角形的颜色与其它子样本中所储存的颜色来决定。简单来说，一个像素中如果有更多的采样点被三角形遮盖，那么这个像素的颜色就会更接近于三角形的颜色。如果我们给上面的三角形填充颜色，就能得到以下的效果：</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_rasterization_samples_filled.png" class="" title="img">
-
-<p>对于每个像素来说，越少的子采样点被三角形所覆盖，那么它受到三角形的影响就越小。三角形的不平滑边缘被稍浅的颜色所包围后，从远处观察时就会显得更加平滑了。不仅仅是颜色值会受到多重采样的影响，深度和模板测试也能够使用多个采样点。对深度测试来说，每个顶点的深度值会在运行深度测试之前被插值到各个子样本中。对模板测试来说，我们对每个子样本，而不是每个像素，存储一个模板值。当然，这也意味着深度和模板缓冲的大小会乘以子采样点的个数。</p>
-<h2 id="OpenGL中的MSAA"><a href="#OpenGL中的MSAA" class="headerlink" title="OpenGL中的MSAA"></a>OpenGL中的MSAA</h2><p>如果我们想要在OpenGL中使用MSAA，必须要使用一个能在每个像素中存储大于1个颜色值的颜色缓冲（因为多重采样需要为每个采样点都储存一个颜色）。所以，需要一个新的缓冲类型，来存储特定数量的多重采样样本，它叫做多重采样缓冲(Multisample Buffer)。大多数的窗口系统都应该提供了一个多重采样缓冲，用以代替默认的颜色缓冲。GLFW同样给了我们这个功能，我们所要做的只是告诉GLFW，我们希望使用一个包含N个样本的多重采样缓冲。这可以在创建窗口之前调用glfwWindowHint来完成。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glfwWindowHint</span>(GLFW_SAMPLES, <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
-
-<p>现在再调用glfwCreateWindow创建渲染窗口时，每个屏幕坐标就会使用一个包含4个子采样点的颜色缓冲了。GLFW会自动创建一个每像素4个子采样点的深度和样本缓冲。这也意味着所有缓冲的大小都增长了4倍。</p>
-<p>现在我们已经向GLFW请求了多重采样缓冲，我们还需要调用glEnable并启用GL_MULTISAMPLE，来启用多重采样。在大多数OpenGL的驱动上，多重采样都是默认启用的，所以这个调用可能会有点多余，但显式地调用一下会更保险一点。这样子不论是什么OpenGL的实现都能够正常启用多重采样了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glEnable</span>(GL_MULTISAMPLE);</span><br></pre></td></tr></table></figure>
-
-<p>只要默认的帧缓冲有了多重采样缓冲的附件，我们所要做的只是调用glEnable来启用多重采样。因为多重采样的算法都在OpenGL驱动的光栅器中实现了，我们不需要再多做什么。如果现在再来渲染本节一开始的那个绿色的立方体，我们应该能看到更平滑的边缘：</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929181208850.png" class="" title="image-20240929181208850">
-
-<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_msaa.rar">这里</a>获取完整代码</p>
-<h2 id="离屏MSAA"><a href="#离屏MSAA" class="headerlink" title="离屏MSAA"></a>离屏MSAA</h2><p>由于GLFW负责了创建多重采样缓冲，启用MSAA非常简单。然而，如果我们想要使用我们自己的帧缓冲来进行离屏渲染，那么我们就必须要自己动手生成多重采样缓冲了。有两种方式可以创建多重采样缓冲，将其作为帧缓冲的附件：纹理附件和渲染缓冲附件。</p>
-<h3 id="多重采样纹理附件"><a href="#多重采样纹理附件" class="headerlink" title="多重采样纹理附件"></a>多重采样纹理附件</h3><p>为了创建一个支持储存多个采样点的纹理，我们使用glTexImage2DMultisample来替代glTexImage2D，它的纹理目标是GL_TEXTURE_2D_MULTISAPLE。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D_MULTISAMPLE, tex);</span><br><span class="line"><span class="built_in">glTexImage2DMultisample</span>(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, width, height, GL_TRUE);</span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D_MULTISAMPLE, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<p>它的第二个参数设置的是纹理所拥有的样本个数。如果最后一个参数为GL_TRUE，图像将会对每个纹素使用相同的样本位置以及相同数量的子采样点个数。我们使用glFramebufferTexture2D将多重采样纹理附加到帧缓冲上，但这里纹理类型使用的是GL_TEXTURE_2D_MULTISAMPLE。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glFramebufferTexture2D</span>(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<p>当前绑定的帧缓冲现在就有了一个纹理图像形式的多重采样颜色缓冲。</p>
-<h3 id="多重采样渲染缓冲对象"><a href="#多重采样渲染缓冲对象" class="headerlink" title="多重采样渲染缓冲对象"></a>多重采样渲染缓冲对象</h3><p>和纹理类似，创建一个多重采样渲染缓冲对象并不难。我们所要做的只是在指定（当前绑定的）渲染缓冲的内存存储时，将glRenderbufferStorage的调用改为glRenderbufferStorageMultisample就可以了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glRenderbufferStorageMultisample</span>(GL_RENDERBUFFER, <span class="number">4</span>, GL_DEPTH24_STENCIL8, width, height);</span><br></pre></td></tr></table></figure>
-
-<p>函数中，渲染缓冲对象后的参数我们将设定为样本的数量，在当前使用的是4。</p>
-<h3 id="渲染到多重采样帧缓冲"><a href="#渲染到多重采样帧缓冲" class="headerlink" title="渲染到多重采样帧缓冲"></a>渲染到多重采样帧缓冲</h3><p>渲染到多重采样帧缓冲对象的过程都是自动的。只要我们在帧缓冲绑定时绘制任何东西，光栅器就会负责所有的多重采样运算。我们最终会得到一个多重采样颜色缓冲以及/或深度和模板缓冲。因为多重采样缓冲有一点特别，我们不能直接将它们的缓冲图像用于其他运算，比如在着色器中对它们进行采样。</p>
-<p>一个多重采样的图像包含比普通图像更多的信息，我们所要做的是缩小或者还原(Resolve)图像。多重采样帧缓冲的还原通常是通过glBlitFramebuffer来完成，它能够将一个帧缓冲中的某个区域复制到另一个帧缓冲中，并且将多重采样缓冲还原。</p>
-<p>glBlitFramebuffer会将一个用4个屏幕空间坐标所定义的源区域复制到一个同样用4个屏幕空间坐标所定义的目标区域中。在之前使用帧缓冲的时候，当我们绑定到GL_FRAMEBUFFER时，我们是同时绑定了读取和绘制的帧缓冲目标。我们也可以将帧缓冲分开绑定至GL_READ_FRAMEBUFFER与GL_DRAW_FRAMEBUFFER。glBlitFramebuffer函数会根据这两个目标，决定哪个是源帧缓冲，哪个是目标帧缓冲。接下来，我们可以将图像位块传送(Blit)到默认的帧缓冲中，将多重采样的帧缓冲传送到屏幕上。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_READ_FRAMEBUFFER, multisampledFBO);</span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_DRAW_FRAMEBUFFER, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">glBlitFramebuffer</span>(<span class="number">0</span>, <span class="number">0</span>, width, height, <span class="number">0</span>, <span class="number">0</span>, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);</span><br></pre></td></tr></table></figure>
-
-<p>如果现在再来渲染这个程序，我们会得到与之前完全一样的结果：一个使用MSAA显示出来的立方体，而且锯齿边缘明显减少了（下图是运行了后期处理的效果）：</p>
-<img src="/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/image-20240929190749871.png" class="" title="image-20240929190749871">
-
-<p><a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2024/09/29/28-%E6%8A%97%E9%94%AF%E9%BD%BF/anti_aliasing_offscreen.rar">这里</a>获取完整代码</p>
-<p>因为屏幕纹理又变回了一个只有单一采样点的普通纹理，像是边缘检测这样的后期处理滤镜会再次出现锯齿。为了补偿这一问题，你可以之后对纹理进行模糊处理，或者想出你自己的抗锯齿算法。</p>
-<p>你可以看到，如果将多重采样与离屏渲染结合起来，我们需要自己负责一些额外的细节。但所有的这些细节都是值得额外的努力的，因为多重采样能够显著提升场景的视觉质量。当然，要注意，如果使用的采样点非常多，启用多重采样会显著降低程序的性能，通常采用的是4采样点的MSAA。</p>
-<h2 id="自定义抗锯齿算法"><a href="#自定义抗锯齿算法" class="headerlink" title="自定义抗锯齿算法"></a>自定义抗锯齿算法</h2><p>将一个多重采样的纹理图像不进行还原直接传入着色器也是可行的。GLSL提供了这样的选项，让我们能够对纹理图像的每个子样本进行采样，所以可以创建我们自己的抗锯齿算法，在大型的图形应用中通常都会这么做。要想获取每个子样本的颜色值，你需要将纹理uniform采样器设置为sampler2DMS，而不是平常使用的sampler2D：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uniform sampler2DMS screenTextureMS;</span><br></pre></td></tr></table></figure>
-
-<p>使用texelFetch函数就能够获取每个子样本的颜色值了：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vec4 colorSample = <span class="built_in">texelFetch</span>(screenTextureMS, TexCoords, <span class="number">3</span>);  <span class="comment">// 第4个子样本</span></span><br></pre></td></tr></table></figure>
-
-<p>我们不会深入探究自定义抗锯齿技术的细节，这里仅仅是一点点启发。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1809,7 +1768,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

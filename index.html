@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-07-24 16:44:41" itemprop="dateModified" datetime="2026-07-24T16:44:41+08:00">2026-07-24</time>
+                <time title="修改时间：2026-07-24 17:51:17" itemprop="dateModified" datetime="2026-07-24T17:51:17+08:00">2026-07-24</time>
               </span>
 
           
@@ -287,7 +287,7 @@
 <p>现在，在之前渲染的球体上渲染环境贴图，效果应该如下图：</p>
 <img src="/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/ibl_hdr_environment_mapped.png" class="" title="img">
 
-<p>现在我们设法成功地读取了 HDR 环境贴图，将它从等距柱状投影图转换为立方体贴图，并将 HDR 立方体贴图作为天空盒渲染到了场景中。此外，我们设置了一个小系统来渲染立方体贴图的所有六个面，我们在计算环境贴图卷积时还会需要它。您可以在这里找到整个转化过程的源代码。</p>
+<p>现在我们设法成功地读取了 HDR 环境贴图，将它从等距柱状投影图转换为立方体贴图，并将 HDR 立方体贴图作为天空盒渲染到了场景中。此外，我们设置了一个小系统来渲染立方体贴图的所有六个面，我们在计算环境贴图卷积时还会需要它。您可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/53_diffuse_irradiance_01.rar">这里</a>找到整个转化过程的源代码。</p>
 <h2 id="立方体贴图的卷积"><a href="#立方体贴图的卷积" class="headerlink" title="立方体贴图的卷积"></a>立方体贴图的卷积</h2><p>如本节教程开头所述，我们的主要目标是计算所有间接漫反射光的积分，其中光照的辐照度以环境立方体贴图的形式给出。我们已经知道，在方向 wi 上采样 HDR 环境贴图，可以获得场景在此方向上的辐射度 L(p,wi) 。虽然如此，要解决积分，我们仍然不能仅从一个方向对环境贴图采样，而要从半球 Ω 上所有可能的方向进行采样，这对于片段着色器而言还是过于昂贵。</p>
 <p>然而，计算上又不可能从 Ω 的每个可能的方向采样环境光照，理论上可能的方向数量是无限的。不过我们可以对有限数量的方向采样以近似求解，在半球内均匀间隔或随机取方向可以获得一个相当精确的辐照度近似值，从而离散地计算积分 ∫ 。</p>
 <p>然而，对于每个片段实时执行此操作仍然太昂贵，因为仍然需要非常大的样本数量才能获得不错的结果，因此我们希望可以预计算。既然半球的朝向决定了我们捕捉辐照度的位置，我们可以预先计算每个可能的半球朝向的辐照度，这些半球朝向涵盖了所有可能的出射方向 wo ：</p>
@@ -354,7 +354,7 @@
 <img src="/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/image-20260724164441693.png" class="" title="image-20260724164441693">
 
 <p>现在看起来仍然有点奇怪，因为金属度较高的球体需要某种形式的反射以便看起来更像金属表面（因为金属表面没有漫反射），不过目前只有来自点光源的反射——而且可以说几乎没有。不过尽管如此，您也可以看出，球体在环境中的感觉更加和谐了（特别是在环境贴图之间切换的时候），因为表面会正确地响应环境光照。</p>
-<p>您可以在此处找到以上讨论过的整套源代码。在下一节教程中，我们将添加反射积分的间接镜面反射部分，此时我们将真正看到 PBR 的力量。</p>
+<p>您可以在<a target="_blank" rel="noopener" href="https://github.com/OSkirito/OSkirito.github.io/blob/master/2026/07/17/41-%E6%BC%AB%E5%8F%8D%E5%B0%84%E8%BE%90%E7%85%A7%E5%BA%A6/53_diffuse_irradiance_02.rar">此处</a>找到以上讨论过的整套源代码。在下一节教程中，我们将添加反射积分的间接镜面反射部分，此时我们将真正看到 PBR 的力量。</p>
 <h2 id="进阶阅读"><a href="#进阶阅读" class="headerlink" title="进阶阅读"></a>进阶阅读</h2><ul>
 <li><a target="_blank" rel="noopener" href="http://www.codinglabs.net/article_physically_based_rendering.aspx">Coding Labs: Physically based rendering</a>：介绍 PBR ，如何以及为何要生成辐照度图。</li>
 <li><a target="_blank" rel="noopener" href="http://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/mathematics-of-shading">The Mathematics of Shading</a>：借助 ScratchAPixel，对本教程中涉及的一些数学知识的简要介绍，特别是关于极坐标和积分。</li>
